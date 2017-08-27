@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cg on Manistein&#39;s Blog</title>
-    <link>http://manistein.github.io/tags/cg/</link>
+    <link>https://manistein.github.io/blog/tags/cg/</link>
     <description>Recent content in Cg on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>© 2017 All rights reserved</copyright>
     <lastBuildDate>Sat, 08 Mar 2014 12:49:00 +0800</lastBuildDate>
     
-	<atom:link href="http://manistein.github.io/tags/cg/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://manistein.github.io/blog/tags/cg/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>变换矩阵推导</title>
-      <link>http://manistein.github.io/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</link>
+      <link>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</link>
       <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
       
-      <guid>http://manistein.github.io/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</guid>
+      <guid>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。&lt;/p&gt;

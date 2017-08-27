@@ -2,57 +2,57 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Manistein&#39;s Blog</title>
-    <link>http://manistein.github.io/categories/</link>
+    <link>https://manistein.github.io/blog/categories/</link>
     <description>Recent content in Categories on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>© 2017 All rights reserved</copyright>
     
-	<atom:link href="http://manistein.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://manistein.github.io/blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Client</title>
-      <link>http://manistein.github.io/categories/client/</link>
+      <link>https://manistein.github.io/blog/categories/client/</link>
       <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
       
-      <guid>http://manistein.github.io/categories/client/</guid>
+      <guid>https://manistein.github.io/blog/categories/client/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Network</title>
-      <link>http://manistein.github.io/categories/network/</link>
+      <link>https://manistein.github.io/blog/categories/network/</link>
       <pubDate>Mon, 07 Aug 2017 13:27:45 +0800</pubDate>
       
-      <guid>http://manistein.github.io/categories/network/</guid>
+      <guid>https://manistein.github.io/blog/categories/network/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Os</title>
-      <link>http://manistein.github.io/categories/os/</link>
+      <link>https://manistein.github.io/blog/categories/os/</link>
       <pubDate>Tue, 30 May 2017 08:49:00 +0800</pubDate>
       
-      <guid>http://manistein.github.io/categories/os/</guid>
+      <guid>https://manistein.github.io/blog/categories/os/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Server</title>
-      <link>http://manistein.github.io/categories/server/</link>
+      <link>https://manistein.github.io/blog/categories/server/</link>
       <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
       
-      <guid>http://manistein.github.io/categories/server/</guid>
+      <guid>https://manistein.github.io/blog/categories/server/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Tools</title>
-      <link>http://manistein.github.io/categories/tools/</link>
+      <link>https://manistein.github.io/blog/categories/tools/</link>
       <pubDate>Thu, 11 Aug 2016 20:36:00 +0800</pubDate>
       
-      <guid>http://manistein.github.io/categories/tools/</guid>
+      <guid>https://manistein.github.io/blog/categories/tools/</guid>
       <description></description>
     </item>
     

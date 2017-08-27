@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Lock on Manistein&#39;s Blog</title>
-    <link>http://manistein.github.io/tags/lock/</link>
+    <link>https://manistein.github.io/blog/tags/lock/</link>
     <description>Recent content in Lock on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>© 2017 All rights reserved</copyright>
     <lastBuildDate>Mon, 03 Apr 2017 11:57:00 +0800</lastBuildDate>
     
-	<atom:link href="http://manistein.github.io/tags/lock/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://manistein.github.io/blog/tags/lock/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>mutex lock，spinlock，rwlock和condlock的理解</title>
-      <link>http://manistein.github.io/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <link>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</link>
       <pubDate>Mon, 03 Apr 2017 11:57:00 +0800</pubDate>
       
-      <guid>http://manistein.github.io/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <guid>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
       <description>&lt;h2 id=&#34;mutex-lock&#34;&gt;Mutex Lock&lt;/h2&gt;
 
 &lt;h4 id=&#34;概述&#34;&gt;概述&lt;/h4&gt;

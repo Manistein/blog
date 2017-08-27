@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>About on Manistein&#39;s Blog</title>
-    <link>http://manistein.github.io/about/</link>
+    <link>https://manistein.github.io/blog/about/</link>
     <description>Recent content in About on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>© 2017 All rights reserved</copyright>
     
-	<atom:link href="http://manistein.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://manistein.github.io/blog/about/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>
