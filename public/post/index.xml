@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Articles on Manistein&#39;s Blog</title>
+    <link>http://manistein.github.io/post/</link>
+    <description>Recent content in Articles on Manistein&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>© 2017 All rights reserved</copyright>
+    <lastBuildDate>Thu, 02 Mar 2017 12:00:00 -0500</lastBuildDate>
+    
+	<atom:link href="http://manistein.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>skynet源码赏析</title>
+      <link>http://manistein.github.io/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</link>
+      <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</guid>
+      <description>&lt;h4 id=&#34;写在最前面&#34;&gt;写在最前面&lt;/h4&gt;
+
+&lt;p&gt;skynet是目前使用比较广泛的服务端框架，虽然目前网上资料众多，但是从自己的学习和使用经历来看，缺乏能够让自己系统了解该框架底层机制的资料，这段时间，趁着自己有时间，阅读了skynet底层的一些代码，现在将自己理解的部分总结并记录下来，以备日后使用。本文旨在捋清skynet框架的结构和主要流程，并不会涉及skynet的方方面面，一些论述，我贴上了一些源码加以论证，并在引用的源码里加入了一些注释。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《TCP/IP详解》数据链路层总结</title>
+      <link>http://manistein.github.io/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Mon, 07 Aug 2017 13:27:45 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;h1 id=&#34;数据链路层概述&#34;&gt;数据链路层概述&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;计算机网络的形成&lt;br /&gt;
+计算机最初只是孤立的一个运算机器，随着业务需求的不断发展，单台孤立的计算机已经不能够满足我们的需求，因此人们把一个区域内的多台计算机连接成一个网络即局域网，然而这些小的网络并不能满足对计算机日益增长的需求，因此把不同的局域网连接成一个全球性质的网络，我们称之为互联网，互联网就是把不同的局域网通过路由器连接起来的网络。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>计算机漫游</title>
+      <link>http://manistein.github.io/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</link>
+      <pubDate>Tue, 30 May 2017 08:49:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</guid>
+      <description>&lt;h4 id=&#34;overview&#34;&gt;Overview&lt;/h4&gt;
+
+&lt;p&gt;我们的计算机能够运作起来，是我们将源代码编译成机器能够识别的二进制机器指令后，打包进可执行文件，并存入磁盘中。当我们运行一个程序的时候，首先会将磁盘内的二进制文件加载到内存中，然后通过CPU来解释和运行。为了能够做到，通过统一的方式使用不同型号的硬件，并且防止失控的程序滥用硬件资源，人们则通过操作系统来处理这些事情。此外操作系统还负责不同进程间的上下文切换，以实现多任务执行（分时调度不同的进程）。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>mutex lock，spinlock，rwlock和condlock的理解</title>
+      <link>http://manistein.github.io/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <pubDate>Mon, 03 Apr 2017 11:57:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <description>&lt;h2 id=&#34;mutex-lock&#34;&gt;Mutex Lock&lt;/h2&gt;
+
+&lt;h4 id=&#34;概述&#34;&gt;概述&lt;/h4&gt;
+
+&lt;p&gt;互斥锁，一条线程加锁锁住临界区，另一条线程尝试访问改临界区的时候，会发生阻塞，并进入休眠状态。&lt;/p&gt;
+
+&lt;h4 id=&#34;具体说明&#34;&gt;具体说明&lt;/h4&gt;
+
+&lt;p&gt;假设一台机器上的cpu有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B使用Mutex锁，锁住一个临界区，当线程A试图访问该临界区时，因为线程B已经将其锁住，因此线程A被挂起，进入休眠状态，此时core0进行上下文切换，将线程A放入休眠队列中，然后core0运行线程C，当线程B完成临界区的流程并执行解锁之后，线程A又会被唤醒，core0重新运行线程A&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《TCP/IP详解》运输层总结</title>
+      <link>http://manistein.github.io/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Mon, 27 Mar 2017 00:30:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;h2 id=&#34;运输层协议公有特征&#34;&gt;运输层协议公有特征&lt;/h2&gt;
+
+&lt;h4 id=&#34;应用进程之间的通信&#34;&gt;应用进程之间的通信&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;两台主机之间的通信，实际上是两台主机上应用进程之间的通信&lt;/li&gt;
+&lt;li&gt;主机上所有使用网络功能的应用进程，共享操作系统内核提供的网络通信功能&lt;/li&gt;
+&lt;li&gt;因为操作系统上应用进程众多，因此为了将数据包准确交付给目标机器上的指定进程，因此需要通过端口号来区分不同的进程&lt;/li&gt;
+&lt;li&gt;IP+Port组成一个套接字，指定两个端点&lt;/li&gt;
+&lt;li&gt;运输层位于内核通信服务的最高层，接收应用进程交付的数据包，同时将收到的数据包交付给应用进程&lt;/li&gt;
+&lt;li&gt;IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《TCP/IP详解》网络层总结</title>
+      <link>http://manistein.github.io/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sat, 25 Mar 2017 14:40:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;h1 id=&#34;ip协议层概述&#34;&gt;IP协议层概述&lt;/h1&gt;
+
+&lt;p&gt;通过数据包的目标IP地址，不断得找出通往该IP地址的路由器（下一跳路由器地址），并最终将数据包送到目标机器上的协议层。本质的功效是导航数据包去往目标机器。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git使用总结</title>
+      <link>http://manistein.github.io/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Thu, 11 Aug 2016 20:36:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;h1 id=&#34;远程分支&#34;&gt;远程分支&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>skynet开发环境部署</title>
+      <link>http://manistein.github.io/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Sun, 01 Nov 2015 16:02:45 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;skynet官方没有提供windows版本，而在windows上进行开发则往往能够给我们提供极大的便利，一般而言，我们本地进行开发需要安装虚拟机(或者真机上安装linux)，然后在虚拟机(或真机)内部署skynet进程。为了能够方便地进行开发，我们将采用sublime text编辑器，通过安装SFTP插件，来将我们的代码同步到虚拟机(或真机)上。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Github使用TotoiseGit配置流程</title>
+      <link>http://manistein.github.io/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</link>
+      <pubDate>Tue, 24 Feb 2015 07:55:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;如何在Windows上对Github上的项目进行版本管理，我想TortoiseGit是个非常不错的选择，它极大简化了我们的操作流程，本篇文章将介绍如何实现使用TotoiseGit管理Github上的项目&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>变换矩阵推导</title>
+      <link>http://manistein.github.io/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</link>
+      <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
+      
+      <guid>http://manistein.github.io/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
