@@ -1,0 +1,259 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>《TCP/IP详解》数据链路层总结</title>
+  <script src="http://manistein.github.io/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="http://manistein.github.io/bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-drawer-panel/paper-drawer-panel.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-toolbar/paper-toolbar.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-fab/paper-fab.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-item/paper-item.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/paper-menu/paper-menu.html">
+  <link rel="import" href="http://manistein.github.io/bower_components/iron-image/iron-image.html">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <style is="custom-style">
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .nav {
+      border-right: 1px solid #ccc;
+    }
+    
+    paper-scroll-header-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--paper-grey-200, #eee);
+       
+      --paper-scroll-header-panel-full-header: {
+        background-image: url(http://manistein.github.io/images/cover.png);
+      };
+       
+      --paper-scroll-header-panel-condensed-header: {
+        background-image: url(http://manistein.github.io/images/cover.png);
+      };
+    }
+    
+    paper-toolbar {
+       
+      height: 256px;
+      background-color: transparent;
+    }
+    .profile{
+      width: 100%;
+      padding-bottom: 20px;
+    }
+    .photo{
+      margin: 20px;
+      display: inline-block;
+      height: 64px; width: 64px;
+      border-radius: 50%;
+    }
+    .article{
+      border: 1px solid #bebebe;
+      padding: 16px;
+      margin: 16px;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    .title{
+      font-size: 22px;
+      padding: 8px 0 16px;
+    }
+    .account{
+      margin-left: 10px;
+    }
+    .description{
+      font-size: 16px;
+      padding-bottom: 8px;
+    }
+    .author{
+      font-size: 16px;
+      padding-left: 20px;
+      color: white;
+    }
+    .design{
+      font-size: 14px;
+    }
+    .copyright{
+      font-size: 16px;
+    }
+    paper-menu a {
+      text-decoration: none;
+      color: #212121;
+    }
+  </style>
+
+</head>
+<body>
+  <paper-drawer-panel id="drawerPanel" responsive-width="1280px">
+    <div class="nav scroll" drawer>
+    
+      <iron-image class="profile" sizing="cover" src="http://manistein.github.io/images/profile.png">
+    
+        
+          <iron-image class="photo" sizing="cover" src="http://manistein.github.io/images/me.jpg"></iron-image>
+        
+          <div class="author">Manistein</div>
+      </iron-image>
+
+      <div class="account">
+        <div class="flex"></div>
+        
+        
+        
+        
+        
+          <a href="https://github.com/Manistein"><paper-icon-button src="http://manistein.github.io/images/github2-dreamstale35.png"></paper-icon-button></a>
+        
+        
+          <a href="https://www.zhihu.com/people/wu-yin-jie/activities"><paper-icon-button src="http://manistein.github.io/images/zhihu.jpg"></paper-icon-button></a>
+        
+          <a href="http://manistein.github.io/index.xml"><paper-icon-button src="http://manistein.github.io/images/feed-dreamstale27.png"></paper-icon-button></a>
+      
+      </div>
+      <paper-menu>
+        <a href="http://manistein.github.io"><paper-item>
+          <iron-icon icon="home"></iron-icon>　<div class="flex">Home</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="http://manistein.github.io/categories/"><paper-item>
+          <iron-icon icon="drafts"></iron-icon>　<div class="flex">Categories</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="http://manistein.github.io/tags/"><paper-item>
+          <iron-icon icon="loyalty"></iron-icon>　<div class="flex">Tags</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="http://manistein.github.io/about/"><paper-item>
+          <iron-icon icon="info"></iron-icon>　<div class="flex">About</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+      </paper-menu>
+    </div>
+
+    <paper-scroll-header-panel main condenses header-height="256" condensed-header-height="64">
+      <paper-toolbar>
+        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        
+          <div style="margin:0 auto;margin-top:200px;font-size:48px;">Manistein&#39;s Blog</div>
+        
+      </paper-toolbar>
+
+
+<div class="content">
+
+  <div class="article">
+    <div class="title">《TCP/IP详解》数据链路层总结</div>
+    
+      <div class="categories">
+        
+          <a href="http://manistein.github.io/categories/network/">network</a>
+        
+      </div>
+     
+    <div class="description"><h1 id="数据链路层概述">数据链路层概述</h1>
+
+<ul>
+<li>计算机网络的形成<br />
+计算机最初只是孤立的一个运算机器，随着业务需求的不断发展，单台孤立的计算机已经不能够满足我们的需求，因此人们把一个区域内的多台计算机连接成一个网络即局域网，然而这些小的网络并不能满足对计算机日益增长的需求，因此把不同的局域网连接成一个全球性质的网络，我们称之为互联网，互联网就是把不同的局域网通过路由器连接起来的网络。</li>
+</ul>
+
+<p></p>
+
+<ul>
+<li>数据链路层的作用<br />
+数据链路层的作用，则是将网络层下发的数据包，根据自己所处的网络类型，将其封装成帧数据以后发送给下一跳地址。以ip数据包传输为例，首先ip层通过目标地址，在路由表中找到数据包通往目的需要经过的下一跳ip地址，并传给数据链路层，数据链路层根据ip，通过arp协议找到该ip地址所对应机器的mac地址，最后根据自己所处的网络对应的链路层协议，将数据包封装成帧以后，发给拥有该mac地址的机器。<br />
+<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/001.png" alt="image" /></li>
+<li>数据包的跨网络传输<br />
+假设当前有两个网络，通过路由器连接一个令牌环网和以太网。<br />
+令牌环网&ndash;路由器&ndash;以太网<br />
+现在令牌环网的上的一台主机的数据包，要发往以太网上的另一台主机，此时令牌环网上的主机数据包经过应用层，运输层和网络层以后，使用令牌环网专用的协议格式，将数据包分装成帧以后，发给下一跳地址，路由器连接令牌环网的哪个ip，然后路由器经过loopback环回地址，将数据包发往同一设备上的，连接以太网的另一个接口（该接口绑定的是该数据包通往目的节点的下一跳地址），然后数据封装成以太网数据包格式后，发往目标机器。</li>
+</ul>
+
+<h1 id="数据链路层的种类与各自的特点">数据链路层的种类与各自的特点</h1>
+
+<ul>
+<li>以太网</li>
+<li>令牌环网</li>
+<li>PPP</li>
+<li>SLIP</li>
+</ul>
+
+<h1 id="环回地址">环回地址</h1>
+
+<p>几乎所有的操作系统，都会有环回地址体系，他的作用是，本机内不同的进程，可以通过TCP/IP协议来进行通信，当数据包到达数据链路层时，如果判断数据包发往本机，则直接发送过去，否则通过ARP协议获取的以太网MAC地址，将数据封装成帧后，发往该MAC地址所属的机器上。<br />
+<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/data_link_layer/loopback.png" alt="image" /></p>
+
+<h1 id="arp和rarp协议">ARP和RARP协议</h1>
+
+<ul>
+<li>ARP协议的作用就是，在一个局域网内，当一台主机要查找某个IP所对应机器的MAC地址时，会向局域网内所有的机器广播这个请求，并捎带自己的MAC地址，当其查找的机器，收到该数据包时，会记录请求机器的ip和mac地址，并将自己的mac地址和ip返回给请求者，这就是ARP协议做的事情，本质上是通过ip去查找mac地址。</li>
+<li>RARP的作用是，将mac地址转换成ip地址</li>
+</ul>
+
+<h1 id="mtu与路径mtu">MTU与路径MTU</h1>
+
+<ul>
+<li>数据链路层协议中，单个数据帧的数据部分有最大和最小传输大小的限制（一般是46~1500个字节）</li>
+<li>不同的数据链路层协议该限制不相同</li>
+<li>数据包经过的路由路径中，最小的MTU被称之为路径MTU，他将作为单个数据链路层数据帧数据部分的大小，以保证该路由路径上，数据包能够送达目的地。</li>
+</ul></div>
+    <div class="tags">
+      7 Aug 2017
+      
+        
+          <a href="http://manistein.github.io/tags/network/">#network</a>
+        
+       
+    </div>
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+     
+    var disqus_shortname = 'Your Disqus Name';
+    
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
+  </div>
+
+</div>
+
+<paper-item>
+  
+    <a href="http://manistein.github.io/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
+  
+    <div class="flex"></div>
+  
+    <a href="http://manistein.github.io/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/"><paper-fab icon="chevron-right"></paper-fab></a>
+  
+</paper-item>
+
+<html>
+<body>
+      <paper-item>
+        <div class="copyright">© 2017 All rights reserved</div>
+        <div class="flex"></div>
+      </paper-item>
+    </paper-scroll-header-panel>
+  </paper-drawer-panel>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+</body>
+</html>
