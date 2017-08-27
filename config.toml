@@ -1,5 +1,5 @@
 theme="polymer"
-baseurl = "http://manistein.github.io"
+baseurl = "https://manistein.github.io/blog"
 languageCode = "zh-CN"
 title = "Manistein's Blog"
 MetaDataFormat = "toml"
