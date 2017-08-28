@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>Git</title>
+  <title>mutex lock，spinlock，rwlock和condlock的理解</title>
   <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
   <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
@@ -151,71 +151,124 @@
 
 <div class="content">
 
-
   <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/git_summary/">Git使用总结</a></div>
+    <div class="title">mutex lock，spinlock，rwlock和condlock的理解</div>
     
       <div class="categories">
         
-          <a href="https://manistein.github.io/blog//categories/tools/">tools</a>
+          <a href="https://manistein.github.io/blog//categories/os/">os</a>
         
       </div>
      
-    <div class="description"><h1 id="远程分支">远程分支</h1>
+    <div class="description"><h2 id="mutex-lock">Mutex Lock</h2>
+
+<h4 id="概述">概述</h4>
+
+<p>互斥锁，一条线程加锁锁住临界区，另一条线程尝试访问改临界区的时候，会发生阻塞，并进入休眠状态。</p>
+
+<h4 id="具体说明">具体说明</h4>
+
+<p>假设一台机器上的cpu有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B使用Mutex锁，锁住一个临界区，当线程A试图访问该临界区时，因为线程B已经将其锁住，因此线程A被挂起，进入休眠状态，此时core0进行上下文切换，将线程A放入休眠队列中，然后core0运行线程C，当线程B完成临界区的流程并执行解锁之后，线程A又会被唤醒，core0重新运行线程A</p>
+
+<p></p>
+
+<h2 id="spin-lock">Spin Lock</h2>
+
+<h4 id="概述-1">概述</h4>
+
+<p>自旋锁，一条线程加锁锁住临界区，另一条线程尝试访问该临界区的时候，会发生阻塞，但是不会进入休眠状态，并且不断轮询该锁，直至原来锁住临界区的线程解锁。</p>
+
+<h4 id="具体说明-1">具体说明</h4>
+
+<p>假设一台机器上有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B调用spin lock锁住临界区，当线程A尝试访问该临界区时，因为B已经加锁，此时线程A会阻塞，并且不断轮询该锁，不会交出core0的使用权，当线程B释放锁时，A开始执行临界区逻辑</p>
+
+<h4 id="需要注意的地方">需要注意的地方</h4>
 
 <ul>
-<li>项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支</li>
+<li>spin lock临界区逻辑，不应该出现io或者是密集运算，因为spinlock不释放core的使用权，因此不断轮询如果临界区代码过于复杂，那么会降低机器性能，因此临界区代码应该足够简单</li>
+<li>spin lock临界区逻辑，不能出现主动中断的逻辑，比如调用sleep，而要保证spinlock的原子性，因为，如果临界区逻辑被挂起，另一个线程执行访问该临界区时，因为之前的锁没有被释放，并且spinlock不会交出core的使用权，因此会死等之前加锁的线程解锁，因为之前加锁的线程已经被挂起，因此此时会出现死锁状态</li>
+<li>不应该递归逻辑中使用spinlock，因为第一次执行加锁，锁住临界区，递归后尝试访问临界区，此时该线程会死等第一次调用释放锁，而递归调用又依赖某个层级的访问结束返回才能执行完毕，而进入第二层级的访问时，就已经不能执行下去了，因此陷入死锁</li>
 </ul>
 
-<p></p></div>
+<h2 id="read-write-lock">Read Write Lock</h2>
+
+<h4 id="概述-2">概述</h4>
+
+<p>读写锁，一共三种状态</p>
+
+<ul>
+<li>读状态时加锁，此时为共享锁，当一个线程加了读锁时，其他线程如果也尝试以读模式进入临界区，那么不会发生阻塞，直接访问临界区</li>
+<li>写状态时加锁，此时为独占锁，当某个线程加了写锁，那么其他线程尝试访问该临界区（不论是读还是写），都会阻塞等待</li>
+<li>不加锁</li>
+</ul>
+
+<h4 id="注意">注意</h4>
+
+<ul>
+<li>某线程加读取锁时，允许其他线程以读模式进入，此时如果有一个线程尝试以写模式访问临界区时，该线程会被阻塞，而其后尝试以读方式访问该临界区的线程也会被阻塞</li>
+<li>读写锁适合在读远大于写的情形中使用</li>
+</ul>
+
+<h2 id="cond-lock">Cond Lock</h2>
+
+<h4 id="概述-3">概述</h4>
+
+<p>一种通过信号驱动的锁，一般来说，这种模式一般需要有一个发送信号的线程，及若干个被动接收信号的线程，条件锁一般要和互斥锁结合使用</p>
+
+<h4 id="pthread中的条件锁">Pthread中的条件锁</h4>
+
+<ul>
+<li>pthread_cond_init初始化</li>
+<li>pthread_cond_signal只会触发一个正在wait的线程，优先级最高的线程最先被唤醒，如果优先级都一样，则优先唤醒睡眠最长的那个线程</li>
+<li>pthread_cond_broadcast唤醒所有线程</li>
+<li>pthread_cond_wait阻塞一个线程，并等待信号唤醒它，在wait的开始逻辑，会写入优先级信息，而这个优先级信息是共享的，因此需要在调用phtread_cond_wait之前，调用pthread_mutex_lock,phtread_cond_wait函数会在优先级信息写完后，调用一次pthread_cond_unlock进行解锁，然后进入block状态，当被signal唤醒时，它又会再加一次锁，经典用法<br /></li>
+</ul>
+
+<pre><code>Thread1
+pthread_cond_signal(g_cond)
+
+Thread2
+pthread_mutex_lock(&amp;g_mutex)
+while(condition)
+    pthread_cond_wait(&amp;g_cond, &amp;g_mutex)
+pthread_mutex_unlock(&amp;g_mutex)
+</code></pre></div>
     <div class="tags">
-      11 Aug 2016
+      3 Apr 2017
       
         
-          <a href="https://manistein.github.io/blog//tags/git/">#git</a>
+          <a href="https://manistein.github.io/blog//tags/lock/">#lock</a>
         
        
     </div>
-  </div>
-
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/config_totoisegit_for_github/">Github使用TotoiseGit配置流程</a></div>
     
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/tools/">tools</a>
-        
-      </div>
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
      
-    <div class="description"><h1 id="前言">前言</h1>
-
-<p>如何在Windows上对Github上的项目进行版本管理，我想TortoiseGit是个非常不错的选择，它极大简化了我们的操作流程，本篇文章将介绍如何实现使用TotoiseGit管理Github上的项目</p>
-
-<p></p></div>
-    <div class="tags">
-      24 Feb 2015
-      
-        
-          <a href="https://manistein.github.io/blog//tags/git/">#git</a>
-        
-       
-    </div>
+    var disqus_shortname = 'Your Disqus Name';
+    
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
   </div>
-
 
 </div>
 
-
 <paper-item>
   
-    <paper-fab disabled icon="chevron-left"></paper-fab>
+    <a href="https://manistein.github.io/blog/post/os/overview_of_computer/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
   
     <div class="flex"></div>
   
-    <paper-fab disabled icon="chevron-right"></paper-fab>
+    <a href="https://manistein.github.io/blog/post/network/transport_layer_summary/"><paper-fab icon="chevron-right"></paper-fab></a>
   
 </paper-item>
-
 
 <html>
 <body>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>Git</title>
+  <title>Github使用TotoiseGit配置流程</title>
   <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
   <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
@@ -151,35 +151,8 @@
 
 <div class="content">
 
-
   <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/git_summary/">Git使用总结</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/tools/">tools</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="远程分支">远程分支</h1>
-
-<ul>
-<li>项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支</li>
-</ul>
-
-<p></p></div>
-    <div class="tags">
-      11 Aug 2016
-      
-        
-          <a href="https://manistein.github.io/blog//tags/git/">#git</a>
-        
-       
-    </div>
-  </div>
-
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/config_totoisegit_for_github/">Github使用TotoiseGit配置流程</a></div>
+    <div class="title">Github使用TotoiseGit配置流程</div>
     
       <div class="categories">
         
@@ -191,7 +164,48 @@
 
 <p>如何在Windows上对Github上的项目进行版本管理，我想TortoiseGit是个非常不错的选择，它极大简化了我们的操作流程，本篇文章将介绍如何实现使用TotoiseGit管理Github上的项目</p>
 
-<p></p></div>
+<p></p>
+
+<h1 id="git-bash部署">Git Bash部署</h1>
+
+<p>安装Git bash，完成安装后，双击ssh.exe文件，输入：</p>
+
+<ul>
+<li>git config &ndash;global user.name &ldquo;xxxx&rdquo;</li>
+<li>git config &ndash;global user.email &ldquo;xxx@xxx&rdquo;<br /></li>
+</ul>
+
+<p>这里主要是配置入库人名称以及入库人联系方式。</p>
+
+<h1 id="安装totoisegit">安装TotoiseGit</h1>
+
+<p>步骤略</p>
+
+<h1 id="权限配置">权限配置</h1>
+
+<ul>
+<li><p>生成私钥和公钥<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github001.png" alt="image" /></p></li>
+
+<li><p>选择PuTTYgen工具，弹出如下界面：<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github002.png" alt="image" /></p></li>
+
+<li><p>点击Generate按钮，然后在红色框框区域不断摇晃鼠标。<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github003.png" alt="image" /></p></li>
+
+<li><p>上面的红色框框区域是公钥，私钥需要点击“Save private key”按钮对其进行保存。添加公钥的地方：<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github004.png" alt="image" /><br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github005.png" alt="image" /><br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github006.png" alt="image" /><br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github007.png" alt="image" /></p></li>
+
+<li><p>clone服务器上的仓库，点击TotoiseGit的clone按钮:<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github008.png" alt="image" /></p></li>
+
+<li><p>从服务器上克隆仓库。<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/tools/git/manage_github009.png" alt="image" /><br />
+选择服务器的路径，以及本地要clone的地址，还有私钥。点击ok就可以开始clone了。</p></li>
+</ul></div>
     <div class="tags">
       24 Feb 2015
       
@@ -200,22 +214,34 @@
         
        
     </div>
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+     
+    var disqus_shortname = 'Your Disqus Name';
+    
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
   </div>
-
 
 </div>
 
-
 <paper-item>
   
-    <paper-fab disabled icon="chevron-left"></paper-fab>
+    <a href="https://manistein.github.io/blog/post/server/skynet/skynet_dev_env_deploy/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
   
     <div class="flex"></div>
   
-    <paper-fab disabled icon="chevron-right"></paper-fab>
+    <a href="https://manistein.github.io/blog/post/client/cg/cg_matrix_analyze/"><paper-fab icon="chevron-right"></paper-fab></a>
   
 </paper-item>
-
 
 <html>
 <body>

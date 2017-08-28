@@ -14,10 +14,10 @@
     
     <item>
       <title>skynet源码赏析</title>
-      <link>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</link>
+      <link>https://manistein.github.io/blog/post/server/skynet/skynet_source_code_analyze/</link>
       <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</guid>
+      <guid>https://manistein.github.io/blog/post/server/skynet/skynet_source_code_analyze/</guid>
       <description>&lt;h4 id=&#34;写在最前面&#34;&gt;写在最前面&lt;/h4&gt;
 
 &lt;p&gt;skynet是目前使用比较广泛的服务端框架，虽然目前网上资料众多，但是从自己的学习和使用经历来看，缺乏能够让自己系统了解该框架底层机制的资料，这段时间，趁着自己有时间，阅读了skynet底层的一些代码，现在将自己理解的部分总结并记录下来，以备日后使用。本文旨在捋清skynet框架的结构和主要流程，并不会涉及skynet的方方面面，一些论述，我贴上了一些源码加以论证，并在引用的源码里加入了一些注释。&lt;/p&gt;
@@ -27,10 +27,10 @@
     
     <item>
       <title>《TCP/IP详解》数据链路层总结</title>
-      <link>https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <link>https://manistein.github.io/blog/post/network/link_layer_summary/</link>
       <pubDate>Mon, 07 Aug 2017 13:27:45 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://manistein.github.io/blog/post/network/link_layer_summary/</guid>
       <description>&lt;h1 id=&#34;数据链路层概述&#34;&gt;数据链路层概述&lt;/h1&gt;
 
 &lt;ul&gt;
@@ -43,10 +43,10 @@
     
     <item>
       <title>计算机漫游</title>
-      <link>https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</link>
+      <link>https://manistein.github.io/blog/post/os/overview_of_computer/</link>
       <pubDate>Tue, 30 May 2017 08:49:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</guid>
+      <guid>https://manistein.github.io/blog/post/os/overview_of_computer/</guid>
       <description>&lt;h4 id=&#34;overview&#34;&gt;Overview&lt;/h4&gt;
 
 &lt;p&gt;我们的计算机能够运作起来，是我们将源代码编译成机器能够识别的二进制机器指令后，打包进可执行文件，并存入磁盘中。当我们运行一个程序的时候，首先会将磁盘内的二进制文件加载到内存中，然后通过CPU来解释和运行。为了能够做到，通过统一的方式使用不同型号的硬件，并且防止失控的程序滥用硬件资源，人们则通过操作系统来处理这些事情。此外操作系统还负责不同进程间的上下文切换，以实现多任务执行（分时调度不同的进程）。&lt;/p&gt;
@@ -56,10 +56,10 @@
     
     <item>
       <title>mutex lock，spinlock，rwlock和condlock的理解</title>
-      <link>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <link>https://manistein.github.io/blog/post/os/understand_mutexlock_spinlock_rwlock_and_condlock/</link>
       <pubDate>Mon, 03 Apr 2017 11:57:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <guid>https://manistein.github.io/blog/post/os/understand_mutexlock_spinlock_rwlock_and_condlock/</guid>
       <description>&lt;h2 id=&#34;mutex-lock&#34;&gt;Mutex Lock&lt;/h2&gt;
 
 &lt;h4 id=&#34;概述&#34;&gt;概述&lt;/h4&gt;
@@ -75,10 +75,10 @@
     
     <item>
       <title>《TCP/IP详解》运输层总结</title>
-      <link>https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <link>https://manistein.github.io/blog/post/network/transport_layer_summary/</link>
       <pubDate>Mon, 27 Mar 2017 00:30:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://manistein.github.io/blog/post/network/transport_layer_summary/</guid>
       <description>&lt;h2 id=&#34;运输层协议公有特征&#34;&gt;运输层协议公有特征&lt;/h2&gt;
 
 &lt;h4 id=&#34;应用进程之间的通信&#34;&gt;应用进程之间的通信&lt;/h4&gt;
@@ -97,10 +97,10 @@
     
     <item>
       <title>《TCP/IP详解》网络层总结</title>
-      <link>https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/</link>
+      <link>https://manistein.github.io/blog/post/network/ip_layer_summary/</link>
       <pubDate>Sat, 25 Mar 2017 14:40:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://manistein.github.io/blog/post/network/ip_layer_summary/</guid>
       <description>&lt;h1 id=&#34;ip协议层概述&#34;&gt;IP协议层概述&lt;/h1&gt;
 
 &lt;p&gt;通过数据包的目标IP地址，不断得找出通往该IP地址的路由器（下一跳路由器地址），并最终将数据包送到目标机器上的协议层。本质的功效是导航数据包去往目标机器。&lt;/p&gt;
@@ -110,10 +110,10 @@
     
     <item>
       <title>Git使用总结</title>
-      <link>https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</link>
+      <link>https://manistein.github.io/blog/post/tools/git/git_summary/</link>
       <pubDate>Thu, 11 Aug 2016 20:36:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://manistein.github.io/blog/post/tools/git/git_summary/</guid>
       <description>&lt;h1 id=&#34;远程分支&#34;&gt;远程分支&lt;/h1&gt;
 
 &lt;ul&gt;
@@ -125,10 +125,10 @@
     
     <item>
       <title>skynet开发环境部署</title>
-      <link>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</link>
+      <link>https://manistein.github.io/blog/post/server/skynet/skynet_dev_env_deploy/</link>
       <pubDate>Sun, 01 Nov 2015 16:02:45 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</guid>
+      <guid>https://manistein.github.io/blog/post/server/skynet/skynet_dev_env_deploy/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;skynet官方没有提供windows版本，而在windows上进行开发则往往能够给我们提供极大的便利，一般而言，我们本地进行开发需要安装虚拟机(或者真机上安装linux)，然后在虚拟机(或真机)内部署skynet进程。为了能够方便地进行开发，我们将采用sublime text编辑器，通过安装SFTP插件，来将我们的代码同步到虚拟机(或真机)上。&lt;/p&gt;
@@ -138,10 +138,10 @@
     
     <item>
       <title>Github使用TotoiseGit配置流程</title>
-      <link>https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</link>
+      <link>https://manistein.github.io/blog/post/tools/git/config_totoisegit_for_github/</link>
       <pubDate>Tue, 24 Feb 2015 07:55:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</guid>
+      <guid>https://manistein.github.io/blog/post/tools/git/config_totoisegit_for_github/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;如何在Windows上对Github上的项目进行版本管理，我想TortoiseGit是个非常不错的选择，它极大简化了我们的操作流程，本篇文章将介绍如何实现使用TotoiseGit管理Github上的项目&lt;/p&gt;
@@ -151,10 +151,10 @@
     
     <item>
       <title>变换矩阵推导</title>
-      <link>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</link>
+      <link>https://manistein.github.io/blog/post/client/cg/cg_matrix_analyze/</link>
       <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</guid>
+      <guid>https://manistein.github.io/blog/post/client/cg/cg_matrix_analyze/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。&lt;/p&gt;

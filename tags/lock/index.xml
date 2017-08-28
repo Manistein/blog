@@ -14,10 +14,10 @@
     
     <item>
       <title>mutex lock，spinlock，rwlock和condlock的理解</title>
-      <link>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <link>https://manistein.github.io/blog/post/os/understand_mutexlock_spinlock_rwlock_and_condlock/</link>
       <pubDate>Mon, 03 Apr 2017 11:57:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <guid>https://manistein.github.io/blog/post/os/understand_mutexlock_spinlock_rwlock_and_condlock/</guid>
       <description>&lt;h2 id=&#34;mutex-lock&#34;&gt;Mutex Lock&lt;/h2&gt;
 
 &lt;h4 id=&#34;概述&#34;&gt;概述&lt;/h4&gt;
