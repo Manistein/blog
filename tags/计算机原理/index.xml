@@ -14,10 +14,10 @@
     
     <item>
       <title>计算机漫游</title>
-      <link>https://manistein.github.io/blog/post/os/overview_of_computer/</link>
+      <link>https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</link>
       <pubDate>Tue, 30 May 2017 08:49:00 +0800</pubDate>
       
-      <guid>https://manistein.github.io/blog/post/os/overview_of_computer/</guid>
+      <guid>https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/</guid>
       <description>&lt;h4 id=&#34;overview&#34;&gt;Overview&lt;/h4&gt;
 
 &lt;p&gt;我们的计算机能够运作起来，是我们将源代码编译成机器能够识别的二进制机器指令后，打包进可执行文件，并存入磁盘中。当我们运行一个程序的时候，首先会将磁盘内的二进制文件加载到内存中，然后通过CPU来解释和运行。为了能够做到，通过统一的方式使用不同型号的硬件，并且防止失控的程序滥用硬件资源，人们则通过操作系统来处理这些事情。此外操作系统还负责不同进程间的上下文切换，以实现多任务执行（分时调度不同的进程）。&lt;/p&gt;
