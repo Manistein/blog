@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>《TCP/IP详解》运输层总结</title>
+  <title></title>
   <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
   <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
@@ -152,15 +152,11 @@
 <div class="content">
 
   <div class="article">
-    <div class="title">《TCP/IP详解》运输层总结</div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/network/">network</a>
-        
-      </div>
+    <div class="title"></div>
      
-    <div class="description"><h2 id="运输层协议公有特征">运输层协议公有特征</h2>
+    <div class="description">
+
+<h2 id="运输层协议公有特征">运输层协议公有特征</h2>
 
 <h4 id="应用进程之间的通信">应用进程之间的通信</h4>
 
@@ -168,26 +164,24 @@
 <li>两台主机之间的通信，实际上是两台主机上应用进程之间的通信</li>
 <li>主机上所有使用网络功能的应用进程，共享操作系统内核提供的网络通信功能</li>
 <li>因为操作系统上应用进程众多，因此为了将数据包准确交付给目标机器上的指定进程，因此需要通过端口号来区分不同的进程</li>
-<li>IP+Port组成一个套接字，指定两个端点</li>
+<li>IP+Port能够将数据包发送到指定机器上的指定进程</li>
 <li>运输层位于内核通信服务的最高层，接收应用进程交付的数据包，同时将收到的数据包交付给应用进程</li>
-<li>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</li>
-</ul>
 
-<p></p>
+<li><p>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</p>
 
-<h4 id="复用和分用">复用和分用</h4>
+<h4 id="复用和分用">复用和分用</h4></li>
 
-<ul>
-<li>复用：所有使用网络功能的应用进程，共享操作系统内核提供的网络服务，它运行包括运输层在内的通信协议逻辑</li>
-<li>分用：内核收到数据包以后，将数据包上传应用进程，具体交付给哪个应用进程，通过端口号区分<br /></li>
-</ul>
+<li><p>复用：所有使用网络功能的应用进程，共享操作系统内核提供的网络服务，它运行包括运输层在内的通信协议逻辑</p></li>
 
-<h4 id="端口号划分">端口号划分</h4>
+<li><p>分用：内核收到数据包以后，将数据包上传应用进程，具体交付给哪个应用进程，通过端口号区分</p>
 
-<ul>
-<li>系统端口号：0~1023</li>
-<li>登记端口号：1024~49151</li>
-<li>客户端使用端口号：49152~65535</li>
+<h4 id="端口号划分">端口号划分</h4></li>
+
+<li><p>系统端口号：0~1023</p></li>
+
+<li><p>登记端口号：1024~49151</p></li>
+
+<li><p>客户端使用端口号：49152~65535</p></li>
 </ul>
 
 <h2 id="udp协议">UDP协议</h2>
@@ -206,15 +200,16 @@
 <p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/001.png" alt="image" /></p></li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/002.png" alt="image" /></p>
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/002.png" alt="image" />
+* 源端口：发送端应用进程端口（16位）
+* 目的端口：接收端应用进程端口（16位）
+* 长度：UDP数据包长度（包括首部和数据部分，单位是字节）
+* 检验和：用于检验数据包是否有效，需要加上14字节的伪首部
+* 注意：当目的端口为无效端口时，接收端会向源端返回一个错误内容为“目的不可达”的ICMP数据包</p>
 
-<ul>
-<li>源端口：发送端应用进程端口（16位）</li>
-<li>目的端口：接收端应用进程端口（16位）</li>
-<li>长度：UDP数据包长度（包括首部和数据部分，单位是字节）</li>
-<li>检验和：用于检验数据包是否有效，需要加上14字节的伪首部</li>
-<li>注意：当目的端口为无效端口时，接收端会向源端返回一个错误内容为“目的不可达”的ICMP数据包</li>
-</ul>
+<h4 id="关于udp套接字">关于UDP套接字</h4>
+
+<p>UDP服务端套接字只有一个，所有的客户端数据包都会发送到同一个socket上，UDP的socket由ip和port指定。</p>
 
 <h2 id="tcp协议">TCP协议</h2>
 
@@ -223,42 +218,35 @@
 <ul>
 <li>TCP是面向连接的，只有连接建立（确定双方数据包可达）才进行数据收发</li>
 <li>只能在建立连接的两个端点间进行通信，不能广播和组播</li>
-<li>提供可靠交付，保证数据包可达，并且保证发送顺序</li>
 <li>全双工通信</li>
 <li>面向字节流，TCP不关心应用层的数据结构，应用层的数据必须序列化为字节流后，才能交付TCP层，TCP层不记录应用进程下发数据的边界，需要应用层自行处理<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/003.png" alt="image" /><br /></li>
+<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/003.png" alt="image" /></li>
+<li>提供可靠交付，保证数据包可达，并且保证交付应用层时，数据包顺序是发送方的发送顺序排列的</li>
+<li>流量控制</li>
+<li>拥塞控制</li>
 </ul>
 
 <h4 id="tcp数据包首部">TCP数据包首部</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/004.png" alt="image" /></p>
-
-<ul>
-<li>源端口：发送端应用进程端口</li>
-<li>目的端口：接收方应用进程端口</li>
-<li>序号：标记数据部分，第一个字节的序号，比如上一个TCP数据包的第一个字节序号为1，最后一个字节序号为200，那么当前数据包的序号为201</li>
-<li>确认号：由接收方向发送方发送，是接收方期待的网络字节序号，这意味着该序号以前的数据包，接收方已经接受，甚至已经上传应用层</li>
-<li>数据偏移：标记数据部分，距离报文起始处有多远，用于记录TCP首部大小，单位是4字节，因为它占4位，最大值是15，所以TCP首部最大字节数是60字节</li>
-<li>保留部分：不使用</li>
-<li>特殊标记：
-
-<ul>
-<li>URG：URG=1时，紧急指针字段有效，告诉主机，有紧急数据包，需要尽快发送。数据包将直接插入发送队列的最前面</li>
-<li>ACK：ACK=1时，确认号有效，否则无效。TCP规定，连接建立后，ACK必须为1</li>
-<li>PSH：发送方PSH=1，则立即创建一个TCP数据包并发送，接收方收到PSH=1的数据包，则直接向上层交付，而不是等到接收缓存满的时候再进行</li>
-<li>SYN：连接请求报文SYN=1，ACK=0；连接接收报文SYN=1，ACK=1</li>
-<li>FIN：表明TCP数据包交付完毕，并要求释放连接</li>
-</ul></li>
-<li>窗口：接收方接收数据字节的窗口，窗口值告诉发送方，从报文段首部中的确认号算起，接收方目前允许对方（连续）发送的数据量，之所以要加限制，是因为接收方的接收缓存大小是有限制的。单位字节。（这里需要和MSS进行区分，MSS也是对方指定，但是MSS指定TCP最大分节，而窗口则表明发送端可以连续发送多少字节，而非一次）</li>
-<li>检验和：用于计算数据包是否有效</li>
-<li>紧急指针：URG=1才生效，标记紧急数据的最后一个字节，在TCP报文中紧急数据是数据开始部分到紧急数据指针之间，随后就是普通数据</li>
-<li>选项：
-
-<ul>
-<li>窗口扩大选项（3字节）：最大值14，表明窗口号可以左移的位数</li>
-<li>时间戳（10字节）：包括发送时间戳和接收时间戳<br /></li>
-</ul></li>
-</ul>
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/004.png" alt="image" />
+* 源端口：发送端应用进程端口
+* 目的端口：接收方应用进程端口
+* 序号：标记数据部分，第一个字节的序号，比如上一个TCP数据包的第一个字节序号为1，最后一个字节序号为200，那么当前数据包的序号为201
+* 确认号：由接收方向发送方发送，是接收方期待的网络字节序号，这意味着该序号以前的数据包，接收方已经接受，甚至已经上传应用层
+* 数据偏移：标记数据部分，距离报文起始处有多远，用于记录TCP首部大小，单位是4字节，因为它占4位，最大值是15，所以TCP首部最大字节数是60字节
+* 保留部分：不使用
+* 特殊标记：
+    * URG：URG=1时，紧急指针字段有效，告诉主机，有紧急数据包，需要尽快发送。数据包将直接插入发送队列的最前面
+    * ACK：ACK=1时，确认号有效，否则无效。TCP规定，连接建立后，ACK必须为1
+    * PSH：发送方PSH=1，则立即创建一个TCP数据包并发送，接收方收到PSH=1的数据包，则直接向上层交付，而不是等到接收缓存满的时候再进行
+    * SYN：连接请求报文SYN=1，ACK=0；连接接收报文SYN=1，ACK=1
+    * FIN：表明TCP数据包交付完毕，并要求释放连接
+* 窗口：接收方接收数据字节的窗口，窗口值告诉发送方，从报文段首部中的确认号算起，接收方目前允许对方（连续）发送的数据量，之所以要加限制，是因为接收方的接收缓存大小是有限制的。单位字节。（这里需要和MSS进行区分，MSS也是对方指定，但是MSS指定TCP最大分节，而窗口则表明发送端可以连续发送多少字节，而非一次）
+* 检验和：用于计算数据包是否有效
+* 紧急指针：URG=1才生效，标记紧急数据的最后一个字节，在TCP报文中紧急数据是数据开始部分到紧急数据指针之间，随后就是普通数据
+* 选项：
+    * 窗口扩大选项（3字节）：最大值14，表明窗口号可以左移的位数
+    * 时间戳（10字节）：包括发送时间戳和接收时间戳</p>
 
 <h4 id="tcp协议可靠传输实现">TCP协议可靠传输实现</h4>
 
@@ -276,7 +264,7 @@
 <li>发送方，滑动窗口内，未发送的字节部分为可用窗口，当可用窗口为0时，不能再发送数据包（超时重传除外）</li>
 <li>数据包就是这样不断循环下去</li>
 </ul></li>
-<li>接收方的滑动窗口以左，是已经被接收的数据，这部分会被应用进程在合适的时机接收，窗口前沿以右的部分是不允许接收的部分，窗口中的数据，可能包含未按序到达的部分，如果字节序不能连续按序达到，接收方就不会向发送方发送期望收到的字节序号（接收方只发送连续收到的字节序最大序号的下一个序号值），当接收方连续收到数据时，窗口后沿会迁移，前沿要么前移要么不动，并且发送已经确认收到的字节序的下一个序号给发送方（期望收到的字节序序号），已经确认收到的部分，在被应用进程接收后，可删除<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/006.png" alt="image" /></li>
+<li>接收方的滑动窗口以左，是已经被接收的数据，这部分会被应用进程在合适的时机接收，窗口前沿以右的部分是不允许接收的部分，窗口中的数据，可能包含未按序到达的部分，如果字节序不能连续按序达到，接收方就不会向发送方发送期望收到的字节序号（接收方只发送连续收到的字节序最大序号的下一个序号值，当同一个确认发送方收到超过3次时，发送方会立刻发送该分节给接收方），当接收方连续收到数据时，窗口后沿会迁移，前沿要么前移要么不动，并且发送已经确认收到的字节序的下一个序号给发送方（期望收到的字节序序号），已经确认收到的部分，在被应用进程接收后，可删除<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/006.png" alt="image" /></li>
 <li>发送方应用进程，在发送数据时，先将字节流写入应用进程所属的内存中，当发送缓存有空余时，写入对应数量的字节（一般写在缓存字节队列的尾部），接收方则不断从已经按序达到的数据中，抽取数据，然后删除这部分数据<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/007.png" alt="image" /></li>
 <li>超时重传机制：发送方在一定时间内，如果没有收到接收方的确认信息，则会重传数据</li>
 </ol>
@@ -306,7 +294,8 @@
 <li>流量控制，是收发两端的事情，本质上是接收方来不及处理，要发送端减少发包量的控制手段</li>
 <li>拥塞控制，是相对于整个网络而言，如果网络中的路由器无法及时处理注入的数据包，就会导致整个网络环境变坏，因此要控制所有端注入网络的数据包数量，同时也要尽量避免全局拥塞的发生，做法就是路由器随机丢弃队尾数据包</li>
 </ul></li>
-<li>如何进行拥塞控制
+
+<li><p>如何进行拥塞控制</p>
 
 <ul>
 <li>慢开始和拥塞避免
@@ -318,16 +307,21 @@
 <li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/009.png" alt="image" /></li>
 <li>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/010.png" alt="image" /></li>
 </ul></li>
-<li>快重传和快恢复
+
+<li><p>快重传和快恢复</p>
 
 <ul>
-<li>快重传算法：比如发送方发送7个TCP报文M1-M7，接收方收到M1和M2时，向发送方发送M2确认，此时假设M3丢失，那么接收方收到M4、M5、M6时（即收到失序数据包），就向发送方发送3个M2确认，发送方收到重复确认超过3次时就重传M3，而不是等超时重传（超时重传要传送M3~M7）</li>
-<li>快恢复算法：当连续收到3次重复确认之后，发送方将窗口减少为原来的一半，并且执行拥塞控制算法</li>
-<li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/011.png" alt="image" /></li>
-<li>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/012.png" alt="image" /></li>
+<li>快重传算法：比如发送方发送7个TCP报文M1-M7，接收方收到M1和M2时，向发送方发送M2确认，此时假设M3丢失，那么接收方收到M4、M5、M6时（即收到失序数据包），就向发送方发送3个M2确认，发送方收到重复确认超过3次时就重传M3，而不是等超时重传（超时重传要传送M3~M7）          <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/011.png" alt="image" /></li>
+<li>快恢复算法：不论当前是处于慢开始算法还是拥塞避免算法，只要当连续收到3次重复确认之后，发送方滑动窗口+3，并且进入快恢复算法，会单独重传多次确认的包，当有新的ack收到时，则立刻进入拥塞避免算法，如果超时触发，滑动窗口减半，并且进入慢开始算法。</li>
+
+<li><p>慢开始、拥塞避免和快恢复算法的状态机示意图  <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/slowstart_congestionavoid_fastrecovery_fsm.png" alt="image" /></p></li>
+
+<li><p>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/012.png" alt="image" /></p></li>
 </ul></li>
-<li>路由器随机丢弃队尾数据包，避免全局阻塞</li>
-<li>滑动窗口大小选定：Min(接收方滑动窗口大小，拥塞窗口大小)</li>
+
+<li><p>路由器随机丢弃队尾数据包，避免全局阻塞</p></li>
+
+<li><p>滑动窗口大小选定：Min(接收方滑动窗口大小，拥塞窗口大小)</p></li>
 </ul></li>
 </ul>
 
@@ -346,7 +340,15 @@
 <li>服务端收到确认的确认以后，进入ESTABLISH状态，双端可以进行通信</li>
 <li>示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/013.png" alt="image" /></li>
 </ul></li>
-<li>为什么要客户端返回确认的确认？因为极端情况下，如果客户端发送了连接请求，此时在网络中发生阻塞，那么客户端在超时以后，会重发连接请求，此时服务端接收并返回确认，客户端返回确认的确认，服务端建立连接。如果此时阻塞的数据包又转发到了服务器，那么服务器依然会发送确认给客户端，客户端因为已经建立了连接，则会把这个确认包丢弃，服务端因为没有收到客户端确认的确认，因此不会再建立连接。如果不是采用三次握手机制，那么在这种情况下，服务端就会建立两个连接，从而浪费网络资源。</li>
+<li>为什么是三次握手，而不是两次、四次，原因是，不论是发送方还是接收方，都需要确保对方已经收到请求并且允许连接的情况下才能建立连接。接收方收到请求并允许连接，会返回一个ACK确认包。收到确认意味着对方已经收到请求，并且允许连接，整个过程大概就是：<br />
+
+<ul>
+<li>A&ndash;sync&ndash;&gt;B</li>
+<li>A&lt;&ndash;ack&ndash;B</li>
+<li>A&lt;&ndash;sync&ndash;B</li>
+<li>A&ndash;ack&ndash;&gt;B<br />
+一共四次，中间两次刚好可以合并，变成三次握手</li>
+</ul></li>
 </ul></li>
 <li>TCP四次挥手
 
@@ -375,13 +377,10 @@
 
 <h4 id="tcp状态机示意">TCP状态机示意</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p></div>
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p>
+</div>
     <div class="tags">
-      27 Mar 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/network/">#network</a>
-        
+      1 Jan 0001
        
     </div>
     
@@ -405,11 +404,11 @@
 
 <paper-item>
   
-    <a href="https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
+    <a href="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
   
     <div class="flex"></div>
   
-    <a href="https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/"><paper-fab icon="chevron-right"></paper-fab></a>
+    <paper-fab disabled icon="chevron-right"></paper-fab>
   
 </paper-item>
 
