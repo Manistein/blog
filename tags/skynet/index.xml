@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Skynet on Manistein&#39;s Blog</title>
+    <link>https://manistein.github.io/blog/tags/skynet/</link>
+    <description>Recent content in Skynet on Manistein&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>© 2017 All rights reserved</copyright>
+    <lastBuildDate>Wed, 16 Aug 2017 19:41:45 +0800</lastBuildDate>
+    
+	<atom:link href="https://manistein.github.io/blog/tags/skynet/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>skynet源码赏析</title>
+      <link>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</link>
+      <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</guid>
+      <description>&lt;h4 id=&#34;写在最前面&#34;&gt;写在最前面&lt;/h4&gt;
+
+&lt;p&gt;skynet是目前使用比较广泛的服务端框架，虽然目前网上资料众多，但是从自己的学习和使用经历来看，缺乏能够让自己系统了解该框架底层机制的资料，这段时间，趁着自己有时间，阅读了skynet底层的一些代码，现在将自己理解的部分总结并记录下来，以备日后使用。本文旨在捋清skynet框架的结构和主要流程，并不会涉及skynet的方方面面，一些论述，我贴上了一些源码加以论证，并在引用的源码里加入了一些注释。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>skynet开发环境部署</title>
+      <link>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Sun, 01 Nov 2015 16:02:45 +0800</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;skynet官方没有提供windows版本，而在windows上进行开发则往往能够给我们提供极大的便利，一般而言，我们本地进行开发需要安装虚拟机(或者真机上安装linux)，然后在虚拟机(或真机)内部署skynet进程。为了能够方便地进行开发，我们将采用sublime text编辑器，通过安装SFTP插件，来将我们的代码同步到虚拟机(或真机)上。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

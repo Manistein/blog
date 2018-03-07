@@ -1,0 +1,289 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>skynet开发环境部署</title>
+  <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-toolbar/paper-toolbar.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-fab/paper-fab.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-item/paper-item.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-menu/paper-menu.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-image/iron-image.html">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <style is="custom-style">
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .nav {
+      border-right: 1px solid #ccc;
+    }
+    
+    paper-scroll-header-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--paper-grey-200, #eee);
+       
+      --paper-scroll-header-panel-full-header: {
+        background-image: url(https://manistein.github.io/blog//images/cover.png);
+      };
+       
+      --paper-scroll-header-panel-condensed-header: {
+        background-image: url(https://manistein.github.io/blog//images/cover.png);
+      };
+    }
+    
+    paper-toolbar {
+       
+      height: 256px;
+      background-color: transparent;
+    }
+    .profile{
+      width: 100%;
+      padding-bottom: 20px;
+    }
+    .photo{
+      margin: 20px;
+      display: inline-block;
+      height: 64px; width: 64px;
+      border-radius: 50%;
+    }
+    .article{
+      border: 1px solid #bebebe;
+      padding: 16px;
+      margin: 16px;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    .title{
+      font-size: 22px;
+      padding: 8px 0 16px;
+    }
+    .account{
+      margin-left: 10px;
+    }
+    .description{
+      font-size: 16px;
+      padding-bottom: 8px;
+    }
+    .author{
+      font-size: 16px;
+      padding-left: 20px;
+      color: white;
+    }
+    .design{
+      font-size: 14px;
+    }
+    .copyright{
+      font-size: 16px;
+    }
+    paper-menu a {
+      text-decoration: none;
+      color: #212121;
+    }
+  </style>
+
+</head>
+<body>
+  <paper-drawer-panel id="drawerPanel" responsive-width="1280px">
+    <div class="nav scroll" drawer>
+    
+      <iron-image class="profile" sizing="cover" src="https://manistein.github.io/blog//images/profile.png">
+    
+        
+          <iron-image class="photo" sizing="cover" src="https://manistein.github.io/blog//images/me.jpg"></iron-image>
+        
+          <div class="author">Manistein</div>
+      </iron-image>
+
+      <div class="account">
+        <div class="flex"></div>
+        
+        
+        
+        
+        
+          <a href="https://github.com/Manistein"><paper-icon-button src="https://manistein.github.io/blog//images/github2-dreamstale35.png"></paper-icon-button></a>
+        
+        
+          <a href="https://www.zhihu.com/people/wu-yin-jie/activities"><paper-icon-button src="https://manistein.github.io/blog//images/zhihu.jpg"></paper-icon-button></a>
+        
+          <a href="https://manistein.github.io/blog//index.xml"><paper-icon-button src="https://manistein.github.io/blog//images/feed-dreamstale27.png"></paper-icon-button></a>
+      
+      </div>
+      <paper-menu>
+        <a href="https://manistein.github.io/blog/"><paper-item>
+          <iron-icon icon="home"></iron-icon>　<div class="flex">Home</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//categories/"><paper-item>
+          <iron-icon icon="drafts"></iron-icon>　<div class="flex">Categories</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//tags/"><paper-item>
+          <iron-icon icon="loyalty"></iron-icon>　<div class="flex">Tags</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//about/"><paper-item>
+          <iron-icon icon="info"></iron-icon>　<div class="flex">About</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+      </paper-menu>
+    </div>
+
+    <paper-scroll-header-panel main condenses header-height="256" condensed-header-height="64">
+      <paper-toolbar>
+        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        
+          <div style="margin:0 auto;margin-top:200px;font-size:48px;">Manistein&#39;s Blog</div>
+        
+      </paper-toolbar>
+
+
+<div class="content">
+
+  <div class="article">
+    <div class="title">skynet开发环境部署</div>
+    
+      <div class="categories">
+        
+          <a href="https://manistein.github.io/blog//categories/server/">server</a>
+        
+      </div>
+     
+    <div class="description"><h1 id="前言">前言</h1>
+
+<p>skynet官方没有提供windows版本，而在windows上进行开发则往往能够给我们提供极大的便利，一般而言，我们本地进行开发需要安装虚拟机(或者真机上安装linux)，然后在虚拟机(或真机)内部署skynet进程。为了能够方便地进行开发，我们将采用sublime text编辑器，通过安装SFTP插件，来将我们的代码同步到虚拟机(或真机)上。</p>
+
+<p></p>
+
+<h1 id="安装linux-ubuntu系统-虚拟机or真机安装">安装linux ubuntu系统（虚拟机or真机安装）</h1>
+
+<p><a href="http://www.jointd.com/?p=457">真机安装参考</a></p>
+
+<p><a href="http://ubuntuserverguide.com/2013/02/manual-disk-partition-guide-for-ubuntu-server-edition.html">磁盘分区参考</a></p>
+
+<h1 id="sftp安装与配置流程">SFTP安装与配置流程</h1>
+
+<ul>
+<li><p>安装方法：ctrl+shift+p，在弹出来的框内输入Install Package<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv001.png" alt="image" /></p></li>
+
+<li><p>在后面弹出来的框内输入SFTP，然后按下回车键就会自动安装<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv002.png" alt="image" /><br />
+SFTP的作用是，在windows上写的代码，能够同步更新到ubuntu上</p></li>
+
+<li><p>右键项目根目录，选择SFTP/FTP，选择Edit Remote Mapping对SFTP进行配置<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv003.png" alt="image" /></p></li>
+
+<li><p>这里需要配置几个部分：host（linux地址），user（linux账户名），password（linux账户密码），remote_path（linux上要被同步的文件夹，确保在linux上已经创建）<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv004.png" alt="image" /><br />
+另外upload_on_save属性要设置为true，这样每次保存都会自动上传</p></li>
+
+<li><p>其他插件安装：AutoFindName（输入字母自动补全），AllAutoComplete（类似VisualAssixtX的只能提示），ConvertToUTF8（乱码解决方案），可不装，但是安装了可以极大方便开发</p></li>
+
+<li><p>存放代码的服务器文件夹拖到sublime中，我的目录结构如下面所示:<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv005.png" alt="image" /></p></li>
+
+<li><p>同步到服务器：一般情况下，只要按照上述步骤走，ctrl+s的时候，也会同步到服务器上，不过改动特别多的时候，比如从svn或git上update了，那么需要将整个文件夹进行一次同步，如<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv006.png" alt="image" /><br />
+通过这种方式进行同步，服务器编译出来的文件会被删掉，因此需要重新编译</p></li>
+
+<li><p>注意，同步之前一定要确保相应的目录是存在的</p></li>
+</ul>
+
+<h1 id="skynet编译及运行">skynet编译及运行</h1>
+
+<ul>
+<li>进入skynet文件目录，输入make linux就可以进行编译，如果jemalloc模块无法编译，可以输入make linux MALLOC_STATICLIB= SKYNET_DEFINES=-DNOUSE_JEMALLOC</li>
+<li>编译结束后，会出现skynet*的文件，相当于windows下的exe文件，运行指令为./skynet config_path<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv007.png" alt="image" /><br />
+config_path是config文件存放的路径</li>
+<li>关于config文件，云风的wiki说的很清楚了，这里特别强调一下，config中的root一般设置为skynet的根目录logger = nil，日志默认输出在控制台，也可以指定定一个脚本，来创建一个自定义的logservice，不过此时logger要指定一个自己写的lua脚本，并且logservice赋值为snlua，表示自定义的log服务是使用lua写的</li>
+<li>在完成了config配置，指定了启动脚本以后，我们就可以在启动脚本里写一个Hello Skynet，使用./skynet config_path指令启动skynet，ubuntu下ctrl+c可以退出<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv008.png" alt="image" /><br />
+这里每隔一秒就会输出一个hello skynet，这里我自己实现了logservice，大家可以暂时忽略<br /></li>
+</ul>
+
+<h1 id="关于securecrt">关于SecureCRT</h1>
+
+<p>虽然按照上面的步骤可以把windows上修改的内容同步到linux上，但是这样操作起来还不是很方便，我们可以下载SecureCRT，在windows上操作Ubuntu</p>
+
+<ul>
+<li>安装SecureCRT</li>
+
+<li><p>创建链接</p>
+
+<ul>
+<li><p>右键Session，选择New Session<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv009.png" alt="image" /></p></li>
+
+<li><p>选择ssh2，点击下一步<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv010.png" alt="image" /></p></li>
+
+<li><p>hostname填写服务器名称，username填写账号名称，防火墙不开<br />
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv011.png" alt="image" /></p></li>
+
+<li><p>下一步，确定，创建完成，下图展示SecureCRT终端
+<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/server/skynet/installenv012.png" alt="image" /></p></li>
+</ul></li>
+</ul></div>
+    <div class="tags">
+      1 Nov 2015
+      
+        
+          <a href="https://manistein.github.io/blog//tags/skynet/">#skynet</a>
+        
+       
+    </div>
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+     
+    var disqus_shortname = 'Your Disqus Name';
+    
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
+  </div>
+
+</div>
+
+<paper-item>
+  
+    <a href="https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
+  
+    <div class="flex"></div>
+  
+    <a href="https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/"><paper-fab icon="chevron-right"></paper-fab></a>
+  
+</paper-item>
+
+<html>
+<body>
+      <paper-item>
+        <div class="copyright">© 2017 All rights reserved</div>
+        <div class="flex"></div>
+      </paper-item>
+    </paper-scroll-header-panel>
+  </paper-drawer-panel>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+</body>
+</html>

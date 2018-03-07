@@ -1,0 +1,427 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title></title>
+  <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-toolbar/paper-toolbar.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-fab/paper-fab.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-item/paper-item.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-menu/paper-menu.html">
+  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-image/iron-image.html">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <style is="custom-style">
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .nav {
+      border-right: 1px solid #ccc;
+    }
+    
+    paper-scroll-header-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--paper-grey-200, #eee);
+       
+      --paper-scroll-header-panel-full-header: {
+        background-image: url(https://manistein.github.io/blog//images/cover.png);
+      };
+       
+      --paper-scroll-header-panel-condensed-header: {
+        background-image: url(https://manistein.github.io/blog//images/cover.png);
+      };
+    }
+    
+    paper-toolbar {
+       
+      height: 256px;
+      background-color: transparent;
+    }
+    .profile{
+      width: 100%;
+      padding-bottom: 20px;
+    }
+    .photo{
+      margin: 20px;
+      display: inline-block;
+      height: 64px; width: 64px;
+      border-radius: 50%;
+    }
+    .article{
+      border: 1px solid #bebebe;
+      padding: 16px;
+      margin: 16px;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    .title{
+      font-size: 22px;
+      padding: 8px 0 16px;
+    }
+    .account{
+      margin-left: 10px;
+    }
+    .description{
+      font-size: 16px;
+      padding-bottom: 8px;
+    }
+    .author{
+      font-size: 16px;
+      padding-left: 20px;
+      color: white;
+    }
+    .design{
+      font-size: 14px;
+    }
+    .copyright{
+      font-size: 16px;
+    }
+    paper-menu a {
+      text-decoration: none;
+      color: #212121;
+    }
+  </style>
+
+</head>
+<body>
+  <paper-drawer-panel id="drawerPanel" responsive-width="1280px">
+    <div class="nav scroll" drawer>
+    
+      <iron-image class="profile" sizing="cover" src="https://manistein.github.io/blog//images/profile.png">
+    
+        
+          <iron-image class="photo" sizing="cover" src="https://manistein.github.io/blog//images/me.jpg"></iron-image>
+        
+          <div class="author">Manistein</div>
+      </iron-image>
+
+      <div class="account">
+        <div class="flex"></div>
+        
+        
+        
+        
+        
+          <a href="https://github.com/Manistein"><paper-icon-button src="https://manistein.github.io/blog//images/github2-dreamstale35.png"></paper-icon-button></a>
+        
+        
+          <a href="https://www.zhihu.com/people/wu-yin-jie/activities"><paper-icon-button src="https://manistein.github.io/blog//images/zhihu.jpg"></paper-icon-button></a>
+        
+          <a href="https://manistein.github.io/blog//index.xml"><paper-icon-button src="https://manistein.github.io/blog//images/feed-dreamstale27.png"></paper-icon-button></a>
+      
+      </div>
+      <paper-menu>
+        <a href="https://manistein.github.io/blog/"><paper-item>
+          <iron-icon icon="home"></iron-icon>　<div class="flex">Home</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//categories/"><paper-item>
+          <iron-icon icon="drafts"></iron-icon>　<div class="flex">Categories</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//tags/"><paper-item>
+          <iron-icon icon="loyalty"></iron-icon>　<div class="flex">Tags</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+        <a href="https://manistein.github.io/blog//about/"><paper-item>
+          <iron-icon icon="info"></iron-icon>　<div class="flex">About</div>
+          <iron-icon icon="chevron-right"></iron-icon>
+        </paper-item></a>
+      </paper-menu>
+    </div>
+
+    <paper-scroll-header-panel main condenses header-height="256" condensed-header-height="64">
+      <paper-toolbar>
+        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        
+          <div style="margin:0 auto;margin-top:200px;font-size:48px;">Manistein&#39;s Blog</div>
+        
+      </paper-toolbar>
+
+
+<div class="content">
+
+  <div class="article">
+    <div class="title"></div>
+     
+    <div class="description">
+
+<h2 id="运输层协议公有特征">运输层协议公有特征</h2>
+
+<h4 id="应用进程之间的通信">应用进程之间的通信</h4>
+
+<ul>
+<li>两台主机之间的通信，实际上是两台主机上应用进程之间的通信</li>
+<li>主机上所有使用网络功能的应用进程，共享操作系统内核提供的网络通信功能</li>
+<li>因为操作系统上应用进程众多，因此为了将数据包准确交付给目标机器上的指定进程，因此需要通过端口号来区分不同的进程</li>
+<li>IP+Port能够将数据包发送到指定机器上的指定进程</li>
+<li>运输层位于内核通信服务的最高层，接收应用进程交付的数据包，同时将收到的数据包交付给应用进程</li>
+
+<li><p>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</p>
+
+<h4 id="复用和分用">复用和分用</h4></li>
+
+<li><p>复用：所有使用网络功能的应用进程，共享操作系统内核提供的网络服务，它运行包括运输层在内的通信协议逻辑</p></li>
+
+<li><p>分用：内核收到数据包以后，将数据包上传应用进程，具体交付给哪个应用进程，通过端口号区分</p>
+
+<h4 id="端口号划分">端口号划分</h4></li>
+
+<li><p>系统端口号：0~1023</p></li>
+
+<li><p>登记端口号：1024~49151</p></li>
+
+<li><p>客户端使用端口号：49152~65535</p></li>
+</ul>
+
+<h2 id="udp协议">UDP协议</h2>
+
+<h4 id="udp特征">UDP特征</h4>
+
+<ul>
+<li>UDP被称为用户数据报协议，它是无连接的，可以直接下传给IP层在网络上传输</li>
+<li>应用层交付的数据包，将不进行任何分片，加上UDP首部后直接交付IP层</li>
+<li>UDP协议不实现可靠传输，因此UDP协议尽最大努力交付</li>
+
+<li><p>UDP没有流量控制，没有拥塞控制，更没有连接状态控制</p>
+
+<h4 id="udp首部">UDP首部</h4>
+
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/001.png" alt="image" /></p></li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/002.png" alt="image" />
+* 源端口：发送端应用进程端口（16位）
+* 目的端口：接收端应用进程端口（16位）
+* 长度：UDP数据包长度（包括首部和数据部分，单位是字节）
+* 检验和：用于检验数据包是否有效，需要加上14字节的伪首部
+* 注意：当目的端口为无效端口时，接收端会向源端返回一个错误内容为“目的不可达”的ICMP数据包</p>
+
+<h4 id="关于udp套接字">关于UDP套接字</h4>
+
+<p>UDP服务端套接字只有一个，所有的客户端数据包都会发送到同一个socket上，UDP的socket由ip和port指定。</p>
+
+<h2 id="tcp协议">TCP协议</h2>
+
+<h4 id="概述-tcp特征">概述（TCP特征）</h4>
+
+<ul>
+<li>TCP是面向连接的，只有连接建立（确定双方数据包可达）才进行数据收发</li>
+<li>只能在建立连接的两个端点间进行通信，不能广播和组播</li>
+<li>全双工通信</li>
+<li>面向字节流，TCP不关心应用层的数据结构，应用层的数据必须序列化为字节流后，才能交付TCP层，TCP层不记录应用进程下发数据的边界，需要应用层自行处理<br />
+<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/003.png" alt="image" /></li>
+<li>提供可靠交付，保证数据包可达，并且保证交付应用层时，数据包顺序是发送方的发送顺序排列的</li>
+<li>流量控制</li>
+<li>拥塞控制</li>
+</ul>
+
+<h4 id="tcp数据包首部">TCP数据包首部</h4>
+
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/004.png" alt="image" />
+* 源端口：发送端应用进程端口
+* 目的端口：接收方应用进程端口
+* 序号：标记数据部分，第一个字节的序号，比如上一个TCP数据包的第一个字节序号为1，最后一个字节序号为200，那么当前数据包的序号为201
+* 确认号：由接收方向发送方发送，是接收方期待的网络字节序号，这意味着该序号以前的数据包，接收方已经接受，甚至已经上传应用层
+* 数据偏移：标记数据部分，距离报文起始处有多远，用于记录TCP首部大小，单位是4字节，因为它占4位，最大值是15，所以TCP首部最大字节数是60字节
+* 保留部分：不使用
+* 特殊标记：
+    * URG：URG=1时，紧急指针字段有效，告诉主机，有紧急数据包，需要尽快发送。数据包将直接插入发送队列的最前面
+    * ACK：ACK=1时，确认号有效，否则无效。TCP规定，连接建立后，ACK必须为1
+    * PSH：发送方PSH=1，则立即创建一个TCP数据包并发送，接收方收到PSH=1的数据包，则直接向上层交付，而不是等到接收缓存满的时候再进行
+    * SYN：连接请求报文SYN=1，ACK=0；连接接收报文SYN=1，ACK=1
+    * FIN：表明TCP数据包交付完毕，并要求释放连接
+* 窗口：接收方接收数据字节的窗口，窗口值告诉发送方，从报文段首部中的确认号算起，接收方目前允许对方（连续）发送的数据量，之所以要加限制，是因为接收方的接收缓存大小是有限制的。单位字节。（这里需要和MSS进行区分，MSS也是对方指定，但是MSS指定TCP最大分节，而窗口则表明发送端可以连续发送多少字节，而非一次）
+* 检验和：用于计算数据包是否有效
+* 紧急指针：URG=1才生效，标记紧急数据的最后一个字节，在TCP报文中紧急数据是数据开始部分到紧急数据指针之间，随后就是普通数据
+* 选项：
+    * 窗口扩大选项（3字节）：最大值14，表明窗口号可以左移的位数
+    * 时间戳（10字节）：包括发送时间戳和接收时间戳</p>
+
+<h4 id="tcp协议可靠传输实现">TCP协议可靠传输实现</h4>
+
+<ol>
+<li>滑动窗口协议</li>
+<li>数据收发双端，都有自己的应用进程内存，以及一个接收缓存和一个发送缓存</li>
+<li>在发送缓存和接收缓存，有一个窗口用于控制数据包的收发,不论发送缓存还是接收缓存都有一个滑动窗口，以发送端滑动窗口为例，字节数据和窗口的关系如下图所示：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/005.png" alt="image" />
+
+<ul>
+<li>当双端连接建立以后，接收方会告诉发送方，自己的窗口大小，以及最大分节大小（MSS即Max Segment Size），窗口大小是指发送方，可以连续发送的字节数，窗口大小与接收方的接收缓存大小及应用层接收数据字节的速度有关系，MSS则指定发送方每个TCP分节的最大大小是多少</li>
+<li>数据缓存以窗口的前沿和后沿作为分界线，对于发送方来说，后沿以左的数据是已经发送并得到确认的数据，窗口内第一个字节，是接收方期望收到的字节序号，窗口内的字节数据包括发送等待确认和未发送部分，前沿部分的右侧是不允许发送的数据</li>
+<li>当发送方收到接收方期望收到的字节序序号时，证明之前的字节已经被接收方接收，那么窗口后沿则可以前移（向右移动），前沿要么保持不动，要么向前移动（右移），TCP不推荐前沿向后移动，容易出现问题</li>
+<li>窗口大小会根据接收方的状态，做出适当调整</li>
+<li>发送方在一定时间内未收到接收方的确认时，会从接收方上次传来的期望收到的字节序号开始到窗口前沿的最后一个字节，将这部分数据重新发送给接收方</li>
+<li>发送方，滑动窗口内，未发送的字节部分为可用窗口，当可用窗口为0时，不能再发送数据包（超时重传除外）</li>
+<li>数据包就是这样不断循环下去</li>
+</ul></li>
+<li>接收方的滑动窗口以左，是已经被接收的数据，这部分会被应用进程在合适的时机接收，窗口前沿以右的部分是不允许接收的部分，窗口中的数据，可能包含未按序到达的部分，如果字节序不能连续按序达到，接收方就不会向发送方发送期望收到的字节序号（接收方只发送连续收到的字节序最大序号的下一个序号值，当同一个确认发送方收到超过3次时，发送方会立刻发送该分节给接收方），当接收方连续收到数据时，窗口后沿会迁移，前沿要么前移要么不动，并且发送已经确认收到的字节序的下一个序号给发送方（期望收到的字节序序号），已经确认收到的部分，在被应用进程接收后，可删除<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/006.png" alt="image" /></li>
+<li>发送方应用进程，在发送数据时，先将字节流写入应用进程所属的内存中，当发送缓存有空余时，写入对应数量的字节（一般写在缓存字节队列的尾部），接收方则不断从已经按序达到的数据中，抽取数据，然后删除这部分数据<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/007.png" alt="image" /></li>
+<li>超时重传机制：发送方在一定时间内，如果没有收到接收方的确认信息，则会重传数据</li>
+</ol>
+
+<h4 id="tcp的流量控制">TCP的流量控制</h4>
+
+<ul>
+<li>当发送方发送的数据过多时，会使接收方来不及将数据上传应用层（与应用层接收数据的速度，接收缓存大小有关系），此时，需要控制发送方发送数据包的数量，控制方是接收方。</li>
+<li>发送方发送数据时，接收方在接收到以后，会将接收到的最大字节序号+1作为确认号，返回给发送方，这个返回确认包，还包含接收方的滑动窗口大小。发送方接收到确认包以后，会将滑动窗口右移，并且将窗口大小设置为接收方的滑动窗口大小。</li>
+<li>当接收方滑动窗口为0时，会向发送端发送自己的窗口大小，如果发送端收到该数据包，则发送方滑动窗口设置为零，此时就引起死锁（因为发送方没东西发了，接收方因为没有东西收，也不会有反馈），此时需要发送0窗口探测，让接收方返回一个tcp报文，将接收方的滑动窗口大小返回给发送方。如果该确认报文在传输过程中丢失，那么会出现接收方滑动窗口为0，但是发送方窗口保持原来大小，在超时后，发送方会重传数据包，并且接收方会返回确认号及当前窗口大小。</li>
+<li>利用可变窗口进行流量控制示例（滑动窗口大小为400）<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/008.png" alt="image" /></li>
+</ul>
+
+<h4 id="tcp的拥塞控制">TCP的拥塞控制</h4>
+
+<ul>
+<li>要进行拥塞的原因
+
+<ul>
+<li>什么是网络拥塞：当对网络资源需求总和&gt;网络资源时，就会发生拥塞。本质就是在某个时间段内，注入网络环境的数据包太多，以至于网络环境无法处理的时候，就会发生。</li>
+<li>如何产生：当主机注入网络的数据包过多时，路由器、网桥、转发器无法及时转发时，就会产生</li>
+<li>会有什么影响：网络环境恶化，通信时间变长甚至中断</li>
+</ul></li>
+<li>和流量控制的区别
+
+<ul>
+<li>流量控制，是收发两端的事情，本质上是接收方来不及处理，要发送端减少发包量的控制手段</li>
+<li>拥塞控制，是相对于整个网络而言，如果网络中的路由器无法及时处理注入的数据包，就会导致整个网络环境变坏，因此要控制所有端注入网络的数据包数量，同时也要尽量避免全局拥塞的发生，做法就是路由器随机丢弃队尾数据包</li>
+</ul></li>
+
+<li><p>如何进行拥塞控制</p>
+
+<ul>
+<li>慢开始和拥塞避免
+
+<ul>
+<li>当网络主机建立时，发送方先把拥塞窗口设置为1（字节），然后注入网络，收到接收方确认以后，将窗口大小乘以2，再将数据包发送出去，如果收到确认则再乘以2，如此循环下去</li>
+<li>窗口有一个慢开始门限值（这个门限值为发生拥塞时，窗口大小的一半），当达到这个值的时候，此时改为拥塞控制算法，该算法就是每次发送完数据包，收到确认后，滑动窗口大小+1。</li>
+<li>当发送方迟迟没有收到确认，并要进行超时重传的时候，此时判定网络处于拥塞状态，拥塞窗口大小重新设置为1，并开始慢开始算法</li>
+<li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/009.png" alt="image" /></li>
+<li>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/010.png" alt="image" /></li>
+</ul></li>
+
+<li><p>快重传和快恢复</p>
+
+<ul>
+<li>快重传算法：比如发送方发送7个TCP报文M1-M7，接收方收到M1和M2时，向发送方发送M2确认，此时假设M3丢失，那么接收方收到M4、M5、M6时（即收到失序数据包），就向发送方发送3个M2确认，发送方收到重复确认超过3次时就重传M3，而不是等超时重传（超时重传要传送M3~M7）          <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/011.png" alt="image" /></li>
+<li>快恢复算法：不论当前是处于慢开始算法还是拥塞避免算法，只要当连续收到3次重复确认之后，发送方滑动窗口+3，并且进入快恢复算法，会单独重传多次确认的包，当有新的ack收到时，则立刻进入拥塞避免算法，如果超时触发，滑动窗口减半，并且进入慢开始算法。</li>
+
+<li><p>慢开始、拥塞避免和快恢复算法的状态机示意图  <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/slowstart_congestionavoid_fastrecovery_fsm.png" alt="image" /></p></li>
+
+<li><p>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/012.png" alt="image" /></p></li>
+</ul></li>
+
+<li><p>路由器随机丢弃队尾数据包，避免全局阻塞</p></li>
+
+<li><p>滑动窗口大小选定：Min(接收方滑动窗口大小，拥塞窗口大小)</p></li>
+</ul></li>
+</ul>
+
+<h4 id="tcp连接管理">TCP连接管理</h4>
+
+<ul>
+<li>TCP三次握手
+
+<ul>
+<li>流程
+
+<ul>
+<li>客户端发送连接请求，客户端进入SYN-SEND状态</li>
+<li>服务端收到客户端的连接请求后，返回请求确认包，服务端进入SYN-RECV状态</li>
+<li>客户端收到确认，进入ESTABLISH状态，并且发送确认的确认给服务端</li>
+<li>服务端收到确认的确认以后，进入ESTABLISH状态，双端可以进行通信</li>
+<li>示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/013.png" alt="image" /></li>
+</ul></li>
+<li>为什么是三次握手，而不是两次、四次，原因是，不论是发送方还是接收方，都需要确保对方已经收到请求并且允许连接的情况下才能建立连接。接收方收到请求并允许连接，会返回一个ACK确认包。收到确认意味着对方已经收到请求，并且允许连接，整个过程大概就是：<br />
+
+<ul>
+<li>A&ndash;sync&ndash;&gt;B</li>
+<li>A&lt;&ndash;ack&ndash;B</li>
+<li>A&lt;&ndash;sync&ndash;B</li>
+<li>A&ndash;ack&ndash;&gt;B<br />
+一共四次，中间两次刚好可以合并，变成三次握手</li>
+</ul></li>
+</ul></li>
+<li>TCP四次挥手
+
+<ul>
+<li>流程
+
+<ul>
+<li>客户端向服务端发送关闭请求数据包，客户端进入FINAL-WAIT1状态</li>
+<li>服务器收到客户端的关闭请求后，服务器进入CLOSE-WAIT状态，此时客户端到服务端方向的连接就已经中断了，客户端不能再向服务端发送任何数据</li>
+<li>客户端收到服务器的关闭确认包以后，则进入到FINAL-WAIT2状态，此时客户端只需要等待服务端将未发完的数据包发送过来</li>
+<li>服务端继续将未发送完毕的数据包发送给客户端，在所有的数据包都发送完毕以后，服务端向客户端发送关闭确认，并且进入LAST-ACK状态</li>
+<li>客户端收到服务端发送的连接关闭数据包，则进入到TIME-WAIT状态，该状态持续2MSL（Max Segment Lifetime最大分片存活时间，一般设置为2分钟），并且在2MSL后关闭</li>
+<li>服务端接收到客户端的确认数据包以后，则关闭连接（注意这里服务端会比客户端先关闭）</li>
+<li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/014.png" alt="image" /></li>
+</ul></li>
+<li>为什么客户端在接收到服务端发送的关闭确认包以后，要设置2MSL的延长关闭时间？
+
+<ul>
+<li>因为客户端在接收服务端发送的关闭请求的时候，会向服务端发送确认数据包，而这个确认数据包可能会在中途丢失，因此服务端在超过时限以后，再次发送一个关闭通知给客户端，客户端接到以后，会重新设置2MSL的延长关闭时间，并且再次向服务端发送确认数据包，如果客户端在接到关闭通知后，马上进入close状态，那么服务器如果没收到确认，则会再次发送关闭通知，而此时，客户端早已关闭，不会向服务端返回确认，因此服务端就不能够正常退出连接</li>
+<li>每个数据包都有个最长存活时间，这么做的目的是，将所有发出去但是阻塞在网络中的数据包，都能够超过最长存活时间，并且被路由器抛弃，这样下次建立连接的时候，就不会接收到上次连接残留的数据包</li>
+</ul></li>
+<li>保活机制：TCP的保活机制是指，当某一端因为机器故障后，一端无法连接到另一端时，采取的一种主动中断连接的办法，任何一端收到一个数据包时，会重新设置一个保活时间，当超过这个时间都没有收到任何对端发送过来的数据包时（第一次是两小时），会发送一个探测报文，以后每隔75分钟会发送一个探测报文来检测连接，当累计发出10个探测报文时，则主动中断连接
+<br /></li>
+</ul></li>
+</ul>
+
+<h4 id="tcp状态机示意">TCP状态机示意</h4>
+
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p>
+</div>
+    <div class="tags">
+      1 Jan 0001
+       
+    </div>
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+     
+    var disqus_shortname = 'Your Disqus Name';
+    
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
+  </div>
+
+</div>
+
+<paper-item>
+  
+    <a href="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/"><paper-fab icon="chevron-left"><a></a></paper-fab></a>
+  
+    <div class="flex"></div>
+  
+    <paper-fab disabled icon="chevron-right"></paper-fab>
+  
+</paper-item>
+
+<html>
+<body>
+      <paper-item>
+        <div class="copyright">© 2017 All rights reserved</div>
+        <div class="flex"></div>
+      </paper-item>
+    </paper-scroll-header-panel>
+  </paper-drawer-panel>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+</body>
+</html>
