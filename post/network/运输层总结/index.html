@@ -160,9 +160,7 @@
         
       </div>
      
-    <div class="description">
-
-<h2 id="运输层协议公有特征">运输层协议公有特征</h2>
+    <div class="description"><h2 id="运输层协议公有特征">运输层协议公有特征</h2>
 
 <h4 id="应用进程之间的通信">应用进程之间的通信</h4>
 
@@ -172,12 +170,15 @@
 <li>因为操作系统上应用进程众多，因此为了将数据包准确交付给目标机器上的指定进程，因此需要通过端口号来区分不同的进程</li>
 <li>IP+Port能够将数据包发送到指定机器上的指定进程</li>
 <li>运输层位于内核通信服务的最高层，接收应用进程交付的数据包，同时将收到的数据包交付给应用进程</li>
+<li>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</li>
+</ul>
 
-<li><p>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</p>
+<p></p>
 
-<h4 id="复用和分用">复用和分用</h4></li>
+<h4 id="复用和分用">复用和分用</h4>
 
-<li><p>复用：所有使用网络功能的应用进程，共享操作系统内核提供的网络服务，它运行包括运输层在内的通信协议逻辑</p></li>
+<ul>
+<li>复用：所有使用网络功能的应用进程，共享操作系统内核提供的网络服务，它运行包括运输层在内的通信协议逻辑</li>
 
 <li><p>分用：内核收到数据包以后，将数据包上传应用进程，具体交付给哪个应用进程，通过端口号区分</p>
 
@@ -383,8 +384,7 @@
 
 <h4 id="tcp状态机示意">TCP状态机示意</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p>
-</div>
+<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p></div>
     <div class="tags">
       27 Mar 2017
       
