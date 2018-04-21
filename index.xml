@@ -165,6 +165,15 @@
     </item>
     
     <item>
+      <title>test</title>
+      <link>https://manistein.github.io/blog/post/game/test/</link>
+      <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/game/test/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>变换矩阵推导</title>
       <link>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</link>
       <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>

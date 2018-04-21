@@ -58,6 +58,11 @@
   </url>
   
   <url>
+    <loc>https://manistein.github.io/blog/post/game/test/</loc>
+    <lastmod>2014-03-08T12:49:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/</loc>
     <lastmod>2014-03-08T12:49:00+08:00</lastmod>
   </url>
@@ -79,6 +84,18 @@
   
   <url>
     <loc>https://manistein.github.io/blog/categories/client/</loc>
+    <lastmod>2014-03-08T12:49:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://manistein.github.io/blog/tags/game/</loc>
+    <lastmod>2014-03-08T12:49:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://manistein.github.io/blog/categories/game/</loc>
     <lastmod>2014-03-08T12:49:00+08:00</lastmod>
     <priority>0</priority>
   </url>
