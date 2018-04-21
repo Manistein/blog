@@ -1,268 +1,120 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>Articles</title>
-  <script src="https://manistein.github.io/blog//bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-icons/iron-icons.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-drawer-panel/paper-drawer-panel.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-icon-button/paper-icon-button.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-toolbar/paper-toolbar.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-fab/paper-fab.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-item/paper-item.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/paper-menu/paper-menu.html">
-  <link rel="import" href="https://manistein.github.io/blog//bower_components/iron-image/iron-image.html">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
-  <style is="custom-style">
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-    .nav {
-      border-right: 1px solid #ccc;
-    }
-    
-    paper-scroll-header-panel {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: var(--paper-grey-200, #eee);
-       
-      --paper-scroll-header-panel-full-header: {
-        background-image: url(https://manistein.github.io/blog//images/cover.png);
-      };
-       
-      --paper-scroll-header-panel-condensed-header: {
-        background-image: url(https://manistein.github.io/blog//images/cover.png);
-      };
-    }
-    
-    paper-toolbar {
-       
-      height: 256px;
-      background-color: transparent;
-    }
-    .profile{
-      width: 100%;
-      padding-bottom: 20px;
-    }
-    .photo{
-      margin: 20px;
-      display: inline-block;
-      height: 64px; width: 64px;
-      border-radius: 50%;
-    }
-    .article{
-      border: 1px solid #bebebe;
-      padding: 16px;
-      margin: 16px;
-      border-radius: 5px;
-      background-color: #fff;
-    }
-    .title{
-      font-size: 22px;
-      padding: 8px 0 16px;
-    }
-    .account{
-      margin-left: 10px;
-    }
-    .description{
-      font-size: 16px;
-      padding-bottom: 8px;
-    }
-    .author{
-      font-size: 16px;
-      padding-left: 20px;
-      color: white;
-    }
-    .design{
-      font-size: 14px;
-    }
-    .copyright{
-      font-size: 16px;
-    }
-    paper-menu a {
-      text-decoration: none;
-      color: #212121;
-    }
-  </style>
-
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="author" content="Manistein">
+<meta name="generator" content="Hugo 0.37" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+<title>Articles - Manistein&#39;s Blog</title>
 </head>
 <body>
-  <paper-drawer-panel id="drawerPanel" responsive-width="1280px">
-    <div class="nav scroll" drawer>
-    
-      <iron-image class="profile" sizing="cover" src="https://manistein.github.io/blog//images/profile.png">
-    
-        
-          <iron-image class="photo" sizing="cover" src="https://manistein.github.io/blog//images/me.jpg"></iron-image>
-        
-          <div class="author">Manistein</div>
-      </iron-image>
 
-      <div class="account">
-        <div class="flex"></div>
-        
-        
-        
-        
-        
-          <a href="https://github.com/Manistein"><paper-icon-button src="https://manistein.github.io/blog//images/github2-dreamstale35.png"></paper-icon-button></a>
-        
-        
-          <a href="https://www.zhihu.com/people/wu-yin-jie/activities"><paper-icon-button src="https://manistein.github.io/blog//images/zhihu.jpg"></paper-icon-button></a>
-        
-          <a href="https://manistein.github.io/blog//index.xml"><paper-icon-button src="https://manistein.github.io/blog//images/feed-dreamstale27.png"></paper-icon-button></a>
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
+    <span class="caret"># _</span>
+    <div class="right">
       
-      </div>
-      <paper-menu>
-        <a href="https://manistein.github.io/blog/"><paper-item>
-          <iron-icon icon="home"></iron-icon>　<div class="flex">Home</div>
-          <iron-icon icon="chevron-right"></iron-icon>
-        </paper-item></a>
-        <a href="https://manistein.github.io/blog//categories/"><paper-item>
-          <iron-icon icon="drafts"></iron-icon>　<div class="flex">Categories</div>
-          <iron-icon icon="chevron-right"></iron-icon>
-        </paper-item></a>
-        <a href="https://manistein.github.io/blog//tags/"><paper-item>
-          <iron-icon icon="loyalty"></iron-icon>　<div class="flex">Tags</div>
-          <iron-icon icon="chevron-right"></iron-icon>
-        </paper-item></a>
-        <a href="https://manistein.github.io/blog//about/"><paper-item>
-          <iron-icon icon="info"></iron-icon>　<div class="flex">About</div>
-          <iron-icon icon="chevron-right"></iron-icon>
-        </paper-item></a>
-      </paper-menu>
     </div>
+  </div>
+</header>
 
-    <paper-scroll-header-panel main condenses header-height="256" condensed-header-height="64">
-      <paper-toolbar>
-        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-        
-          <div style="margin:0 auto;margin-top:200px;font-size:48px;">Manistein&#39;s Blog</div>
-        
-      </paper-toolbar>
+<div class="container">
 
+<main role="main" class="article-list">
+  <h1 class="list-title">Articles</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/">数据包在网络层中的传输</a></h2>
+  <div class="meta">
 
-<div class="content">
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2018-04-14">April 14, 2018</time></span>
 
-
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/">数据包在网络层中的传输</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/network/">network</a>
-        
-      </div>
-     
-    <div class="description"><h2 id="前言">前言</h2>
+  </div>
+  <section class="summary">
+    <h2 id="前言">前言</h2>
 
 <p>好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解 卷1》来看，不过结合个人的学习经历，相比于Top-Down，个人认为这本书其实并不适合刚入门的初学者看，它略过了太多的细节，相反《Computer Networking A Top-Down Approach》这本，不论在内容编排上，还是在内容阐述上都非常合理、清晰，循序渐进，对于想入门计算机网络的人来说，是绝佳的经典教程。<br />
 按照我自己的习惯，每经历一个阶段的学习，我就会进行一次知识的梳理和总结，今天写的这篇<strong>目的是通过阐述数据包在网络层中的流转，梳理网络层的整体结构，运作流程。最终串联各个知识点</strong>。本文将通过3个数据包流转的例子（其中一个是在一个很小的局域网内的传输，一个是在AS内的传输，还有一个是跨AS的传输），来逐步展现网络层的基本组成成分，以及不同规模情况下的基本运作流程。网络层数据包协议主要有IPv4和IPv6两种，目前广泛运用的仍然是IPv4，为了解决IPv4地址耗尽的问题，专家们提出了IPv6。本文探讨的内容，主要针对IPv4，不对IPv6作深入探讨。<br />
 本文旨在梳理网络层的基本结构和运作流程，并不涉及到网络层的方方面面，文章也会大量引用《计算机网络》、《网络是怎样连接的》、《Computer Networking A Top-Down Approach》以及其他一些论文的论述和插图，最后本人学识水平有限，如有疏漏，欢迎大家批评指正。</p>
 
-<p></p></div>
-    <div class="tags">
-      14 Apr 2018
-      
-        
-          <a href="https://manistein.github.io/blog//tags/network/">#network</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/">skynet源码赏析</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/server/">server</a>
-        
-      </div>
-     
-    <div class="description"><h4 id="写在最前面">写在最前面</h4>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/">skynet源码赏析</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-08-16">August 16, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h4 id="写在最前面">写在最前面</h4>
 
 <p>skynet是目前使用比较广泛的服务端框架，虽然目前网上资料众多，但是从自己的学习和使用经历来看，缺乏能够让自己系统了解该框架底层机制的资料，这段时间，趁着自己有时间，阅读了skynet底层的一些代码，现在将自己理解的部分总结并记录下来，以备日后使用。本文旨在捋清skynet框架的结构和主要流程，并不会涉及skynet的方方面面，一些论述，我贴上了一些源码加以论证，并在引用的源码里加入了一些注释。</p>
 
-<p></p></div>
-    <div class="tags">
-      16 Aug 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/skynet/">#skynet</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》数据链路层总结</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/network/">network</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="数据链路层概述">数据链路层概述</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》数据链路层总结</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-08-07">August 07, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h1 id="数据链路层概述">数据链路层概述</h1>
 
 <ul>
 <li>计算机网络的形成<br />
 计算机最初只是孤立的一个运算机器，随着业务需求的不断发展，单台孤立的计算机已经不能够满足我们的需求，因此人们把一个区域内的多台计算机连接成一个网络即局域网，然而这些小的网络并不能满足对计算机日益增长的需求，因此把不同的局域网连接成一个全球性质的网络，我们称之为互联网，互联网就是把不同的局域网通过路由器连接起来的网络。</li>
 </ul>
 
-<p></p></div>
-    <div class="tags">
-      7 Aug 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/network/">#network</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/">计算机漫游</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/os/">os</a>
-        
-      </div>
-     
-    <div class="description"><h4 id="overview">Overview</h4>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/">计算机漫游</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-05-30">May 30, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h4 id="overview">Overview</h4>
 
 <p>我们的计算机能够运作起来，是我们将源代码编译成机器能够识别的二进制机器指令后，打包进可执行文件，并存入磁盘中。当我们运行一个程序的时候，首先会将磁盘内的二进制文件加载到内存中，然后通过CPU来解释和运行。为了能够做到，通过统一的方式使用不同型号的硬件，并且防止失控的程序滥用硬件资源，人们则通过操作系统来处理这些事情。此外操作系统还负责不同进程间的上下文切换，以实现多任务执行（分时调度不同的进程）。</p>
 
-<p></p></div>
-    <div class="tags">
-      30 May 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86/">#计算机原理</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/">mutex lock，spinlock，rwlock和condlock的理解</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/os/">os</a>
-        
-      </div>
-     
-    <div class="description"><h2 id="mutex-lock">Mutex Lock</h2>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/">mutex lock，spinlock，rwlock和condlock的理解</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-04-03">April 03, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h2 id="mutex-lock">Mutex Lock</h2>
 
 <h4 id="概述">概述</h4>
 
@@ -272,27 +124,21 @@
 
 <p>假设一台机器上的cpu有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B使用Mutex锁，锁住一个临界区，当线程A试图访问该临界区时，因为线程B已经将其锁住，因此线程A被挂起，进入休眠状态，此时core0进行上下文切换，将线程A放入休眠队列中，然后core0运行线程C，当线程B完成临界区的流程并执行解锁之后，线程A又会被唤醒，core0重新运行线程A</p>
 
-<p></p></div>
-    <div class="tags">
-      3 Apr 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/lock/">#lock</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》运输层总结</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/network/">network</a>
-        
-      </div>
-     
-    <div class="description"><h2 id="运输层协议公有特征">运输层协议公有特征</h2>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》运输层总结</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-03-27">March 27, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h2 id="运输层协议公有特征">运输层协议公有特征</h2>
 
 <h4 id="应用进程之间的通信">应用进程之间的通信</h4>
 
@@ -305,140 +151,112 @@
 <li>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</li>
 </ul>
 
-<p></p></div>
-    <div class="tags">
-      27 Mar 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/network/">#network</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》网络层总结</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/network/">network</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="ip协议层概述">IP协议层概述</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/">《TCP/IP详解》网络层总结</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2017-03-25">March 25, 2017</time></span>
+
+  </div>
+  <section class="summary">
+    <h1 id="ip协议层概述">IP协议层概述</h1>
 
 <p>通过数据包的目标IP地址，不断得找出通往该IP地址的路由器（下一跳路由器地址），并最终将数据包送到目标机器上的协议层。本质的功效是导航数据包去往目标机器。</p>
 
-<p></p></div>
-    <div class="tags">
-      25 Mar 2017
-      
-        
-          <a href="https://manistein.github.io/blog//tags/network/">#network</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">Git使用总结</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/tools/">tools</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="远程分支">远程分支</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">Git使用总结</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2016-08-11">August 11, 2016</time></span>
+
+  </div>
+  <section class="summary">
+    <h1 id="远程分支">远程分支</h1>
 
 <ul>
 <li>项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支</li>
 </ul>
 
-<p></p></div>
-    <div class="tags">
-      11 Aug 2016
-      
-        
-          <a href="https://manistein.github.io/blog//tags/git/">#git</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">skynet开发环境部署</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/server/">server</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="前言">前言</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">skynet开发环境部署</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2015-11-01">November 01, 2015</time></span>
+
+  </div>
+  <section class="summary">
+    <h1 id="前言">前言</h1>
 
 <p>skynet官方没有提供windows版本，而在windows上进行开发则往往能够给我们提供极大的便利，一般而言，我们本地进行开发需要安装虚拟机(或者真机上安装linux)，然后在虚拟机(或真机)内部署skynet进程。为了能够方便地进行开发，我们将采用sublime text编辑器，通过安装SFTP插件，来将我们的代码同步到虚拟机(或真机)上。</p>
 
-<p></p></div>
-    <div class="tags">
-      1 Nov 2015
-      
-        
-          <a href="https://manistein.github.io/blog//tags/skynet/">#skynet</a>
-        
-       
-    </div>
-  </div>
+<p></p>  <a href="/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">Read More...</a>
+  </section>
+</article>
 
-  <div class="article">
-    <div class="title"><a href="https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/">Github使用TotoiseGit配置流程</a></div>
-    
-      <div class="categories">
-        
-          <a href="https://manistein.github.io/blog//categories/tools/">tools</a>
-        
-      </div>
-     
-    <div class="description"><h1 id="前言">前言</h1>
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/">Github使用TotoiseGit配置流程</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2015-02-24">February 24, 2015</time></span>
+
+  </div>
+  <section class="summary">
+    <h1 id="前言">前言</h1>
 
 <p>如何在Windows上对Github上的项目进行版本管理，我想TortoiseGit是个非常不错的选择，它极大简化了我们的操作流程，本篇文章将介绍如何实现使用TotoiseGit管理Github上的项目</p>
 
-<p></p></div>
-    <div class="tags">
-      24 Feb 2015
-      
-        
-          <a href="https://manistein.github.io/blog//tags/git/">#git</a>
-        
-       
-    </div>
+<p></p>  <a href="/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/">Read More...</a>
+  </section>
+</article>
+
+  
+    <article class="list-item" itemscope itemtype="http://schema.org/Blog">
+  <h2 class="headline" itemprop="headline"><a href="/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/">变换矩阵推导</a></h2>
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2014-03-08">March 08, 2014</time></span>
+
   </div>
+  <section class="summary">
+    <h1 id="前言">前言</h1>
 
+<p>大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。</p>
 
+<p></p>  <a href="/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/">Read More...</a>
+  </section>
+</article>
+
+  
+</main>
 </div>
 
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
 
-<paper-item>
-  
-    <paper-fab disabled icon="chevron-left"></paper-fab>
-  
-    <div class="flex"></div>
-  
-    <a href="/blog/post/page/2/"><paper-fab icon="chevron-right"></paper-fab></a>
-  
-</paper-item>
-
-
-<html>
-<body>
-      <paper-item>
-        <div class="copyright">© 2017 All rights reserved</div>
-        <div class="flex"></div>
-      </paper-item>
-    </paper-scroll-header-panel>
-  </paper-drawer-panel>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  
 </body>
 </html>
+
