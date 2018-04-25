@@ -1234,7 +1234,7 @@ function skynet.register_protocol(class)
 end
 </code></pre>
 
-<p>现在回到我们的example脚本，它注册了一个text类消息处理协议，然后为lua协议注册了一个回调函数，我们注意到，在skynet.lua这个脚本中，虽然又在proto表中注册lua类型的处理函数，但是没有定义该类型的回调函数dispatch，这个dispatch函数，需要用户自己定义，一般使用skynet.dispatch来完成</p>
+<p>现在回到我们的example脚本，它注册了一个text类消息处理协议，然后为lua协议注册了一个回调函数，我们注意到，在skynet.lua这个脚本中，虽然有在proto表中注册lua类型协议（其中包括解包函数unpack），但是没有定义消费lua类型消息的回调函数dispatch，这个dispatch函数，需要用户自己定义，一般使用skynet.dispatch来完成</p>
 
 <pre><code>-- skynet.lua
 function skynet.dispatch(typename, func)
@@ -1249,7 +1249,7 @@ function skynet.dispatch(typename, func)
 end
 </code></pre>
 
-<p>exmaple脚本为lua类型消息处理协议，注册了一个lua层消息回调函数skynet.dispatch_message，后面example服务接收到的lua类型消息，都会被传到这个函数内<br />
+<p>exmaple脚本为lua协议，注册了一个lua层消息回调函数，后面example服务接收到的lua类型消息，都会被传到这个函数内<br />
 最后，example脚本执行了skynet.start函数，完成启动一个lua服务的最后工作</p>
 
 <pre><code>-- skynet.lua
