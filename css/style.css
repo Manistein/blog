@@ -29,7 +29,7 @@ body {
 }
 
 .container {
-  max-width: 52em;
+  max-width: 90em;
   margin-left: auto;
   margin-right: auto;
 }
@@ -295,7 +295,7 @@ article.single section.body {
   padding-bottom: 3rem;
 }
 
-@media (max-width: 52em) {
+@media (max-width: 104em) {
   article.single section.body {
     padding-top: 2rem;
     padding-bottom: 1rem;

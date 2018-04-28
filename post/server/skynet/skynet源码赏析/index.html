@@ -1925,7 +1925,7 @@ older kernels.</p>
 再后面则是对socket列表的初始化操作，这里没什么好说的了。</p></li>
 
 <li><p>skynet监听和绑定端口的流程<br />
-我们要真正接收来自客户端的消息时，通常需要创建一个gate服务，用于接收从socket线程发送过来的消息，首先我们要通过gate，绑定和监听一个端口。这里，我们在gate创建阶段监听一个端口，在worker线程内，gate服务创建绑定了一个端口，并且监听了它，此时，gate服务（worker线程内）通过管道向socket线程发送了一个请求，向socket slot里添加一个专门用于监听端口的socket（类型为SOCKET_TYPE_LISTEN），并且在epoll里添加这个socket的监听事件，这样当有关于该socket的epoll事件触发时，由于epoll的event数据包含socket的指针，该socket对应的类型为SOCKET_TYPE_LISTEN，因此我们可以知道该epoll事件，其实是有一个连接可以建立了。在连接建立以后，socket线程会向gate服务发送一条消息，通知gate服务新建立连接socket的slot id，让gate自己处理。
+我们要真正接收来自客户端的消息时，通常需要创建一个gate服务，用于接收从socket线程发送过来的消息，首先我们要通过gate，绑定和监听一个端口。这里，我们在gate创建阶段监听一个端口，在worker线程内，gate服务创建绑定了一个端口，并且监听了它，此时，gate服务（worker线程内）通过管道向socket线程发送了一个请求，向socket slot里添加一个专门用于监听端口的socket（类型为SOCKET_TYPE_LISTEN），并且在epoll里添加这个socket的监听事件，这样当有关于该socket的epoll事件触发时，由于epoll的event数据包含socket的指针，该socket对应的类型为SOCKET_TYPE_LISTEN，因此我们可以知道该epoll事件，其实是有一个连接可以建立了。在连接建立以后，socket线程会向gate服务发送一条消息，通知gate服务新建立连接socket的slot id，让gate自己处理。<br />
 <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/005socket_listen.png" alt="image" /></p></li>
 
 <li><p>skynet建立和客户端连接流程<br />
@@ -1933,11 +1933,11 @@ older kernels.</p>
 <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/006socket_accept.png" alt="image" /></p></li>
 
 <li><p>skynet接收客户端消息流程
-由于单个skynet节点内，所有的socket都归gate服务管理，当socket收到数据包以后，就会往gate服务的次级消息队列，push数据包消息，gate在收到消息以后，首先会对数据进行分包和粘包处理，当收齐所有字节以后，又会向agent服务转发（向agent的次级消息队列push消息），最后agent会一个一个消费这些从客户端上传的请求。
+由于单个skynet节点内，所有的socket都归gate服务管理，当socket收到数据包以后，就会往gate服务的次级消息队列，push数据包消息，gate在收到消息以后，首先会对数据进行分包和粘包处理，当收齐所有字节以后，又会向agent服务转发（向agent的次级消息队列push消息），最后agent会一个一个消费这些从客户端上传的请求。<br />
 <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/007socket_recv.png" alt="image" /></p></li>
 
 <li><p>服务端向客户端发送数据流程
-agent服务向客户端发送消息时，直接通过管道，将数据包从worker线程发送往socket线程，socket线程收到后，会将数据包存入对应socket的write buffer中，最后再向客户端推送。
+agent服务向客户端发送消息时，直接通过管道，将数据包从worker线程发送往socket线程，socket线程收到后，会将数据包存入对应socket的write buffer中，最后再向客户端推送。<br />
 <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/008socket_send.png" alt="image" /></p></li>
 </ol>
 
