@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>© 2017 All rights reserved</copyright>
-    <lastBuildDate>Sat, 14 Apr 2018 00:58:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 03 May 2018 10:04:15 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>数据链路层漫谈</title>
+      <link>https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%BC%AB%E8%B0%88/</link>
+      <pubDate>Thu, 03 May 2018 10:04:15 +0800</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%BC%AB%E8%B0%88/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;　　数据链路层，负责网络上，两个节点之间的数据帧通信，是最贴近硬件的一层。掌握数据链路层的知识，对我们理解网络中的一些现象具有极大的意义。这篇Blog，首先会介绍数据链路层的作用，以及基本结构和基本运作流程；紧随其后，我们将探讨数据链路层的转发设备，以及不同的设备构建的局部网络，数据帧传输的基本运作流程；最后我们将介绍在广播Channel中使用的链路层协议（Multi-Access   Protocol）。本文的知识和观点主要来自于《Computer Networking A Top-Down Approach》一书，本Blog也将会大量引用该书的图文。&lt;br /&gt;
+　　本Blog的主要功能是对数据链路层知识进行梳理，而非对Top-Down中Link-Layer这一章节的翻译，而是经过自己的梳理而写的文章。最后由于本人水平有限，如有不当的地方，欢迎大家批评指正，大家可以将建议或者意见发到我的邮箱中1518986465@qq.com。
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>数据包在网络层中的传输</title>

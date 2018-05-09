@@ -1120,7 +1120,7 @@ main(select(2, table.unpack(args)))
 <li>定义消息回调函数</li>
 <li>注册lua类型的消息回调函数</li>
 <li>注册除了lua类型以外的其他类型消息处理协议</li>
-<li>调用skynet.start函数，也就是将skynet.dispatch_message函数注册为lua服务的回调函数，所有派发给该lua服务的消息，都会传给这个函数；以及在下一帧执行lua服务启动逻辑的启动函数（skynet.start函数的第二个参数）<br /></li>
+<li>调用skynet.start函数，也就是将skynet.dispatch_message函数注册为lua服务的回调函数，所有派发给该lua服务的消息，都会传给这个函数；以及在下一帧执行lua服务启动逻辑的启动函数<br /></li>
 </ul>
 
 <p>skynet的lua服务，有一个proto表用于存放不同的消息类型的消息处理协议，一个协议，一般包含以下内容</p>
@@ -1313,7 +1313,7 @@ _callback(lua_State *L) {
 </code></pre>
 
 <p>这里将snlua这个skynet_context的callback函数赋值为_cb，而_cb最终又会通过lua_State转调lua层的skynet.dispatch_message函数，也就是说，发送给snlua服务的消息，最终都是交给lua层去处理的<br />
-在完成lua层callback函数的注册以后，接下来就是执行lua服务的启动函数（也就是skynet.start函数的第二个参数）</p>
+在完成lua层callback函数的注册以后，接下来就是执行lua服务的启动函数</p>
 
 <pre><code>-- skynet.lua
 local function init_template(start)
