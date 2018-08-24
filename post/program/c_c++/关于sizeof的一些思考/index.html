@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-122943512-1');
+</script>
+<meta charset="utf-8">
+<meta name="description" content="program">
+<meta name="author" content="Manistein">
+<meta name="generator" content="Hugo 0.37" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
+<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+<title>关于sizeof的一些思考 - Manistein&#39;s Blog</title>
+</head>
+<body>
+
+<header>
+  <div class="container clearfix">
+    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
+    <span class="caret"># _</span>
+    <div class="right">
+      
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+
+<main role="main" class="article">
+  
+<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="meta">
+
+    <span class="key">published on</span>
+    <span class="val"><time itemprop="datePublished" datetime="2018-08-24">August 24, 2018</time></span>
+
+
+    <span class="key">in</span>
+    <span class="val">
+
+        <a href="/blog/categories/Program">Program</a>
+
+    </span>
+
+
+    <br>
+    <span class="key">tags:</span>
+    <span class="val">
+
+        <a href="/blog/tags/C_C&#43;&#43;">C_C&#43;&#43;</a>
+
+    </span>
+
+  </div>
+  <h1 class="headline" itemprop="headline">关于sizeof的一些思考</h1>
+  <section class="body" itemprop="articleBody">
+    <h2 id="前言">前言</h2>
+
+<p>今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。</p>
+
+<p></p>
+
+<h2 id="sizeof-实现">sizeof 实现</h2>
+
+<p>关于sizeof的实现，如下所示[1]：</p>
+
+<pre><code>#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+</code></pre>
+
+<p>我们可以看到，计算某个变量的字节数，本质是取到该变量的地址后，经过一次+1运算，获得下一个变量的起始地址，最后通过相减获得字节数。</p>
+
+<h2 id="测试">测试</h2>
+
+<p>现在我们拿自己实现的SIZEOF和官方实现的sizeof作对比，来测试这段代码。</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+
+char array[10] = { 0 };
+char* a = NULL;
+
+int main() {
+    printf(&quot;array SIZEOF size:%ld \n&quot;, SIZEOF(array));
+    printf(&quot;array sizeof size:%ld \n&quot;, sizeof(array));
+    
+    printf(&quot;a SIZEOF size:%ld \n&quot;, SIZEOF(a));
+    printf(&quot;a sizeof size:%ld \n&quot;, sizeof(a));
+    
+    return 0;
+}
+
+-- 输出
+array SIZEOF size:10 
+array sizeof size:10 
+a SIZEOF size:8 
+a sizeof size:8 
+
+</code></pre>
+
+<p>由此我们可以看到，即便是值为NULL的指针变量，其实质在程序启动时，也已经被分配了内存，sizeof其实质是在计算a，这个指针变量的字节数。</p>
+
+<h2 id="关于计算malloc和realloc字节大小的问题">关于计算malloc和realloc字节大小的问题</h2>
+
+<p>对上面的例子，进行修改，得到如下代码</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char array[10] = { 0 };
+char* a = NULL;
+
+int main() {
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(a));
+    free(a);
+    
+    return 0;
+}
+
+-- 输出
+after malloc sizeof(a) = 8
+</code></pre>
+
+<p>由此可见，在对a变量malloc分配空间前，和对a分配空间后的sizeof值大小是一致的，这是因为a在程序启动的时候，已经被分配了内存，sizeof只是计算a这个变量的内存字节大小，而malloc出来的内存块的地址，只是作为值保存在a中，然而我们并不能通过sizeof(*a)得到malloc出来的完整的内存块字节，只能获得1：</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char array[10] = { 0 };
+char* a = NULL;
+
+int main() {
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(*a));
+    free(a);
+    
+    return 0;
+}
+
+-- 输出
+after malloc sizeof(*a) = 1
+</code></pre>
+
+<p>因此，malloc出来的大小，只能我们自己去记录。同时realloc的情况也类似</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char array[10] = { 0 };
+char* a = NULL;
+
+int main() {
+    a = (char*)realloc(a, strlen(CONST_STR) + 1);
+    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(*a));
+    free(a);
+    
+    return 0;
+}
+
+-- 输出
+after malloc sizeof(a) = 1
+</code></pre>
+
+<h2 id="关于字符串赋值">关于字符串赋值</h2>
+
+<p>对于字符串赋值，最好的方式就是使用<a href="http://www.cplusplus.com/reference/cstring/strcpy/">strcpy</a>，不过今天和别人讨论的时候，发现一个有意思的问题，有个朋友非得用memcpy来进行拷贝，于是有了这样的场景：</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char array[10] = { 'H', 'e', 'l', 'l', 'o' };
+char array2[20] = { 0 };
+
+int main() {
+    printf(&quot;1 %s \n&quot;, array2);
+    memcpy(array2, array, sizeof(array));  
+    printf(&quot;2 %s \n&quot;, array2);
+    
+    return 0;
+}
+
+-- 输出
+1  
+2 Hello 
+
+</code></pre>
+
+<p>emmmm，一切看上去是正常的。如果我们换一种方式，假设两个字符串变量的内存，都是通过malloc开辟的堆内存，那么我们来看一下如下的场景：</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char* a = NULL;
+char* b = NULL;
+
+int main() {
+    printf(&quot;before malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&quot;after malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    strcpy(a, CONST_STR);
+    
+    b = (char*)malloc(strlen(CONST_STR) + 1);
+    memcpy(b, a, sizeof(a));
+    printf(&quot;b str = %s \n&quot;, b);
+    
+    free(b);
+    free(a);
+    return 0;
+}
+
+-- 输出
+before malloc sizeof(a) = 8 
+after malloc sizeof(a) = 8 
+b str = Hello Wo 
+</code></pre>
+
+<p>emmmmm&hellip;b字符串被截取了，因为正如我们前面看到，sizeof(a)拿到的是，a这个指针变量的字节，而不是a所指向的内存块的字节大小，这台测试机是64位的，因此它是8个字节，如果非得用memcpy的话，那么需要将sizeof(a)修改成strlen(a)</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &quot;Hello World&quot;
+
+char* a = NULL;
+char* b = NULL;
+
+int main() {
+    printf(&quot;before malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    strcpy(a, CONST_STR);
+    printf(&quot;after malloc sizeof(a) = %ld  strlen(a) = %ld \n&quot;, sizeof(a), strlen(a));
+    
+    b = (char*)malloc(strlen(CONST_STR) + 1);
+    memcpy(b, a, strlen(a));
+    printf(&quot;b str = %s \n&quot;, b);
+    
+    free(b);
+    free(a);
+    return 0;
+}
+
+-- 输出
+before malloc sizeof(a) = 8 
+after malloc sizeof(a) = 8  strlen(a) = 11 
+b str = Hello World 
+</code></pre>
+
+<h2 id="结论">结论</h2>
+
+<p>sizeof返回一个变量，连续的字节大小，如果是个指针变量，那么它只作用在指针变量本身，而不是其所指向的内存地址块。</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>[1] <a href="http://cs-fundamentals.com/tech-interview/c/implement-sizeof-operator-in-c.php">implement sizeof operator in c</a></p>
+  </section>
+</article>
+
+</main>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
+

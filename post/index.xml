@@ -13,6 +13,19 @@
     
     
     <item>
+      <title>关于sizeof的一些思考</title>
+      <link>https://manistein.github.io/blog/post/program/c_c&#43;&#43;/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/</link>
+      <pubDate>Fri, 24 Aug 2018 16:02:45 +0800</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/program/c_c&#43;&#43;/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>网络安全初探</title>
       <link>https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2/</link>
       <pubDate>Mon, 09 Jul 2018 11:39:15 +0800</pubDate>
@@ -199,6 +212,19 @@
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2-zhihu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2-zhihu/</guid>
+      <description>&lt;h1 id=&#34;写在最前面&#34;&gt;写在最前面&lt;/h1&gt;
+
+&lt;p&gt;&amp;emsp;&amp;emsp;网络安全是个很大的话题，它包括了网络加密、数据真实性认证、终端身份认证、防火墙等技术，而网络加密、数据真实性验证，终端身份认证，则是网络安全中的重要一环，学习和掌握它具有重要意义，通过学习网络安全的相关知识，有助于我们理解生活中一些关于网络安全方面的现象。这样也可以做到知其然，并且知其所以然。最近一段时间，我发现自己对这块的掌握并不牢靠，于是参阅了一些资料和论文，主要的参阅资料是《Computer Networking A Top-Down Approach》的第八章Secure In Computer Networks，也包含了多篇paper。本文主要阐述网络加密、数据验证、身份验证的一些基本知识，并不涉及网络安全的其他方面。由于本人水平有限，有不正确的地方，欢迎批评指正，最后原创不易，转载请注明出处。&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>
