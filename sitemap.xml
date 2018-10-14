@@ -82,6 +82,14 @@
   </url>
   
   <url>
+    <loc>https://manistein.github.io/blog/page/about/</loc>
+  </url>
+  
+  <url>
+    <loc>https://manistein.github.io/blog/page/_index2/</loc>
+  </url>
+  
+  <url>
     <loc>https://manistein.github.io/blog/tags/c_c&#43;&#43;/</loc>
     <lastmod>2018-08-24T16:02:45+08:00</lastmod>
     <priority>0</priority>
@@ -137,6 +145,11 @@
   <url>
     <loc>https://manistein.github.io/blog/categories/os/</loc>
     <lastmod>2017-05-30T08:49:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://manistein.github.io/blog/page/</loc>
     <priority>0</priority>
   </url>
   
