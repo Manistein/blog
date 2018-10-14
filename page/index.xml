@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on Manistein&#39;s Blog</title>
+    <link>https://manistein.github.io/blog/page/</link>
+    <description>Recent content in Pages on Manistein&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
+    
+	<atom:link href="https://manistein.github.io/blog/page/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About Me</title>
+      <link>https://manistein.github.io/blog/page/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/page/about/</guid>
+      <description> 有朋自远方来，不亦乐乎 欢迎来到我的博客，我希望通过分享自己的一些想法，见解和总结来结识更多的朋友。希望更多热衷技术的小伙伴可以加入我创建的游戏技术讨论群QQ：185017593
+关于我  2010.9~2014.7 就读于广东省韶关学院计算机学院 2014~2015 参与一款MMO端游开发 2015~2016 参与一款MMO手游开发，负责服务端核心模块开发，业务功能开发 2017~2017.3 参与维护一款全服架构的农场类手游，主要工作在服务端，在项目后期独立维护该项目，该项目同时在线峰值超过1w 2017.5~至今 负责一款全服架构的模拟经营类游戏的服务端框架的设计和搭建，并且和搭档一起设计和开发业务层核心模块，此外也参与业务功能开发  我的技能  熟悉skynet 熟悉cocos2dx 熟悉c/c++和lua  爱好  阅读 总结 RTS游戏忠实粉丝，也喜欢GTA系列的游戏  </description>
+    </item>
+    
+    <item>
+      <title>About me</title>
+      <link>https://manistein.github.io/blog/page/_index2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/page/_index2/</guid>
+      <description>My name is Inigo Montoya. I have the following qualities:
+ I rock a great mustache I&amp;rsquo;m extremely loyal to my family  What else do you need?
+my history To be honest, I&amp;rsquo;m having some trouble remembering right now, so why don&amp;rsquo;t you just watch my movie and it will answer all your questions.</description>
+    </item>
+    
+  </channel>
+</rss>

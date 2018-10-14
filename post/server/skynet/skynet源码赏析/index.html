@@ -1,70 +1,210 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>skynet源码赏析</title>
+  <meta property="og:title" content="skynet源码赏析" />
+  <meta name="twitter:title" content="skynet源码赏析" />
+  <meta name="description" content="skynet">
+  <meta property="og:description" content="skynet">
+  <meta name="twitter:description" content="skynet">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  gtag('config', 'UA-122943512-1');
-</script>
-<meta charset="utf-8">
-<meta name="description" content="skynet">
-<meta name="author" content="Manistein">
-<meta name="generator" content="Hugo 0.37" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
-<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
-<title>skynet源码赏析 - Manistein&#39;s Blog</title>
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
 </head>
-<body>
 
-<header>
-  <div class="container clearfix">
-    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
-    <span class="caret"># _</span>
-    <div class="right">
-      
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
   </div>
-</header>
-
-<div class="container">
+</nav>
 
 
-<main role="main" class="article">
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
   
-<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="meta">
-
-    <span class="key">published on</span>
-    <span class="val"><time itemprop="datePublished" datetime="2017-08-16">August 16, 2017</time></span>
+  
+  
 
 
-    <span class="key">in</span>
-    <span class="val">
-
-        <a href="/blog/categories/server">server</a>
-
-    </span>
 
 
-    <br>
-    <span class="key">tags:</span>
-    <span class="val">
 
-        <a href="/blog/tags/skynet">skynet</a>
 
-    </span>
+  
 
-  </div>
-  <h1 class="headline" itemprop="headline">skynet源码赏析</h1>
-  <section class="body" itemprop="articleBody">
-    <h4 id="写在最前面">写在最前面</h4>
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>skynet源码赏析</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 16, 2017
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 24 minutes (4952 words)
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h4 id="写在最前面">写在最前面</h4>
 
 <p>skynet是目前使用比较广泛的服务端框架，虽然目前网上资料众多，但是从自己的学习和使用经历来看，缺乏能够让自己系统了解该框架底层机制的资料，这段时间，趁着自己有时间，阅读了skynet底层的一些代码，现在将自己理解的部分总结并记录下来，以备日后使用。本文旨在捋清skynet框架的结构和主要流程，并不会涉及skynet的方方面面，一些论述，我贴上了一些源码加以论证，并在引用的源码里加入了一些注释。</p>
 
@@ -133,8 +273,7 @@ skynet本质是什么？它为我们提供了什么机制？如何正确使用�
 <ul>
 <li><p>modules管理模块<br />
 我们所写的C服务在编译成so库以后，会在某个时机被加载到一个modules的列表中，当要创建该类服务的实例时，将从modules列表取出该服务的函数句柄，调用create函数创建服务实例，并且init之后，将实例赋值给一个新的context对象后，注册到图1所示的skynet_context list中，一个新的服务就创建完成了。我们存放modules的模块数据结构如下所示：</p>
-
-<pre><code>// skynet_module.h
+<div class="highlight"><pre class="chroma">// skynet_module.h
 typedef void * (*skynet_dl_create)(void);
 typedef int (*skynet_dl_init)(void * inst, struct skynet_context *, const char * parm);
 typedef void (*skynet_dl_release)(void * inst);
@@ -159,31 +298,25 @@ struct modules {
     struct skynet_module m[MAX_MODULE_TYPE];  // 存放服务模块的数组，最多32类
 };
     
-static struct modules * M = NULL;
-</code></pre>
-
+static struct modules * M = NULL;</pre></div>
 <p>通过上面的注释，我们大概可以了解skynet_module结构的作用了，也就是说一个符合规范的skynet c服务，应当包含create，init，signal和release四个接口，在该c服务编译成so库以后，在程序中动态加载到skynet_module列表中，这里通过dlopen函数来获取so库的访问句柄，并通过dlsym将so库中对应的函数绑定到函数指针中，对于两个函数的说明如下所示：</p>
-
-<pre><code>// 引证来源：https://linux.die.net/man/3/dlopen
+<div class="highlight"><pre class="chroma">// 引证来源：https://linux.die.net/man/3/dlopen
 void *dlopen(const char *filename, int flag);
 void *dlsym(void *handle, const char *symbol);
     
 dlopen()
 The function dlopen() loads the dynamic library file named by the null-terminated string filename and returns
-an opaque &quot;handle&quot; for the dynamic library...
+an opaque &#34;handle&#34; for the dynamic library...
     
 dlsym()
-The function dlsym() takes a &quot;handle&quot; of a dynamic library returned by dlopen() and the null-terminated symbol  
-name, returning the address where that symbol is loaded into memory...
-</code></pre>
-
+The function dlsym() takes a &#34;handle&#34; of a dynamic library returned by dlopen() and the null-terminated symbol  
+name, returning the address where that symbol is loaded into memory...</pre></div>
 <p>dlopen函数，本质是将so库加载内存中，并返回一个可以访问该内存块的句柄，dlsym，则是通过该句柄和指定一个函数名，到内存中找到指定函数，在内存中的地址，这里将该地址赋值给skynet_module中的create、init、signal或release的其中一个函数指针（根据传入的symbol名称，即函数名来定），一个模块被加载以后，将被放置到modules的skynet_module数组中，当要创建该module的实例时，将会从skynet_module中取出对应的模块，并调用create函数创建实例，然后将实例指针传入init函数完成初始化以后，赋值给context。<br />
 一个C服务，定义以上四个接口时，一定要以文件名作为前缀，然后通过下划线和对应函数连接起来，因为skynet加载的时候，就是通过这种方式去寻找对应函数的地址的，比如一个c服务文件名为logger，那么对应的4个函数名则为logger_create、logger_init、logger_signal、logger_release。</p></li>
 
 <li><p>skynet_context管理模块<br />
 我们创建一个新的服务，首先要先找到对应服务的module，在创建完module实例并完成初始化以后，还需要创建一个skynet_context上下文，并将module实例和module模块和这个context关联起来，最后放置于skynet_context list中，一个个独立的沙盒环境就这样被创建出来了，下面来看主要的数据结构：</p>
-
-<pre><code>// skynet_server.c
+<div class="highlight"><pre class="chroma">// skynet_server.c
 struct skynet_context {
     void * instance;                // 由指定module的create函数，创建的数据实例指针，同一类服务可能有多个实例，
                                     // 因此每个服务都应该有自己的数据
@@ -223,15 +356,12 @@ struct handle_storage {
     struct handle_name *name;      // 别名列表
 };
     
-static struct handle_storage *H = NULL;
-</code></pre>
-
+static struct handle_storage *H = NULL;</pre></div>
 <p>我们创建一个新的skynet_context时，会往slot列表中放，当一个消息送达一个context时，其callback函数就会被调用，callback函数一般在module的init函数里指定，调用callback函数时，会传入userdata（一般是instance指针），source（发送方的服务id），type（消息类型），msg和sz（数据及其大小），每个服务的callback处理各自的逻辑。这里其实可以将modules视为工厂，而skynet_context则是该工厂创建出来的实例，而这些实例，则是通过handle_storage来进行管理。</p></li>
 
 <li><p>消息与消息队列<br />
 我们的创建的服务，需要通过消息来驱动，而一个服务要获取消息，是从消息队列里取的。skynet包含两级消息队列，一个global_mq，他包含一个head和tail指针，分别指向次级消息队列的头部和尾部，另外还有一个次级消息队列，这个一个单向链表。消息的派发机制是，工作线程，会从global_mq里pop一个次级消息队列来，然后从次级消息队列中，pop出一个消息，并传给context的callback函数，在完成驱动以后，再将次级消息队列push回global_mq中，数据结构如下所示：</p>
-
-<pre><code>// skynet_mq.h
+<div class="highlight"><pre class="chroma">// skynet_mq.h
 struct skynet_message {
     uint32_t source;            // 消息发送方的服务地址
         
@@ -277,12 +407,9 @@ struct global_queue {
     struct spinlock lock;
 };
     
-static struct global_queue *Q = NULL;
-</code></pre>
-
+static struct global_queue *Q = NULL;</pre></div>
 <p>上面我们已经讨论了，一个服务如何被消息驱动，现在我们来讨论，消息是如何写入到消息队列中去的。我们要向一个服务发消息，最终是通过调用skynet.send接口，将消息插入到该服务专属的次级消息队列的，次级消息队列的内容，并不是context结构的一部分（context只是引用了他的指针），因此，在一个服务执行callback的同时，其他服务（可能是多个线程内执行callback的其他服务）可以向它的消息队列里push消息，而mq的push操作，是加了一个自旋锁，以避免多个线程，同时操作一个消息队列。lua层的skynet.send接口，最终会调到c层的skynet_context_push。这个接口实质上，是通过handle将context指针取出来，然后再往消息队列里push消息：</p>
-
-<pre><code>// skynet_server.c
+<div class="highlight"><pre class="chroma">// skynet_server.c
 int
 skynet_context_push(uint32_t handle, struct skynet_message *message) {
     struct skynet_context * ctx = skynet_handle_grab(handle);
@@ -313,9 +440,7 @@ skynet_handle_grab(uint32_t handle) {
     rwlock_runlock(&amp;s-&gt;lock);
     
     return result;
-}
-</code></pre>
-
+}</pre></div>
 <p>因为我们访问一个服务的机会，远大于创建一个服务并写入列表的机会，因此这里用了读写锁，在通过handle获取context指针时，加了一个读取锁，这样当在读取的过程中，同时有新的服务创建，并且存在要扩充skynet_context list容量的风险，因此不论如何，他都应当被阻塞住，直到所有的读取锁都释放掉。<br />
 次级消息队列，实际上是一个数组，并且用两个int型数据，分别指向他的头部和尾部（head和tail），不论是head还是tail，当他们的值&gt;=数组尺寸时，都会进行回绕（即从下标为0开始，比如值为数组的size时，会被重新赋值为0），在push操作后，head等于tail意味着队列已满（此时，队列会扩充两倍，并从头到尾重新赋值，此时head指向0，而tail为扩充前，数组的大小），在pop操作后，head等于tail意味着队列已经空了（后面他会从skynet全局消息队列中，被剔除掉）。<br />
 <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/003skynet_mq.png" alt="image" />图3</p></li>
@@ -324,8 +449,7 @@ skynet_handle_grab(uint32_t handle) {
 <h4 id="skynet如何启动一个c服务">skynet如何启动一个c服务</h4>
 
 <p>我们写的c服务在编译成so库以后，在某个时段，会被加载到modules列表中。创建c服务的工作，一般在c层进行，一般会调用skynet_context_new接口，如下所示：</p>
-
-<pre><code>// skynet_server.c
+<div class="highlight"><pre class="chroma">// skynet_server.c
 struct skynet_context * 
 skynet_context_new(const char * name, const char *param) {
     struct skynet_module * mod = skynet_module_query(name);
@@ -366,11 +490,11 @@ skynet_context_new(const char * name, const char *param) {
         }
         skynet_globalmq_push(queue);
         if (ret) {
-            skynet_error(ret, &quot;LAUNCH %s %s&quot;, name, param ? param : &quot;&quot;);
+            skynet_error(ret, &#34;LAUNCH %s %s&#34;, name, param ? param : &#34;&#34;);
         }
         return ret;
     } else {
-        skynet_error(ctx, &quot;FAILED launch %s&quot;, name);
+        skynet_error(ctx, &#34;FAILED launch %s&#34;, name);
         uint32_t handle = ctx-&gt;handle;
         skynet_context_release(ctx);
         skynet_handle_retire(handle);
@@ -425,20 +549,20 @@ _try_open(struct modules *m, const char * name) {
     do
     {
         memset(tmp,0,sz);
-        while (*path == ';') path++;
-        if (*path == '\0') break;
-        l = strchr(path, ';');
+        while (*path == &#39;;&#39;) path++;
+        if (*path == &#39;\0&#39;) break;
+        l = strchr(path, &#39;;&#39;);
         if (l == NULL) l = path + strlen(path);
         int len = l - path;
         int i;
-        for (i=0;path[i]!='?' &amp;&amp; i &lt; len ;i++) {
+        for (i=0;path[i]!=&#39;?&#39; &amp;&amp; i &lt; len ;i++) {
             tmp[i] = path[i];
         }
         memcpy(tmp+i,name,name_size);
-        if (path[i] == '?') {
+        if (path[i] == &#39;?&#39;) {
             strncpy(tmp+i+name_size,path+i+1,len - i - 1);
         } else {
-            fprintf(stderr,&quot;Invalid C service path\n&quot;);
+            fprintf(stderr,&#34;Invalid C service path\n&#34;);
             exit(1);
         }
         dl = dlopen(tmp, RTLD_NOW | RTLD_GLOBAL);
@@ -446,7 +570,7 @@ _try_open(struct modules *m, const char * name) {
     }while(dl == NULL);
 
     if (dl == NULL) {
-        fprintf(stderr, &quot;try open %s failed : %s\n&quot;,name,dlerror());
+        fprintf(stderr, &#34;try open %s failed : %s\n&#34;,name,dlerror());
     }
 
     return dl;
@@ -456,19 +580,17 @@ _open_sym(struct skynet_module *mod) {
     size_t name_size = strlen(mod-&gt;name);
     char tmp[name_size + 9]; // create/init/release/signal , longest name is release (7)
     memcpy(tmp, mod-&gt;name, name_size);
-    strcpy(tmp+name_size, &quot;_create&quot;);
+    strcpy(tmp+name_size, &#34;_create&#34;);
     mod-&gt;create = dlsym(mod-&gt;module, tmp);
-    strcpy(tmp+name_size, &quot;_init&quot;);
+    strcpy(tmp+name_size, &#34;_init&#34;);
     mod-&gt;init = dlsym(mod-&gt;module, tmp);
-    strcpy(tmp+name_size, &quot;_release&quot;);
+    strcpy(tmp+name_size, &#34;_release&#34;);
     mod-&gt;release = dlsym(mod-&gt;module, tmp);
-    strcpy(tmp+name_size, &quot;_signal&quot;);
+    strcpy(tmp+name_size, &#34;_signal&#34;);
     mod-&gt;signal = dlsym(mod-&gt;module, tmp);
 
     return mod-&gt;init == NULL;
-}
-</code></pre>
-
+}</pre></div>
 <p>我们要创建一个c服务，首先要获取对应c服务的模块对象，在上一节中，我们已经介绍了skynet的modules对象，它包含skynet_module列表，so库所在路径，创建一个c服务，一般要经历下面几个步骤：</p>
 
 <ol>
@@ -488,20 +610,17 @@ _open_sym(struct skynet_module *mod) {
 
 <ol>
 <li><p>启动skynet节点时，会启动一个logger c服务</p>
-
-<pre><code>// skynet_start.c
+<div class="highlight"><pre class="chroma">// skynet_start.c
 void
 skynet_start(struct skynet_config * config) {
 ...
 struct skynet_context *ctx = skynet_context_new(config-&gt;logservice, config-&gt;logger);
 if (ctx == NULL) {
-    fprintf(stderr, &quot;Can't launch %s service\n&quot;, config-&gt;logservice);
+    fprintf(stderr, &#34;Can&#39;t launch %s service\n&#34;, config-&gt;logservice);
     exit(1);
 }
 ...
-}
-</code></pre>
-
+}</pre></div>
 <p>其中配置中的logservice指名log服务的so库名称，用于后面加载服务时使用，后面的logger字段则指定log的输出路径。</p></li>
 
 <li><p>此时，在图1中的skynet_module列表中，搜索logger服务模块，如果没找到则在so库的输出路径中，寻找名为logger的so库，找到则将该so库加载到内存中，并将对应的logger_create,logger_init,logger_release函数地址分别赋值给logger模块中的create,init,release函数指针，此时图1中的skynet_module列表中，多了一个logger模块。</p></li>
@@ -509,8 +628,7 @@ if (ctx == NULL) {
 <li><p>创建服务实例，即创建一个skynet_context实例，为了使skynet_context实例拥有访问logger服务内部函数的权限，这里将logger模块指针，赋值给skynet_context实例的mod变量中。</p></li>
 
 <li><p>创建一个logger服务的数据实例，调用logger服务的create函数：</p>
-
-<pre><code>// service_logger.c
+<div class="highlight"><pre class="chroma">// service_logger.c
 struct logger {
 FILE * handle;
 int close;
@@ -521,29 +639,26 @@ struct logger * inst = skynet_malloc(sizeof(*inst));
 inst-&gt;handle = NULL;
 inst-&gt;close = 0;
 return inst;
-}
-</code></pre>
-
+}</pre></div>
 <p>此时，将新创建的数据实例赋值给skynet_context的instance变量，此时，一个服务对象运行时，所要用到的逻辑，能够通过mod变量，访问logger服务对应的函数，而通过instance可以找到该服务自己的数据块。</p></li>
 
 <li><p>将新创建的skynet_context对象，注册到图一的skynet_context list中，此时skynet_context list多了一个logger服务实例</p></li>
 
 <li><p>初始化logger服务，注册logger服务的callback函数：</p>
-
-<pre><code>// service_logger.c
+<div class="highlight"><pre class="chroma">// service_logger.c
 static int
 _logger(struct skynet_context * context, void *ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
 struct logger * inst = ud;
-fprintf(inst-&gt;handle, &quot;[:%08x] &quot;,source);
+fprintf(inst-&gt;handle, &#34;[:%08x] &#34;,source);
 fwrite(msg, sz , 1, inst-&gt;handle);
-fprintf(inst-&gt;handle, &quot;\n&quot;);
+fprintf(inst-&gt;handle, &#34;\n&#34;);
 fflush(inst-&gt;handle);
 return 0;
 }
 int
 logger_init(struct logger * inst, struct skynet_context *ctx, const char * parm) {
 if (parm) {
-    inst-&gt;handle = fopen(parm,&quot;w&quot;);
+    inst-&gt;handle = fopen(parm,&#34;w&#34;);
     if (inst-&gt;handle == NULL) {
         return 1;
     }
@@ -553,7 +668,7 @@ if (parm) {
 }
 if (inst-&gt;handle) {
     skynet_callback(ctx, inst, _logger);
-    skynet_command(ctx, &quot;REG&quot;, &quot;.logger&quot;);
+    skynet_command(ctx, &#34;REG&#34;, &#34;.logger&#34;);
     return 0;
 }
 return 1;
@@ -563,9 +678,7 @@ void
 skynet_callback(struct skynet_context * context, void *ud, skynet_cb cb) {
 context-&gt;cb = cb;
 context-&gt;cb_ud = ud;
-}
-</code></pre>
-
+}</pre></div>
 <p>上面这段逻辑，将skynet_context的callback函数设置为logger服务的_logger函数，并将调用callback时，传入的userdata设置为先前创建的数据实例</p></li>
 
 <li><p>为logger服务实例创建一个次级消息队列，并将队列插入到全局消息队列中</p></li>
@@ -659,8 +772,7 @@ skynet在启动时，会创建若干条worker线程（由配置指定），这�
 
 <li><p>worker线程的创建与运作<br />
 要理解skynet的消息调度，首先要理解worker线程的创建流程，基本运作以及线程安全。worker线程的数量由配置的“thread”字段指定，skynet节点启动时，会创建配置指定数量的worker线程，我们可以再skynet_start.c的start函数中找到这个创建流程：</p>
-
-<pre><code>// skynet_start.c
+<div class="highlight"><pre class="chroma">// skynet_start.c
 static void
 start(int thread) {
     pthread_t pid[thread+3];
@@ -676,11 +788,11 @@ start(int thread) {
         m-&gt;m[i] = skynet_monitor_new();
     }
     if (pthread_mutex_init(&amp;m-&gt;mutex, NULL)) {
-        fprintf(stderr, &quot;Init mutex error&quot;);
+        fprintf(stderr, &#34;Init mutex error&#34;);
         exit(1);
     }
     if (pthread_cond_init(&amp;m-&gt;cond, NULL)) {
-        fprintf(stderr, &quot;Init cond error&quot;);
+        fprintf(stderr, &#34;Init cond error&#34;);
         exit(1);
     }
     
@@ -710,12 +822,9 @@ start(int thread) {
     }
     
     free_monitor(m);
-}
-</code></pre>
-
+}</pre></div>
 <p>skynet所有的线程都在这里被创建，在创建完monitor线程，timer线程和socket线程以后，就开始创建worker线程。每条worker线程会被指定一个权重值，这个权重值决定一条线程一次消费多少条次级消息队列里的消息，当权重值&lt; 0，worker线程一次消费一条消息（从次级消息队列中pop一个消息）；当权重==0的时候，worker线程一次消费完次级消息队列里所有的消息；当权重&gt;0时，假设次级消息队列的长度为mq_length，将mq_length转成二进制数值以后，向右移动weight（权重值）位，结果N则是，该线程一次消费次级消息队列的消息数。在多条线程，同时运作时，每条worker线程都要从global_mq中pop一条次级消息队列出来，对global_mq进行pop和push操作的时候，会用自旋锁锁住临界区，</p>
-
-<pre><code>// skynet_mq.c
+<div class="highlight"><pre class="chroma">// skynet_mq.c
 void 
 skynet_globalmq_push(struct message_queue * queue) {
     struct global_queue *q= Q;
@@ -748,17 +857,14 @@ skynet_globalmq_pop() {
     SPIN_UNLOCK(q)
     
     return mq;
-}
-</code></pre>
-
+}</pre></div>
 <p>这样出队操作，只能同时在一条worker线程里进行，而其他worker线程只能够进入阻塞状态，在开的worker线程很多的情况下，始终有一定数量线程处于阻塞状态，降低服务器的并发处理效率，这里这么做第1-4条worker线程，每次只消费一个次级消息队列的消息，第5-8条线程一次消费整个次级消息队列的消息，第9-16条worker线程一次消费的消息数目大约是整个次级消息队列长度的一半，第17-24条线程一次消费的消息数大约是整个次级消息队列长度的四分之一，而第25-32条worker线程，则大约是次级消息总长度的八分之一。这样做的目的，大概是希望避免过多的worker线程为了等待spinlock解锁，而陷入阻塞状态（因为一些线程，一次消费多条甚至全部次级消息队列的消息，因此在消费期间，不会对global_mq进行入队和出队操作，入队和出队操作时加自旋锁的，因此就不会尝试去访问spinlock锁住的临界区，该线程就在相当一段时间内不会陷入阻塞），进而提升服务器的并发处理能力。这里还有一个细节值得注意，就是前四条线程，每次只是pop一个次级消息队列的消息出来，这样做也在一定程度上保证了没有服务会被饿死。<br />
 正如本节概述所说，一个worker线程被创建出来以后，则是不断尝试从global_mq中pop一个次级消息队列，并从次级消息队列中pop消息，进而通过服务的callback函数来消费该消息：</p>
-
-<pre><code>// skynet_start.c
+<div class="highlight"><pre class="chroma">// skynet_start.c
 static void
 wakeup(struct monitor *m, int busy) {
     if (m-&gt;sleep &gt;= m-&gt;count - busy) {
-        // signal sleep worker, &quot;spurious wakeup&quot; is harmless
+        // signal sleep worker, &#34;spurious wakeup&#34; is harmless
         pthread_cond_signal(&amp;m-&gt;cond);
     }
 }
@@ -797,13 +903,13 @@ thread_worker(void *p) {
         if (q == NULL) {
             if (pthread_mutex_lock(&amp;m-&gt;mutex) == 0) {
                 ++ m-&gt;sleep;
-                // &quot;spurious wakeup&quot; is harmless,
+                // &#34;spurious wakeup&#34; is harmless,
                 // because skynet_context_message_dispatch() can be call at any time.
                 if (!m-&gt;quit)
                     pthread_cond_wait(&amp;m-&gt;cond, &amp;m-&gt;mutex);
                 -- m-&gt;sleep;
                 if (pthread_mutex_unlock(&amp;m-&gt;mutex)) {
-                    fprintf(stderr, &quot;unlock mutex error&quot;);
+                    fprintf(stderr, &#34;unlock mutex error&#34;);
                     exit(1);
                 }
             }
@@ -843,7 +949,7 @@ skynet_context_message_dispatch(struct skynet_monitor *sm, struct message_queue 
         }
         int overload = skynet_mq_overload(q);
         if (overload) {
-            skynet_error(ctx, &quot;May overload, message queue length = %d&quot;, overload);
+            skynet_error(ctx, &#34;May overload, message queue length = %d&#34;, overload);
         }
     
         skynet_monitor_trigger(sm, msg.source , handle);
@@ -861,7 +967,7 @@ skynet_context_message_dispatch(struct skynet_monitor *sm, struct message_queue 
     struct message_queue *nq = skynet_globalmq_pop();
     if (nq) {
         // If global mq is not empty , push q back, and return next queue (nq)
-        // Else (global mq is empty or block, don't push q back, and return q again (for next dispatch)
+        // Else (global mq is empty or block, don&#39;t push q back, and return q again (for next dispatch)
         skynet_globalmq_push(q);
         q = nq;
     } 
@@ -884,9 +990,7 @@ dispatch_message(struct skynet_context *ctx, struct skynet_message *msg) {
         skynet_free(msg-&gt;data);
     } 
     CHECKCALLING_END(ctx)
-}
-</code></pre>
-
+}</pre></div>
 <p>整个worker线程的消费流程是：<br />
 a) worker线程每次，从global_mq中弹出一个次级消息队列，如果次级消息队列为空，则该worker线程投入睡眠，timer线程每隔2.5毫秒会唤醒一条睡眠中的worker线程，并重新尝试从全局消息队列中pop一个次级消息队列出来，当次级消息队列不为空时，进入下一步<br />
 b) 根据次级消息的handle，找出其所属的服务（一个skynet_context实例）指针，从次级消息队列中，pop出n条消息（受weight值影响），并且将其作为参数，传给skynet_context的cb函数，并调用它<br />
@@ -901,8 +1005,7 @@ d) 返回第a步</p></li>
 <li>不论是global_mq也好，次级消息队列也好，他们在入队和出队操作时，都有加上spinlock，这样多个线程同时访问mq的时候，第一个访问者会进入临界区并锁住，其他线程会阻塞等待，直至该锁解除，这样也保证了线程安全。global_mq会同时被多个worker线程访问，这个很好理解，因为worker线程总是在不断尝试驱动不同的服务，要驱动服务，首先要取出至少一个消息，要获得消息，就要取出一个次级消息队列，而这个次级消息队列要从全局消息队列里取。虽然一个服务的callback函数，只能在一个worker线程内被调用，但是在多个worker线程中，可以向同一个次级消息队列push消息，即便是该次级消息队列所对应的服务正在执行callback函数，由于次级消息队列不是skynet_context的成员（skynet_context只是包含了次级消息队列的指针），因此改变次级消息队列不等于改变skynet_context上的数据，不会影响到该服务自身内存的数据，次级消息队列在进行push和pop操作的时候，会加上一个spinlock，当多个worker线程同时向同一个次级消息队列push消息时，第一个访问的worker线程，能够进入临界区，其他worker线程就阻塞等待，直至该临界区解锁，这样保证了线程安全。</li>
 
 <li><p>我们在通过handle从skynet_context list里获取skynet_context的过程中（比如派发消息时，要要先获取skynet_context指针，再调用该服务的callback函数），需要加上一个读写锁，因为在skynet运作的过程中，获取skynet_context，比创建skynet_context的情况要多得多，因此这里用了读写锁：</p>
-
-<pre><code>struct skynet_context * 
+<div class="highlight"><pre class="chroma">struct skynet_context * 
 skynet_handle_grab(uint32_t handle) {
     struct handle_storage *s = H;
     struct skynet_context * result = NULL;
@@ -919,9 +1022,7 @@ skynet_handle_grab(uint32_t handle) {
     rwlock_runlock(&amp;s-&gt;lock);
         
     return result;
-}
-</code></pre>
-
+}</pre></div>
 <p>这里加上读写锁的意义在于，多个worker线程，同时从skynet_context列表中获取context指针时，没有一条线程是会被阻塞的，这样提高了并发的效率，而此时，尝试往skyent_context里表中，添加新的服务的线程将会被阻塞住，因为添加新的服务可能会导致skynet_context列表（也就是代码里的slot列表）可能会被resize，因此读的时候不允许写入，写的时候不允许读取，保证了线程安全。</p></li>
 </ul></li>
 </ol>
@@ -934,19 +1035,18 @@ skynet_handle_grab(uint32_t handle) {
 <h4 id="skynet如何启动一个lua服务">skynet如何启动一个lua服务</h4>
 
 <p>每个skynet进程在启动时，都会启动一个lua层的launcher服务，该服务主要负责skynet运作期间，服务的创建工作。我们在lua层创建一个lua层服务时，通常会调用skynet.newservice函数</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.newservice(name, ...)
-    return skynet.call(&quot;.launcher&quot;, &quot;lua&quot; , &quot;LAUNCH&quot;, &quot;snlua&quot;, name, ...)
+    return skynet.call(&#34;.launcher&#34;, &#34;lua&#34; , &#34;LAUNCH&#34;, &#34;snlua&#34;, name, ...)
 end
 
 -- launcher.lua
 local function launch_service(service, ...)
-    local param = table.concat({...}, &quot; &quot;)
+    local param = table.concat({...}, &#34; &#34;)
     local inst = skynet.launch(service, param)
     local response = skynet.response()
     if inst then
-        services[inst] = service .. &quot; &quot; .. param
+        services[inst] = service .. &#34; &#34; .. param
         instance[inst] = response
     else
         response(false)
@@ -958,16 +1058,13 @@ end
 function command.LAUNCH(_, service, ...)
     launch_service(service, ...)
     return NORET
-end
-</code></pre>
-
+end</pre></div>
 <p>此时会发送消息给launcher服务，告诉launcher服务，要去创建一个snlua的c服务，并且绑定一个lua_State，该lua_State运行名称为name的lua脚本（这个脚本是入口），这里将c服务名称、脚本名称和参数，拼成一个字符串，并下传给c层</p>
-
-<pre><code>-- skynet.manager
+<div class="highlight"><pre class="chroma">-- skynet.manager
 function skynet.launch(...)
-    local addr = c.command(&quot;LAUNCH&quot;, table.concat({...},&quot; &quot;))
+    local addr = c.command(&#34;LAUNCH&#34;, table.concat({...},&#34; &#34;))
     if addr then
-        return tonumber(&quot;0x&quot; .. string.sub(addr , 2))
+        return tonumber(&#34;0x&#34; .. string.sub(addr , 2))
     end
 end
 
@@ -997,8 +1094,8 @@ cmd_launch(struct skynet_context * context, const char * param) {
     char tmp[sz+1];
     strcpy(tmp,param);
     char * args = tmp;
-    char * mod = strsep(&amp;args, &quot; \t\r\n&quot;);
-    args = strsep(&amp;args, &quot;\r\n&quot;);
+    char * mod = strsep(&amp;args, &#34; \t\r\n&#34;);
+    args = strsep(&amp;args, &#34;\r\n&#34;);
     struct skynet_context * inst = skynet_context_new(mod,args);
     if (inst == NULL) {
         return NULL;
@@ -1006,12 +1103,9 @@ cmd_launch(struct skynet_context * context, const char * param) {
         id_to_hex(context-&gt;result, inst-&gt;handle);
         return context-&gt;result;
     }
-}
-</code></pre>
-
+}</pre></div>
 <p>此时，我们就已经创建了一个snlua的c服务（c服务创建流程，上文已经有说明，这里不再赘述），在创建snlua服务的过程中，会对新的snlua服务进行初始化操作</p>
-
-<pre><code>// service_snlua.c
+<div class="highlight"><pre class="chroma">// service_snlua.c
 static int
 _launch(struct skynet_context * context, void *ud, int type, int session, uint32_t source , const void * msg, size_t sz) {
     assert(type == 0 &amp;&amp; session == 0);
@@ -1019,7 +1113,7 @@ _launch(struct skynet_context * context, void *ud, int type, int session, uint32
     skynet_callback(context, NULL, NULL);
     int err = _init(l, context, msg, sz);
     if (err) {
-        skynet_command(context, &quot;EXIT&quot;, NULL);
+        skynet_command(context, &#34;EXIT&#34;, NULL);
     }
 
     return 0;
@@ -1031,58 +1125,55 @@ snlua_init(struct snlua *l, struct skynet_context *ctx, const char * args) {
     char * tmp = skynet_malloc(sz);
     memcpy(tmp, args, sz);
     skynet_callback(ctx, l , _launch);
-    const char * self = skynet_command(ctx, &quot;REG&quot;, NULL);
+    const char * self = skynet_command(ctx, &#34;REG&#34;, NULL);
     uint32_t handle_id = strtoul(self+1, NULL, 16);
     // it must be first message
     skynet_send(ctx, 0, handle_id, PTYPE_TAG_DONTCOPY,0, tmp, sz);
     return 0;
-}
-</code></pre>
-
+}</pre></div>
 <p>这里将_launch作为该snlua服务的callback函数，完成注册以后，向自己发送了一个消息，本snlua服务在接收到消息以后，就会调用_launch函数，此时，snlua服务的回调函数会被赋空值，并进行一次snlua绑定的lua_State的初始化</p>
-
-<pre><code>// service_snlua.c
+<div class="highlight"><pre class="chroma">// service_snlua.c
 static int
 _init(struct snlua *l, struct skynet_context *ctx, const char * args, size_t sz) {
     lua_State *L = l-&gt;L;
     l-&gt;ctx = ctx;
     lua_gc(L, LUA_GCSTOP, 0);
     lua_pushboolean(L, 1);  /* signal for libraries to ignore env. vars. */
-    lua_setfield(L, LUA_REGISTRYINDEX, &quot;LUA_NOENV&quot;);
+    lua_setfield(L, LUA_REGISTRYINDEX, &#34;LUA_NOENV&#34;);
     luaL_openlibs(L);
     lua_pushlightuserdata(L, ctx);
-    lua_setfield(L, LUA_REGISTRYINDEX, &quot;skynet_context&quot;);
-    luaL_requiref(L, &quot;skynet.codecache&quot;, codecache , 0);
+    lua_setfield(L, LUA_REGISTRYINDEX, &#34;skynet_context&#34;);
+    luaL_requiref(L, &#34;skynet.codecache&#34;, codecache , 0);
     lua_pop(L,1);
 
-    const char *path = optstring(ctx, &quot;lua_path&quot;,&quot;./lualib/?.lua;./lualib/?/init.lua&quot;);
+    const char *path = optstring(ctx, &#34;lua_path&#34;,&#34;./lualib/?.lua;./lualib/?/init.lua&#34;);
     lua_pushstring(L, path);
-    lua_setglobal(L, &quot;LUA_PATH&quot;);
-    const char *cpath = optstring(ctx, &quot;lua_cpath&quot;,&quot;./luaclib/?.so&quot;);
+    lua_setglobal(L, &#34;LUA_PATH&#34;);
+    const char *cpath = optstring(ctx, &#34;lua_cpath&#34;,&#34;./luaclib/?.so&#34;);
     lua_pushstring(L, cpath);
-    lua_setglobal(L, &quot;LUA_CPATH&quot;);
-    const char *service = optstring(ctx, &quot;luaservice&quot;, &quot;./service/?.lua&quot;);
+    lua_setglobal(L, &#34;LUA_CPATH&#34;);
+    const char *service = optstring(ctx, &#34;luaservice&#34;, &#34;./service/?.lua&#34;);
     lua_pushstring(L, service);
-    lua_setglobal(L, &quot;LUA_SERVICE&quot;);
-    const char *preload = skynet_command(ctx, &quot;GETENV&quot;, &quot;preload&quot;);
+    lua_setglobal(L, &#34;LUA_SERVICE&#34;);
+    const char *preload = skynet_command(ctx, &#34;GETENV&#34;, &#34;preload&#34;);
     lua_pushstring(L, preload);
-    lua_setglobal(L, &quot;LUA_PRELOAD&quot;);
+    lua_setglobal(L, &#34;LUA_PRELOAD&#34;);
 
     lua_pushcfunction(L, traceback);
     assert(lua_gettop(L) == 1);
 
-    const char * loader = optstring(ctx, &quot;lualoader&quot;, &quot;./lualib/loader.lua&quot;);
+    const char * loader = optstring(ctx, &#34;lualoader&#34;, &#34;./lualib/loader.lua&#34;);
 
     int r = luaL_loadfile(L,loader);
     if (r != LUA_OK) {
-        skynet_error(ctx, &quot;Can't load %s : %s&quot;, loader, lua_tostring(L, -1));
+        skynet_error(ctx, &#34;Can&#39;t load %s : %s&#34;, loader, lua_tostring(L, -1));
         _report_launcher_error(ctx);
         return 1;
     }
     lua_pushlstring(L, args, sz);
     r = lua_pcall(L,1,0,1);
     if (r != LUA_OK) {
-        skynet_error(ctx, &quot;lua loader error : %s&quot;, lua_tostring(L, -1));
+        skynet_error(ctx, &#34;lua loader error : %s&#34;, lua_tostring(L, -1));
         _report_launcher_error(ctx);
         return 1;
     }
@@ -1091,14 +1182,11 @@ _init(struct snlua *l, struct skynet_context *ctx, const char * args, size_t sz)
     lua_gc(L, LUA_GCRESTART, 0);
 
     return 0;
-}
-</code></pre>
-
+}</pre></div>
 <p>c初始化lua_State，先是将服务指针，skynet_context保存起来，以方便lua层调c的时候使用，然后就是一些配置设置，如设置lua服务脚本的存放路径，c服务so库的存放路径，lualib的存放路径等（加载和调用的时候，回到这些路径里找），然后该lua_State会加载一个用于执行指定脚本的loader.lua脚本，并将参数传给这个脚本（参数就是snlua服务绑定的lua脚本名称和传给这个脚本的参数拼起来的字符串，比如要启动一个名为scene的服务，那么对应的脚本名称就是scene.lua）</p>
-
-<pre><code>-- lualib.loader.lua
+<div class="highlight"><pre class="chroma">-- lualib.loader.lua
 local args = {}
-for word in string.gmatch(..., &quot;%S+&quot;) do
+for word in string.gmatch(..., &#34;%S+&#34;) do
     table.insert(args, word)
 end
 
@@ -1107,8 +1195,8 @@ SERVICE_NAME = args[1]
 local main, pattern
 
 local err = {}
-for pat in string.gmatch(LUA_SERVICE, &quot;([^;]+);*&quot;) do
-    local filename = string.gsub(pat, &quot;?&quot;, SERVICE_NAME)
+for pat in string.gmatch(LUA_SERVICE, &#34;([^;]+);*&#34;) do
+    local filename = string.gsub(pat, &#34;?&#34;, SERVICE_NAME)
     local f, msg = loadfile(filename)
     if not f then
         table.insert(err, msg)
@@ -1121,9 +1209,7 @@ end
 
 ...
 
-main(select(2, table.unpack(args)))
-</code></pre>
-
+main(select(2, table.unpack(args)))</pre></div>
 <p>然后，这个lua_State就开始执行这个脚本了，一般来说，lua服务的入口脚本，一般可能执行如下几件事情：</p>
 
 <ul>
@@ -1139,8 +1225,7 @@ main(select(2, table.unpack(args)))
 <li>name：表示协议类型的字符串，如lua类型，其值则为&rdquo;lua&rdquo;</li>
 
 <li><p>id：标识协议类型的整型值，类型有</p>
-
-<pre><code>local skynet = {
+<div class="highlight"><pre class="chroma">local skynet = {
 -- read skynet.h
 PTYPE_TEXT = 0,
 PTYPE_RESPONSE = 1,
@@ -1154,8 +1239,7 @@ PTYPE_QUEUE = 8,    -- used in deprecated mqueue, use skynet.queue instead
 PTYPE_DEBUG = 9,
 PTYPE_LUA = 10,
 PTYPE_SNAX = 11,
-}
-</code></pre></li>
+}</pre></div></li>
 
 <li><p>pack：发送消息时，对消息进行打包的函数</p></li>
 
@@ -1165,12 +1249,11 @@ PTYPE_SNAX = 11,
 </ul>
 
 <p>现在通过启动一个example服务来举例说明，example服务的定义如下所示：</p>
-
-<pre><code>-- example.lua
-local skynet = require &quot;skynet&quot;
+<div class="highlight"><pre class="chroma">-- example.lua
+local skynet = require &#34;skynet&#34;
 
 skynet.register_protocol {
-    name = &quot;text&quot;,
+    name = &#34;text&#34;,
     id = skynet.PTYPE_TEXT,
     unpack = function (msg, sz)
         return skynet.tostring(msg, sz)
@@ -1186,20 +1269,16 @@ function CMD.do_something(...)
     -- TODO
 end
 
-skynet.dispatch(&quot;lua&quot;, function(_,_, command, ...)
+skynet.dispatch(&#34;lua&#34;, function(_,_, command, ...)
     local f = CMD[command]
     skynet.ret(skynet.pack(f(...)))
 end)
 
 skynet.start(function()
     -- TODO
-end)
-
-</code></pre>
-
+end)</pre></div>
 <p>启动一个example服务，意味着loader脚本，最终执行的那个脚本就是example.lua这个脚本，在执行这个脚本的过程中，首先和其他所有的lua服务一样，这个example服务需要调用skynet.lua里的api，因此，需要require一下skynet.lua这个脚本，而在require的过程中，就已经注册了几个回调消息处理协议：</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 
 ...
 
@@ -1208,45 +1287,38 @@ do
     local REG = skynet.register_protocol
 
     REG {
-        name = &quot;lua&quot;,
+        name = &#34;lua&#34;,
         id = skynet.PTYPE_LUA,
         pack = skynet.pack,
         unpack = skynet.unpack,
     }
 
     REG {
-        name = &quot;response&quot;,
+        name = &#34;response&#34;,
         id = skynet.PTYPE_RESPONSE,
     }
 
     REG {
-        name = &quot;error&quot;,
+        name = &#34;error&#34;,
         id = skynet.PTYPE_ERROR,
         unpack = function(...) return ... end,
         dispatch = _error_dispatch,
     }
 end
 
-...
-
-</code></pre>
-
+...</pre></div>
 <p>这里事先注册了lua类型，response类型和error类型的消息处理协议，也就是说，一个lua服务至少保证lua类型、response类型和error类型默认有消息处理协议，而注册函数的流程就是将这个消息处理协议的结构存入proto表中，当一个lua服务接收到消息时，则会根据其消息类型，在proto表中找到对应的处理协议以后，调用该协议的unpack函数，将参数解包以后，再传给该协议的dispatch函数，最后达到驱动lua服务的目的：</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.register_protocol(class)
     local name = class.name
     local id = class.id
     assert(proto[name] == nil)
-    assert(type(name) == &quot;string&quot; and type(id) == &quot;number&quot; and id &gt;=0 and id &lt;=255)
+    assert(type(name) == &#34;string&#34; and type(id) == &#34;number&#34; and id &gt;=0 and id &lt;=255)
     proto[name] = class
     proto[id] = class
-end
-</code></pre>
-
+end</pre></div>
 <p>现在回到我们的example脚本，它注册了一个text类消息处理协议，然后为lua协议注册了一个回调函数，我们注意到，在skynet.lua这个脚本中，虽然有在proto表中注册lua类型协议（其中包括解包函数unpack），但是没有定义消费lua类型消息的回调函数dispatch，这个dispatch函数，需要用户自己定义，一般使用skynet.dispatch来完成</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.dispatch(typename, func)
     local p = proto[typename]
     if func then
@@ -1256,24 +1328,18 @@ function skynet.dispatch(typename, func)
     else
         return p and p.dispatch
     end
-end
-</code></pre>
-
+end</pre></div>
 <p>exmaple脚本为lua协议，注册了一个lua层消息回调函数，后面example服务接收到的lua类型消息，都会被传到这个函数内<br />
 最后，example脚本执行了skynet.start函数，完成启动一个lua服务的最后工作</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.start(start_func)
     c.callback(skynet.dispatch_message)
     skynet.timeout(0, function()
         skynet.init_service(start_func)
     end)
-end
-</code></pre>
-
+end</pre></div>
 <p>这个函数，首先lua服务注册了一个lua层的消息回调函数，前面已经讨论过，一个c服务在消费次级消息队列的消息时，最终会调用callback函数，而这里做的工作则是，通过这个c层的callback函数，再转调lua层消息回调函数skynet.dispatch_message</p>
-
-<pre><code>// lua-skynet.c
+<div class="highlight"><pre class="chroma">// lua-skynet.c
 static int
 _cb(struct skynet_context * context, void * ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
     lua_State *L = ud;
@@ -1319,13 +1385,10 @@ _callback(lua_State *L) {
     }
 
     return 0;
-}
-</code></pre>
-
+}</pre></div>
 <p>这里将snlua这个skynet_context的callback函数赋值为_cb，而_cb最终又会通过lua_State转调lua层的skynet.dispatch_message函数，也就是说，发送给snlua服务的消息，最终都是交给lua层去处理的<br />
 在完成lua层callback函数的注册以后，接下来就是执行lua服务的启动函数</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 local function init_template(start)
     init_all()
     init_func = {}
@@ -1340,15 +1403,13 @@ end
 function skynet.init_service(start)
     local ok, err = skynet.pcall(start)
     if not ok then
-        skynet.error(&quot;init service failed: &quot; .. tostring(err))
-        skynet.send(&quot;.launcher&quot;,&quot;lua&quot;, &quot;ERROR&quot;)
+        skynet.error(&#34;init service failed: &#34; .. tostring(err))
+        skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;ERROR&#34;)
         skynet.exit()
     else
-        skynet.send(&quot;.launcher&quot;,&quot;lua&quot;, &quot;LAUNCHOK&quot;)
+        skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;LAUNCHOK&#34;)
     end
-end
-</code></pre>
-
+end</pre></div>
 <p>这里并没有立即执行这个start函数，而是故意放在了下一帧进行。到了目前这一步，整个example服务就被启动起来了，虽然他并没有执行什么逻辑，但是却展现了一个lua层服务完整的创建流程，下一节将介绍lua层消息处理机制。</p>
 
 <h4 id="lua层消息处理机制">lua层消息处理机制</h4>
@@ -1380,41 +1441,35 @@ Lua 支持协程，也叫 协同式多线程。 一个协程在 Lua 中代表了
 
 <p>下面的代码展示了一个协程工作的范例：</p>
 </blockquote>
-
-<pre><code> function foo (a)
-   print(&quot;foo&quot;, a)
+<div class="highlight"><pre class="chroma"> function foo (a)
+   print(&#34;foo&#34;, a)
    return coroutine.yield(2*a)
  end
 
  co = coroutine.create(function (a,b)
-       print(&quot;co-body&quot;, a, b)
+       print(&#34;co-body&#34;, a, b)
        local r = foo(a+1)
-       print(&quot;co-body&quot;, r)
+       print(&#34;co-body&#34;, r)
        local r, s = coroutine.yield(a+b, a-b)
-       print(&quot;co-body&quot;, r, s)
-       return b, &quot;end&quot;
+       print(&#34;co-body&#34;, r, s)
+       return b, &#34;end&#34;
  end)
 
- print(&quot;main&quot;, coroutine.resume(co, 1, 10))
- print(&quot;main&quot;, coroutine.resume(co, &quot;r&quot;))
- print(&quot;main&quot;, coroutine.resume(co, &quot;x&quot;, &quot;y&quot;))
- print(&quot;main&quot;, coroutine.resume(co, &quot;x&quot;, &quot;y&quot;))
-</code></pre>
-
+ print(&#34;main&#34;, coroutine.resume(co, 1, 10))
+ print(&#34;main&#34;, coroutine.resume(co, &#34;r&#34;))
+ print(&#34;main&#34;, coroutine.resume(co, &#34;x&#34;, &#34;y&#34;))
+ print(&#34;main&#34;, coroutine.resume(co, &#34;x&#34;, &#34;y&#34;))</pre></div>
 <blockquote>
 <p>当你运行它，将产生下列输出：</p>
 </blockquote>
-
-<pre><code> co-body 1       10
+<div class="highlight"><pre class="chroma"> co-body 1       10
  foo     2
  main    true    4
  co-body r
  main    true    11      -9
  co-body x       y
  main    true    10      end
- main    false   cannot resume dead coroutine
-</code></pre>
-
+ main    false   cannot resume dead coroutine</pre></div>
 <blockquote>
 <p>你也可以通过 C API 来创建及操作协程： 参见函数 lua_newthread， lua_resume， 以及 lua_yield。</p>
 </blockquote>
@@ -1424,8 +1479,7 @@ Lua 支持协程，也叫 协同式多线程。 一个协程在 Lua 中代表了
 <h5 id="3-skynet消息处理机制">3.skynet消息处理机制</h5>
 
 <p>在前文，我们已经说明了，一个lua服务在接收消息时，最终会传给lua层的消息回调函数skynet.dispatch_message</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.dispatch_message(...)
     local succ, err = pcall(raw_dispatch_message,...)
     while true do
@@ -1440,17 +1494,14 @@ function skynet.dispatch_message(...)
                 succ = false
                 err = tostring(fork_err)
             else
-                err = tostring(err) .. &quot;\n&quot; .. tostring(fork_err)
+                err = tostring(err) .. &#34;\n&#34; .. tostring(fork_err)
             end
         end
     end
     assert(succ, tostring(err))
-end
-</code></pre>
-
+end</pre></div>
 <p>消息处理函数，只做两件事情，一件是消费当前消息，另一件则是按顺序执行之前通过调用skynet.fork创建的协程，这里我么只关注处理当前消息的情况raw_dispatch_message</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
     -- skynet.PTYPE_RESPONSE = 1, read skynet.h
     if prototype == 1 then
@@ -1459,7 +1510,7 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
         local p = proto[prototype]    -- 找到与消息类型对应的解析协议
         if p == nil then
             if session ~= 0 then
-                c.send(source, skynet.PTYPE_ERROR, session, &quot;&quot;)
+                c.send(source, skynet.PTYPE_ERROR, session, &#34;&#34;)
             else
                 unknown_request(session, source, msg, sz, prototype)
             end
@@ -1481,9 +1532,7 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
             unknown_request(session, source, msg, sz, proto[prototype].name)
         end
     end
-end
-</code></pre>
-
+end</pre></div>
 <p>消息处理的分为两种情况，一种是其他服务send过来的消息，还有一种就是自己发起同步rpc调用（调用call）后，获得的返回结果（返回消息的类型是PTYPE_RESPONSE）。关于call的情况，后面会详细讨论，现在只讨论如何处理其他服务send过来的消息。<br />
 整个执行的流程如下所示：</p>
 
@@ -1494,8 +1543,7 @@ end
 </ul>
 
 <p>这里对协程的复用，做一些小小的说明，创建协程的函数，非常有意思，为了进一步提高性能，skynet对协程做了缓存，也就是说，一个协程在使用完以后，并不是让他结束掉，而是把上一次使用的dispatch函数清掉，并且挂起协程，放入一个协程池中，供下一次调用。下次使用时，他将执行新的dispatch函数，只有当协程池中没有协程时，才会去创建新协程，如此循环往复</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 local function co_create(f)
     local co = table.remove(coroutine_pool)
     if co == nil then  -- 协程池中，再也找不到可以用的协程时，将重新创建一个
@@ -1508,7 +1556,7 @@ local function co_create(f)
                 f = nil
                 coroutine_pool[#coroutine_pool+1] = co
                 
-                f = coroutine_yield &quot;EXIT&quot;  -- （1）
+                f = coroutine_yield &#34;EXIT&#34;  -- （1）
                 f(coroutine_yield())  -- （2）
             end
         end)
@@ -1524,15 +1572,12 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
     -- 如果是一个复用中的协程，那么这里的coroutine.resume会将第二个至最后一个参数，通过第（2）处的coroutine_yield返回给消息回调函数
     suspend(co, coroutine.resume(co, session,source, p.unpack(msg,sz, ...)))
     ...
-end
-</code></pre>
-
+end</pre></div>
 <p>上面的逻辑在完成回调函数调用后，会对协程进行回收，它会将回调函数清掉，并且将当前协程写入协程缓存列表中，然后挂起协程，挂起类型为“EXIT”，如上面的代码所示，对挂起类型进行处理的函数是suspend函数，当一个协程结束时，会进行如下操作</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function suspend(co, result, command, param, size)
 ...
-    elseif command == &quot;EXIT&quot; then
+    elseif command == &#34;EXIT&#34; then
         -- coroutine exit
         local address = session_coroutine_address[co]
         release_watching(address)
@@ -1540,58 +1585,51 @@ function suspend(co, result, command, param, size)
         session_coroutine_address[co] = nil
         session_response[co] = nil
 ...
-end
-
-</code></pre>
-
+end</pre></div>
 <p>其实这里是将与本协程关联的数据清空，包括向本服务发送消息的服务的地址，session，以及本服务对请求服务返回消息的确认信息。在lua层处理一条消息，本质上是在一个协程里进行的，因此要以协程句柄作为key，保存这些变量。协程每次暂停，都需要使用或处理这些数据，并告知当前协程的状态，以及要根据不同的状态做出相应的处理逻辑，比如当一个协程使用完毕时，就会挂起，并返回“EXIT”类型，意味着协程已经和之前的消息无关系了，需要清空与本协程关联的所有消息相关的信息，以便下一条消息使用。<br />
 协程发起一次同步RPC调用（挂起状态类型为“CALL”），或者投入睡眠时（挂起状态类型为“SLEEP”），也会使自己挂起，此时要为当前的协程分配一个唯一的session变量，并且以session为key，协程地址为value存入一个table表中，目的是，当对方返回结果，或者定时器到达时间timer线程向本服务发送一个唤醒原来协程的消息时，能够通过session找到对应的协程，并将其唤醒，从之前挂起的地方继续执行下去。<br />
 当一个服务向本服务发起一次call调用时，本服务需要返回一个结果变量给请求者，此时也需要将本协程挂起，向请求者返回结果时，需要调用如下接口</p>
+<div class="highlight"><pre class="chroma"><span class="o">--</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">lua</span>
+<span class="nx">function</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">ret</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">sz</span><span class="p">)</span>
+    <span class="nx">msg</span> <span class="p">=</span> <span class="nx">msg</span> <span class="nx">or</span> <span class="s">&#34;&#34;</span>
+    <span class="k">return</span> <span class="nx">coroutine_yield</span><span class="p">(</span><span class="s">&#34;RETURN&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">sz</span><span class="p">)</span> <span class="o">--</span> <span class="err">（</span><span class="mi">1</span><span class="err">）</span>
+<span class="nx">end</span>
 
-<pre><code>-- skynet.lua
-function skynet.ret(msg, sz)
-    msg = msg or &quot;&quot;
-    return coroutine_yield(&quot;RETURN&quot;, msg, sz) -- （1）
-end
-
-function suspend(co, result, command, param, size)
-...
-    elseif command == &quot;RETURN&quot; then
-        local co_session = session_coroutine_id[co]
-        local co_address = session_coroutine_address[co]
-        if param == nil or session_response[co] then
-            error(debug.traceback(co))
-        end
-        session_response[co] = true
-        local ret
-        if not dead_service[co_address] then
-            ret = c.send(co_address, skynet.PTYPE_RESPONSE, co_session, param, size) ~= nil
-            if not ret then
-                -- If the package is too large, returns nil. so we should report error back
-                c.send(co_address, skynet.PTYPE_ERROR, co_session, &quot;&quot;)
-            end
-        elseif size ~= nil then
-            c.trash(param, size)
-            ret = false
-        end
-        return suspend(co, coroutine.resume(co, ret)) -- 重新唤醒（1）处，此时skynet.ret返回
-...
-end
-</code></pre>
-
+<span class="nx">function</span> <span class="nx">suspend</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">command</span><span class="p">,</span> <span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
+<span class="o">...</span>
+    <span class="nx">elseif</span> <span class="nx">command</span> <span class="o">==</span> <span class="s">&#34;RETURN&#34;</span> <span class="nx">then</span>
+        <span class="nx">local</span> <span class="nx">co_session</span> <span class="p">=</span> <span class="nx">session_coroutine_id</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
+        <span class="nx">local</span> <span class="nx">co_address</span> <span class="p">=</span> <span class="nx">session_coroutine_address</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nx">param</span> <span class="o">==</span> <span class="kc">nil</span> <span class="nx">or</span> <span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="nx">then</span>
+            <span class="nb">error</span><span class="p">(</span><span class="nx">debug</span><span class="p">.</span><span class="nx">traceback</span><span class="p">(</span><span class="nx">co</span><span class="p">))</span>
+        <span class="nx">end</span>
+        <span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="p">=</span> <span class="kc">true</span>
+        <span class="nx">local</span> <span class="nx">ret</span>
+        <span class="k">if</span> <span class="nx">not</span> <span class="nx">dead_service</span><span class="p">[</span><span class="nx">co_address</span><span class="p">]</span> <span class="nx">then</span>
+            <span class="nx">ret</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_RESPONSE</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span>
+            <span class="k">if</span> <span class="nx">not</span> <span class="nx">ret</span> <span class="nx">then</span>
+                <span class="o">--</span> <span class="nx">If</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">is</span> <span class="nx">too</span> <span class="nx">large</span><span class="p">,</span> <span class="nx">returns</span> <span class="kc">nil</span><span class="p">.</span> <span class="nx">so</span> <span class="nx">we</span> <span class="nx">should</span> <span class="nx">report</span> <span class="kt">error</span> <span class="nx">back</span>
+                <span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_ERROR</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+            <span class="nx">end</span>
+        <span class="nx">elseif</span> <span class="nx">size</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span> <span class="nx">then</span>
+            <span class="nx">c</span><span class="p">.</span><span class="nx">trash</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
+            <span class="nx">ret</span> <span class="p">=</span> <span class="kc">false</span>
+        <span class="nx">end</span>
+        <span class="k">return</span> <span class="nx">suspend</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">coroutine</span><span class="p">.</span><span class="nx">resume</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">ret</span><span class="p">))</span> <span class="o">--</span> <span class="nx">重新唤醒</span><span class="err">（</span><span class="mi">1</span><span class="err">）</span><span class="nx">处</span><span class="err">，</span><span class="nx">此时skynet</span><span class="p">.</span><span class="nx">ret返回</span>
+<span class="o">...</span>
+<span class="nx">end</span></pre></div>
 <p>在调用skynet.ret以后，调用该接口的协程就会挂起，此时挂起的状态类型是“RETURN”，这里挂起的目的是，等待返回消息的逻辑处理完，再接着执行协程挂起处后面的逻辑。suspend里所做的处理，也就是，将消息插入目的服务的次级消息队列中，然后再唤醒已经挂起的协程。</p>
 
 <h5 id="4-对其他服务的call访问">4.对其他服务的call访问</h5>
 
 <p>一个服务，向另一个服务发起同步rpc调用，首先要挂起当前协程，然后是将目的服务发送一个消息，并且在本地记录一个唯一的session值，并以其为key，以挂起的协程地址为value存入一个table中，当目标服务返回结果时，根据这个session找回对应的协程，并且调用resume函数唤醒他。</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 local function yield_call(service, session)
     watching_session[session] = service
-    local succ, msg, sz = coroutine_yield(&quot;CALL&quot;, session)
+    local succ, msg, sz = coroutine_yield(&#34;CALL&#34;, session)
     watching_session[session] = nil
     if not succ then
-        error &quot;call failed&quot;
+        error &#34;call failed&#34;
     end
     return msg,sz
 end
@@ -1600,14 +1638,14 @@ function skynet.call(addr, typename, ...)
     local p = proto[typename]
     local session = c.send(addr, p.id , nil , p.pack(...))
     if session == nil then
-        error(&quot;call to invalid address &quot; .. skynet.address(addr))
+        error(&#34;call to invalid address &#34; .. skynet.address(addr))
     end
     return p.unpack(yield_call(addr, session))
 end
 
 function suspend(co, result, command, param, size)
 ...
-    if command == &quot;CALL&quot; then
+    if command == &#34;CALL&#34; then
         session_id_coroutine[param] = co
 ...
 end
@@ -1616,7 +1654,7 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
     -- skynet.PTYPE_RESPONSE = 1, read skynet.h
     if prototype == 1 then
         local co = session_id_coroutine[session]
-        if co == &quot;BREAK&quot; then
+        if co == &#34;BREAK&#34; then
             session_id_coroutine[session] = nil
         elseif co == nil then
             unknown_response(session, source, msg, sz)
@@ -1626,9 +1664,7 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
         end
     else
     ...
-    end
-</code></pre>
-
+    end</pre></div>
 <p>上面一段逻辑的流程如下所示：</p>
 
 <ul>
@@ -1641,20 +1677,16 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
 
 <p>我们使用定时器的两种情况，一种是设置一个定时器，让某个函数在t秒后执行；还有一种则是，在执行某个函数的过程中，暂停t秒后继续执行。<br />
 第一种情况，我们使用skynet.timeout来执行：</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.timeout(ti, func)
-    local session = c.intcommand(&quot;TIMEOUT&quot;,ti)
+    local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
     assert(session)
     local co = co_create(func)
     assert(session_id_coroutine[session] == nil)
     session_id_coroutine[session] = co
-end
-</code></pre>
-
+end</pre></div>
 <p>这里，首先向定时器注册了一个事件，这个事件的信息包含服务地址、多少秒后触发定时事件以及一个session变量；然后为执行函数创建一个协程，协程创建后默认不执行，因此目前的func相当于冻结状态，最后lua层会以session为key，协程地址为value存入一个table表中。当该事件的触发时间到的时候，timer线程会取出时间数据，向事件所属的地址发送一条RESPONSE类型的消息</p>
-
-<pre><code>// skynet_timer.c
+<div class="highlight"><pre class="chroma">// skynet_timer.c
 static inline void
 dispatch_list(struct timer_node *current) {
     do {
@@ -1671,29 +1703,24 @@ dispatch_list(struct timer_node *current) {
         current=current-&gt;next;
         skynet_free(temp);  
     } while (current);
-}
-</code></pre>
-
+}</pre></div>
 <p>服务收到这个消息以后，会根据session的值，找回协程地址，并调用resume函数，唤醒这个协程，这样就完成了t秒后执行某个函数的功能。<br />
 第二种情况，我们使用skynet.sleep来执行</p>
-
-<pre><code>-- skynet.lua
+<div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.sleep(ti)
-    local session = c.intcommand(&quot;TIMEOUT&quot;,ti)
+    local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
     assert(session)
-    local succ, ret = coroutine_yield(&quot;SLEEP&quot;, session)
+    local succ, ret = coroutine_yield(&#34;SLEEP&#34;, session)
     sleep_session[coroutine.running()] = nil
     if succ then
         return
     end
-    if ret == &quot;BREAK&quot; then
-        return &quot;BREAK&quot;
+    if ret == &#34;BREAK&#34; then
+        return &#34;BREAK&#34;
     else
         error(ret)
     end
-end
-</code></pre>
-
+end</pre></div>
 <p>一个协程内的函数，在执行的过程中，调用了sleep函数以后，此时首先会向定时器注册一个事件，这个时间包含了服务地址、睡眠时间ti和一个session变量，然后就对当前协程执行挂起操作，挂起类型为SLEEP，此时会触发对suspend函数的调用，前面已经讨论过，suspend函数对SLEEP这种挂起类型的处理是，以session为key，再以协程地址为value存入一个table中（详见 lua层消息处理机制 一节）。在ti秒以后，timer线程触发定时事件，并向服务发送一个RESPONSE类型的消息，服务收到消息以后会调用resume唤醒该协程，从而使该协程继续执行后面的逻辑。<br />
 本节讨论了定时器最常见的两种使用情况，并且讨论了timer线程如何和worker线程内的服务进行交互，本节为了突出问题关键，并未对timer内部的运作细节进行一一讨论，但是这些事没有必要的，我们只要知道timer事件如何添加，timer何时会通知服务，如何通知即可，无需在一些复杂的细节里耗费太多的时间和精力。</p>
 
@@ -1714,8 +1741,7 @@ end
 <ol>
 <li><p>skynet网络层基本数据结构<br />
 在开始讨论具体的流程之前，首先我们要讨论一下socket部分的主要数据结构</p>
-
-<pre><code>// socket_server.c
+<div class="highlight"><pre class="chroma">// socket_server.c
 struct socket {
     uintptr_t opaque;       // 与本socket关联的服务地址，socket接收到的消息，最后将会传送到这个服务商
     struct wb_list high;    // 高优先级发送队列
@@ -1745,14 +1771,11 @@ struct socket_server {
     char buffer[MAX_INFO];  // 地址信息转成字符串以后，存在这里
     uint8_t udpbuffer[MAX_UDP_PACKAGE];
     fd_set rfds;
-};
-</code></pre>
-
+};</pre></div>
 <p>上面两个，估计是socket模块中最重要的两个结构了，注释里对多数字段，进行了说明，这里首先要谈谈socket_server这个结构，首先skynet的其他线程，向socket线程发送消息，是通过管道来进行的，也就是说，如果worker线程往sendctrl_fd写入数据，那么在socket线程，只需要对recvctrl_fd进行读取，就能收到worker线程发送过来的数据包，这么做的好处，则是使这一流程变得非常简单，而且保证线程安全。checkctrl则用来标记是否有其他线程向socket线程发送管道消息，如果有则被置为1。<br />
 每次有epoll事件触发时，都会往epoll事件列表ev中写入，并返回事件的数量，每处理完一个事件，event_index就会增加一（每次epoll事件触发时，event_index都会被重置为0）。<br />
 socket_server结构中，有一个socket列表&ndash;slot列表，这里存放的都是socket对象实例，slot列表和epoll事件关联度非常大，每当一个连接建立时，该连接的fd会增加一个epoll事件，我们来看看如何为fd增加一个epoll可读事件</p>
-
-<pre><code>// socket_server.c
+<div class="highlight"><pre class="chroma">// socket_server.c
 static struct socket *
 new_fd(struct socket_server *ss, int id, int fd, int protocol, uintptr_t opaque, bool add) {
     struct socket * s = &amp;ss-&gt;slot[HASH_ID(id)];
@@ -1786,12 +1809,9 @@ sp_add(int efd, int sock, void *ud) {
         return 1;
     }
     return 0;
-}
-</code></pre>
-
+}</pre></div>
 <p>这里我们可以看到，要让epoll监听fd，当这个fd有事件时，epoll会返回事件，但是epoll不会告诉你，怎么去处理这个事件，因此，需要根据socket的type来选择正确的处理逻辑（这里需要注意的是，epoll事件的data的ptr指针，指向一个socket结构的指针）</p>
-
-<pre><code>// return type
+<div class="highlight"><pre class="chroma">// return type
 int 
 socket_server_poll(struct socket_server *ss, struct socket_message * result, int * more) {
     for (;;) {
@@ -1823,21 +1843,18 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
             } 
             break;
         case SOCKET_TYPE_INVALID:
-            fprintf(stderr, &quot;socket-server: invalid socket\n&quot;);
+            fprintf(stderr, &#34;socket-server: invalid socket\n&#34;);
             break;
         default:
             ...
         }
     }
-}
-</code></pre>
-
+}</pre></div>
 <p>epoll事件触发以后，最终是根据ud的信息，来进行对应的逻辑处理的，而这里的ud则是socket变量，也就是说slot列表里的socket对象，是和epoll最为相关的。</p></li>
 
 <li><p>skynet网络层的初始化流程<br />
 在启动一个skynet节点的时候，首先会对socket模块进行初始化：</p>
-
-<pre><code>// skynet_socket.c
+<div class="highlight"><pre class="chroma">// skynet_socket.c
 static struct socket_server * SOCKET_SERVER = NULL;
     
 void 
@@ -1852,19 +1869,19 @@ socket_server_create() {
     int fd[2];
     poll_fd efd = sp_create();
     if (sp_invalid(efd)) {
-        fprintf(stderr, &quot;socket-server: create event pool failed.\n&quot;);
+        fprintf(stderr, &#34;socket-server: create event pool failed.\n&#34;);
         return NULL;
     }
         
     // 创建管道，用于其他线程向socket线程发送消息，这样能够轻松保证其他线程向socket线程发送数据包时的线程安全
     if (pipe(fd)) {
         sp_release(efd);
-        fprintf(stderr, &quot;socket-server: create socket pair failed.\n&quot;);
+        fprintf(stderr, &#34;socket-server: create socket pair failed.\n&#34;);
         return NULL;
     }
     if (sp_add(efd, fd[0], NULL)) {
         // add recvctrl_fd to event poll
-        fprintf(stderr, &quot;socket-server: can't add server fd to event pool.\n&quot;);
+        fprintf(stderr, &#34;socket-server: can&#39;t add server fd to event pool.\n&#34;);
         close(fd[0]);
         close(fd[1]);
         sp_release(efd);
@@ -1897,9 +1914,7 @@ socket_server_create() {
 static int
 sp_create() {
     return epoll_create(1024);
-}
-</code></pre>
-
+}</pre></div>
 <p>从初始化代码来看，我们可以知道skynet的网络层使用了epoll模型，epoll属于同步io，当没有任何一个fd能收到客户端发送过来的数据包，或者任何一个fd有要向客户端推送数据包时，那么socket线程将被阻塞，当有任意一个fd能够接收数据包或者发送数据包时，就会唤醒socket线程，并对数据包进行处理。不同于select和poll，当有事件触发时，epoll不需要轮询并测试所有的fd（效率为O(n)），只返回准备好的fd及事件(效率是O(1))。<br />
 此外，这里需要对epoll_create的create作一个说明，这里的1024并非是epoll只能监听1024个fd，而是初始分配的内存大小为1024，当要epoll实例监听的fd超过1024以后，会重新分配内存以容纳更多的fd。新版本的linux中，epoll已经在内核中，自己管理初始的fd列表大小，这个值已经没有意义，但是仍然必须填&gt;0的值，目的是兼容老版本的操作系统内核。<br />
 &gt; 引证来源：<a href="http://man7.org/linux/man-pages/man2/epoll_create.2.html">http://man7.org/linux/man-pages/man2/epoll_create.2.html</a>
@@ -1960,19 +1975,120 @@ agent服务向客户端发送消息时，直接通过管道，将数据包从wor
 <p>这一部分，云风大侠已经说的很清楚了，这里就不敢班门弄斧。<br />
 如何使用查看<a href="https://github.com/cloudwu/skynet/wiki/Cluster">Cluster</a><br />
 Cluster设计请查看<a href="http://blog.codingnow.com/2017/03/skynet_cluster.html">skynet cluster 模块的设计与编码协议</a></p>
-  </section>
-</article>
 
-</main>
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/skynet/">skynet</a>&nbsp;
+            
+          </div>
+        
 
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/" data-toggle="tooltip" data-placement="top" title="《TCP/IP详解》数据链路层总结">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/" data-toggle="tooltip" data-placement="top" title="数据包在网络层中的传输">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
-<footer>
+    <footer>
   <div class="container">
-    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
 </html>
 

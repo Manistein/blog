@@ -5,8 +5,8 @@
     <link>https://manistein.github.io/blog/categories/</link>
     <description>Recent content in Categories on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <copyright>© 2017 All rights reserved</copyright>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
     
 	<atom:link href="https://manistein.github.io/blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
       <title>Client</title>
       <link>https://manistein.github.io/blog/categories/client/</link>
       <pubDate>Sat, 08 Mar 2014 12:49:00 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/client/</guid>
       <description></description>
     </item>
@@ -24,7 +24,7 @@
       <title>Network</title>
       <link>https://manistein.github.io/blog/categories/network/</link>
       <pubDate>Mon, 09 Jul 2018 11:39:15 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/network/</guid>
       <description></description>
     </item>
@@ -33,7 +33,7 @@
       <title>Os</title>
       <link>https://manistein.github.io/blog/categories/os/</link>
       <pubDate>Tue, 30 May 2017 08:49:00 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/os/</guid>
       <description></description>
     </item>
@@ -42,7 +42,7 @@
       <title>Program</title>
       <link>https://manistein.github.io/blog/categories/program/</link>
       <pubDate>Fri, 24 Aug 2018 16:02:45 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/program/</guid>
       <description></description>
     </item>
@@ -51,7 +51,7 @@
       <title>Server</title>
       <link>https://manistein.github.io/blog/categories/server/</link>
       <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/server/</guid>
       <description></description>
     </item>
@@ -60,7 +60,7 @@
       <title>Tools</title>
       <link>https://manistein.github.io/blog/categories/tools/</link>
       <pubDate>Thu, 11 Aug 2016 20:36:00 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/categories/tools/</guid>
       <description></description>
     </item>

@@ -1,70 +1,210 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>关于sizeof的一些思考</title>
+  <meta property="og:title" content="关于sizeof的一些思考" />
+  <meta name="twitter:title" content="关于sizeof的一些思考" />
+  <meta name="description" content="program">
+  <meta property="og:description" content="program">
+  <meta name="twitter:description" content="program">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/program/c_c&#43;&#43;/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  gtag('config', 'UA-122943512-1');
-</script>
-<meta charset="utf-8">
-<meta name="description" content="program">
-<meta name="author" content="Manistein">
-<meta name="generator" content="Hugo 0.37" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
-<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
-<title>关于sizeof的一些思考 - Manistein&#39;s Blog</title>
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/program/c_c&#43;&#43;/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
 </head>
-<body>
 
-<header>
-  <div class="container clearfix">
-    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
-    <span class="caret"># _</span>
-    <div class="right">
-      
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
   </div>
-</header>
-
-<div class="container">
+</nav>
 
 
-<main role="main" class="article">
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
   
-<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="meta">
-
-    <span class="key">published on</span>
-    <span class="val"><time itemprop="datePublished" datetime="2018-08-24">August 24, 2018</time></span>
+  
+  
 
 
-    <span class="key">in</span>
-    <span class="val">
-
-        <a href="/blog/categories/Program">Program</a>
-
-    </span>
 
 
-    <br>
-    <span class="key">tags:</span>
-    <span class="val">
 
-        <a href="/blog/tags/C_C&#43;&#43;">C_C&#43;&#43;</a>
 
-    </span>
+  
 
-  </div>
-  <h1 class="headline" itemprop="headline">关于sizeof的一些思考</h1>
-  <section class="body" itemprop="articleBody">
-    <h2 id="前言">前言</h2>
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>关于sizeof的一些思考</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 24, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 3 minutes (483 words)
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="前言">前言</h2>
 
 <p>今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。</p>
 
@@ -73,17 +213,13 @@
 <h2 id="sizeof-实现">sizeof 实现</h2>
 
 <p>关于sizeof的实现，如下所示[1]：</p>
-
-<pre><code>#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-</code></pre>
-
+<div class="highlight"><pre class="chroma">#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)</pre></div>
 <p>我们可以看到，计算某个变量的字节数，本质是取到该变量的地址后，经过一次+1运算，获得下一个变量的起始地址，最后通过相减获得字节数。</p>
 
 <h2 id="测试">测试</h2>
 
 <p>现在我们拿自己实现的SIZEOF和官方实现的sizeof作对比，来测试这段代码。</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
@@ -92,11 +228,11 @@ char array[10] = { 0 };
 char* a = NULL;
 
 int main() {
-    printf(&quot;array SIZEOF size:%ld \n&quot;, SIZEOF(array));
-    printf(&quot;array sizeof size:%ld \n&quot;, sizeof(array));
+    printf(&#34;array SIZEOF size:%ld \n&#34;, SIZEOF(array));
+    printf(&#34;array sizeof size:%ld \n&#34;, sizeof(array));
     
-    printf(&quot;a SIZEOF size:%ld \n&quot;, SIZEOF(a));
-    printf(&quot;a sizeof size:%ld \n&quot;, sizeof(a));
+    printf(&#34;a SIZEOF size:%ld \n&#34;, SIZEOF(a));
+    printf(&#34;a sizeof size:%ld \n&#34;, sizeof(a));
     
     return 0;
 }
@@ -105,136 +241,119 @@ int main() {
 array SIZEOF size:10 
 array sizeof size:10 
 a SIZEOF size:8 
-a sizeof size:8 
-
-</code></pre>
-
+a sizeof size:8 </pre></div>
 <p>由此我们可以看到，即便是值为NULL的指针变量，其实质在程序启动时，也已经被分配了内存，sizeof其实质是在计算a，这个指针变量的字节数。</p>
 
 <h2 id="关于计算malloc和realloc字节大小的问题">关于计算malloc和realloc字节大小的问题</h2>
 
 <p>对上面的例子，进行修改，得到如下代码</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
 char array[10] = { 0 };
 char* a = NULL;
 
 int main() {
     a = (char*)malloc(strlen(CONST_STR) + 1);
-    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(a));
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(a));
     free(a);
     
     return 0;
 }
 
 -- 输出
-after malloc sizeof(a) = 8
-</code></pre>
-
+after malloc sizeof(a) = 8</pre></div>
 <p>由此可见，在对a变量malloc分配空间前，和对a分配空间后的sizeof值大小是一致的，这是因为a在程序启动的时候，已经被分配了内存，sizeof只是计算a这个变量的内存字节大小，而malloc出来的内存块的地址，只是作为值保存在a中，然而我们并不能通过sizeof(*a)得到malloc出来的完整的内存块字节，只能获得1：</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
 char array[10] = { 0 };
 char* a = NULL;
 
 int main() {
     a = (char*)malloc(strlen(CONST_STR) + 1);
-    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(*a));
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
     free(a);
     
     return 0;
 }
 
 -- 输出
-after malloc sizeof(*a) = 1
-</code></pre>
-
+after malloc sizeof(*a) = 1</pre></div>
 <p>因此，malloc出来的大小，只能我们自己去记录。同时realloc的情况也类似</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
 char array[10] = { 0 };
 char* a = NULL;
 
 int main() {
     a = (char*)realloc(a, strlen(CONST_STR) + 1);
-    printf(&quot;after malloc sizeof(a) = %ld&quot;, sizeof(*a));
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
     free(a);
     
     return 0;
 }
 
 -- 输出
-after malloc sizeof(a) = 1
-</code></pre>
-
+after malloc sizeof(a) = 1</pre></div>
 <h2 id="关于字符串赋值">关于字符串赋值</h2>
 
 <p>对于字符串赋值，最好的方式就是使用<a href="http://www.cplusplus.com/reference/cstring/strcpy/">strcpy</a>，不过今天和别人讨论的时候，发现一个有意思的问题，有个朋友非得用memcpy来进行拷贝，于是有了这样的场景：</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
-char array[10] = { 'H', 'e', 'l', 'l', 'o' };
+char array[10] = { &#39;H&#39;, &#39;e&#39;, &#39;l&#39;, &#39;l&#39;, &#39;o&#39; };
 char array2[20] = { 0 };
 
 int main() {
-    printf(&quot;1 %s \n&quot;, array2);
+    printf(&#34;1 %s \n&#34;, array2);
     memcpy(array2, array, sizeof(array));  
-    printf(&quot;2 %s \n&quot;, array2);
+    printf(&#34;2 %s \n&#34;, array2);
     
     return 0;
 }
 
 -- 输出
 1  
-2 Hello 
-
-</code></pre>
-
+2 Hello </pre></div>
 <p>emmmm，一切看上去是正常的。如果我们换一种方式，假设两个字符串变量的内存，都是通过malloc开辟的堆内存，那么我们来看一下如下的场景：</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
 char* a = NULL;
 char* b = NULL;
 
 int main() {
-    printf(&quot;before malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    printf(&#34;before malloc sizeof(a) = %ld \n&#34;, sizeof(a));
     
     a = (char*)malloc(strlen(CONST_STR) + 1);
-    printf(&quot;after malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    printf(&#34;after malloc sizeof(a) = %ld \n&#34;, sizeof(a));
     strcpy(a, CONST_STR);
     
     b = (char*)malloc(strlen(CONST_STR) + 1);
     memcpy(b, a, sizeof(a));
-    printf(&quot;b str = %s \n&quot;, b);
+    printf(&#34;b str = %s \n&#34;, b);
     
     free(b);
     free(a);
@@ -244,31 +363,28 @@ int main() {
 -- 输出
 before malloc sizeof(a) = 8 
 after malloc sizeof(a) = 8 
-b str = Hello Wo 
-</code></pre>
-
+b str = Hello Wo </pre></div>
 <p>emmmmm&hellip;b字符串被截取了，因为正如我们前面看到，sizeof(a)拿到的是，a这个指针变量的字节，而不是a所指向的内存块的字节大小，这台测试机是64位的，因此它是8个字节，如果非得用memcpy的话，那么需要将sizeof(a)修改成strlen(a)</p>
-
-<pre><code>#include &lt;stdio.h&gt;
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
 #define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
-#define CONST_STR &quot;Hello World&quot;
+#define CONST_STR &#34;Hello World&#34;
 
 char* a = NULL;
 char* b = NULL;
 
 int main() {
-    printf(&quot;before malloc sizeof(a) = %ld \n&quot;, sizeof(a));
+    printf(&#34;before malloc sizeof(a) = %ld \n&#34;, sizeof(a));
     
     a = (char*)malloc(strlen(CONST_STR) + 1);
     strcpy(a, CONST_STR);
-    printf(&quot;after malloc sizeof(a) = %ld  strlen(a) = %ld \n&quot;, sizeof(a), strlen(a));
+    printf(&#34;after malloc sizeof(a) = %ld  strlen(a) = %ld \n&#34;, sizeof(a), strlen(a));
     
     b = (char*)malloc(strlen(CONST_STR) + 1);
     memcpy(b, a, strlen(a));
-    printf(&quot;b str = %s \n&quot;, b);
+    printf(&#34;b str = %s \n&#34;, b);
     
     free(b);
     free(a);
@@ -278,9 +394,7 @@ int main() {
 -- 输出
 before malloc sizeof(a) = 8 
 after malloc sizeof(a) = 8  strlen(a) = 11 
-b str = Hello World 
-</code></pre>
-
+b str = Hello World </pre></div>
 <h2 id="结论">结论</h2>
 
 <p>sizeof返回一个变量，连续的字节大小，如果是个指针变量，那么它只作用在指针变量本身，而不是其所指向的内存地址块。</p>
@@ -288,19 +402,116 @@ b str = Hello World
 <h2 id="reference">Reference</h2>
 
 <p>[1] <a href="http://cs-fundamentals.com/tech-interview/c/implement-sizeof-operator-in-c.php">implement sizeof operator in c</a></p>
-  </section>
-</article>
 
-</main>
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/c_c&#43;&#43;/">C_C&#43;&#43;</a>&nbsp;
+            
+          </div>
+        
 
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2/" data-toggle="tooltip" data-placement="top" title="网络安全初探">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
-<footer>
+    <footer>
   <div class="container">
-    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
 </html>
 

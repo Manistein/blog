@@ -5,8 +5,8 @@
     <link>https://manistein.github.io/blog/categories/tools/</link>
     <description>Recent content in Tools on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <copyright>© 2017 All rights reserved</copyright>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
     <lastBuildDate>Thu, 11 Aug 2016 20:36:00 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/categories/tools/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>Git使用总结</title>
       <link>https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</link>
       <pubDate>Thu, 11 Aug 2016 20:36:00 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</guid>
       <description>&lt;h1 id=&#34;远程分支&#34;&gt;远程分支&lt;/h1&gt;
 
@@ -31,7 +31,7 @@
       <title>Github使用TotoiseGit配置流程</title>
       <link>https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</link>
       <pubDate>Tue, 24 Feb 2015 07:55:00 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 

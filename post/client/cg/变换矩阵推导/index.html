@@ -1,72 +1,226 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>变换矩阵推导</title>
+  <meta property="og:title" content="变换矩阵推导" />
+  <meta name="twitter:title" content="变换矩阵推导" />
+  <meta name="description" content="前言
 
-  gtag('config', 'UA-122943512-1');
-</script>
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="Manistein">
-<meta name="generator" content="Hugo 0.37" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
-<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
-<title>变换矩阵推导 - Manistein&#39;s Blog</title>
+注：这篇文章，最早发表在CSDN博客上https://blog.csdn.net/Manistein/article/details/8994607  后来CSDN博客弃用了，于是迁移到这里，以下是正文
+大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。
+
+">
+  <meta property="og:description" content="前言
+
+注：这篇文章，最早发表在CSDN博客上https://blog.csdn.net/Manistein/article/details/8994607  后来CSDN博客弃用了，于是迁移到这里，以下是正文
+大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。
+
+">
+  <meta name="twitter:description" content="前言
+
+注：这篇文章，最早发表在CSDN博客上https://blog.csdn.net/Manistein/article/details/8994607  后来CSDN博客弃用了，于是迁移到这里，以下是正文
+大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式 …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
 </head>
-<body>
 
-<header>
-  <div class="container clearfix">
-    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
-    <span class="caret"># _</span>
-    <div class="right">
-      
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
   </div>
-</header>
-
-<div class="container">
+</nav>
 
 
-<main role="main" class="article">
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
   
-<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="meta">
-
-    <span class="key">published on</span>
-    <span class="val"><time itemprop="datePublished" datetime="2014-03-08">March 08, 2014</time></span>
+  
+  
 
 
-    <span class="key">in</span>
-    <span class="val">
-
-        <a href="/blog/categories/client">client</a>
-
-    </span>
 
 
-    <br>
-    <span class="key">tags:</span>
-    <span class="val">
 
-        <a href="/blog/tags/cg">cg</a>
 
-    </span>
+  
 
-  </div>
-  <h1 class="headline" itemprop="headline">变换矩阵推导</h1>
-  <section class="body" itemprop="articleBody">
-    <h1 id="前言">前言</h1>
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>变换矩阵推导</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 8, 2014
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 2 minutes (217 words)
+  
+  
+</span>
 
-<p>大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。</p>
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="前言">前言</h1>
+
+<p>注：这篇文章，最早发表在CSDN博客上<a href="https://blog.csdn.net/Manistein/article/details/8994607">https://blog.csdn.net/Manistein/article/details/8994607</a>  后来CSDN博客弃用了，于是迁移到这里，以下是正文<br />
+大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。</p>
 
 <p></p>
 
@@ -75,13 +229,13 @@
 <h1 id="缩放矩阵推导">缩放矩阵推导</h1>
 
 <p>要对整张纹理进行变换操作，需要对图元中的每一个顶点进行处理，比如我们需要对纹理进行缩放操作，假设上三角形由v0，v1，v2组成，下三角形由v0，v2，v3组成，那么我们要对此图元进行缩放处理，就先要得到一个缩放矩阵，缩放矩阵如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix001.jpeg" alt="image" />图1</p>
+<img src="../../../../images/client/cg/matrix001.jpeg" alt="image" />图1</p>
 
 <p>如果我们要将原来的图元放大两倍，那么这个矩阵就是：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix002.jpeg" alt="image" />图2</p>
+<img src="../../../../images/client/cg/matrix002.jpeg" alt="image" />图2</p>
 
 <p>这里我要对矩阵的变换操作，进行一些较为详细的讨论，为什么这个矩阵是缩放矩阵，顶点与它相乘，会发生什么样的变化？这里我们假设顶点为v[vx,vy,vz,vt]，其中，vx，vy和vz为顶点在x轴，y轴和z轴上的坐标，而vt则是一个十分特别的变量，如果vt为0，那么v为向量，如果vt为1，那么v为点，为什么会有这样的定义呢？这绝对不是无中生有，我们都知道，平移向量是没有意义的，向量只是表示方位，而顶点则是表示一个具体的点，以缩放矩阵为例，我们分别把v的vt标识为1，将v’的vt标识为0，现在我们分别将v和v’与该缩放矩阵平移S相乘，并且查看结果，假设S矩阵如下所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix003.jpeg" alt="image" />图3</p>
+<img src="../../../../images/client/cg/matrix003.jpeg" alt="image" />图3</p>
 
 <p>V为[vx,vy,vz,1]，将v与S相乘得：
 Sv=[vx * Sx + tx, vy * sy + ty, vz * sz + tz, 1]，从最终的顶点，我们可以知道，当vt为1时，顶点不仅实现了缩放，而且还实现了平移，下面我们来看v’与sv相乘的结果：
@@ -89,31 +243,31 @@ Sv=[vx * Sx + tx, vy * sy + ty, vz * sz + tz, 1]，从最终的顶点，我们�
 Sv’=[ vx * Sx, vy * sy, vz * sz, 0];与上面的结果对比，我们可以很轻易地发现，v’并没有实现平移，他只是实现了缩放而已，这个与平移向量没有意义的思想是一脉相承的，所以我们规定当向量的第四维的值为0时，其为向量，为1时，其为顶点。如果vt的值不为1，而是任意值w，那么要进行坐标操作时，想要将该向量标准化，即将v’=[vx,vy,vz,w]转化为v’[vx/w, vy/w, vz/w, 1];
 在下面的演示过程当中，为了使读者更易理解，所以所有的顶点都只标出x轴和y轴坐标。
 假设我们的v0={-1,1，0}，v1={1,1,0}， v2={1，-1,0}，v3={-1，-1,0}，在缩放时，由于上三角形和下三角形有两个顶点是重合的，所以我们可以把这个整个图元看做是矩形，一般情况下，我们把变换中心设置为图元的中心位置，如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix004.jpeg" alt="image" />图4</p>
+<img src="../../../../images/client/cg/matrix004.jpeg" alt="image" />图4</p>
 
 <p>正如上图所示，矩形的中间位置在坐标轴的正中间，v0~v3与这个缩放矩阵相乘后，得到的点为v0（-2,2），v1（2,2），v2（2，-2），v3（-2，-2）；缩放后，如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix005.jpeg" alt="image" />图5</p>
+<img src="../../../../images/client/cg/matrix005.jpeg" alt="image" />图5</p>
 
 <p>以上显示的所有内容，都是在图元的局部坐标系中进行，在2D处理当中，要显示最终的纹理，我们需要将局部坐标系转化为屏幕坐标系，什么是屏幕坐标系，就是我们窗体的Client区域，如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix006.jpeg" alt="image" />图6</p>
+<img src="../../../../images/client/cg/matrix006.jpeg" alt="image" />图6</p>
 
 <p>要将局部坐标系转换为屏幕坐标系，我们只需要进行平移操作即可，比如，我们所进行操作的图元的在屏幕上的坐标为（100,100），那么，此时我们只需要将纹理的4个顶点，分别向右平移100个像素，再向下平移100个像素，如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix007.jpeg" alt="image" />图7</p>
+<img src="../../../../images/client/cg/matrix007.jpeg" alt="image" />图7</p>
 
 <p>现在一切都很清楚了，其实所谓的缩放，其实就是在原点将所有的图元顶点，乘以同一个缩放矩阵，然后再将所有的顶点平移像素坐标中的位置。</p>
 
 <p>二、旋转矩阵推导
 1、绕特殊轴旋转（如x、y、z轴，这里只讨论z轴的情况，其他情况原理一致）<br />
 同理，旋转矩阵也一样的原理，下面我们来看一下旋转矩阵的构造：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix008.jpeg" alt="image" />图8</p>
+<img src="../../../../images/client/cg/matrix008.jpeg" alt="image" />图8</p>
 
 <p>上图所示的矩阵是绕z轴顺时针旋转t度的矩阵，以上图元只需要将所有的顶点乘以这个矩阵，即可实现旋转。
 这个矩阵是怎么来的呢？现在我们来推导一下，其实绕x，y或z轴旋转的矩阵很容易推导，比绕任意轴旋转的矩阵要容易得多，绕任意轴矩阵推导，我已经将那个推导的方法上传到“独立游戏开发者联盟”qq群里了，有兴趣的可以去下载，群号分别是185017593。
 言归正传，现在我们来推导这个矩阵，首先假设存在向量v[vx,vy, 0, 0];现在我们要让v绕z轴顺时针旋转θ度，如下图所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix009.jpeg" alt="image" />图9</p>
+<img src="../../../../images/client/cg/matrix009.jpeg" alt="image" />图9</p>
 
 <p>要实现v向v’绕z轴顺时针旋转t度，直接去计算是十分有困难的，这里我们将借助三角函数来实现，首先我们设|v|=r,那么通过三角函数，我们可以得到下面的关系<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix010.jpeg" alt="image" />图10</p>
+<img src="../../../../images/client/cg/matrix010.jpeg" alt="image" />图10</p>
 
 <p>Sinθ = vx / r;
 cosθ = vy / r;
@@ -124,27 +278,27 @@ cos(θ+t) = cosθ*cost – sinθ*sint;
 Vx’/ r = vx / r *cost + vy / r *sint;
 Vy’/ r = vy / r *cost – vx / r * sint;
 根据矩阵的计算方法，我们可以逆推得到矩阵M：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix011.jpeg" alt="image" />图11</p>
+<img src="../../../../images/client/cg/matrix011.jpeg" alt="image" />图11</p>
 
 <p>现在我们将v[vx, vy,0, 0]向量与矩阵M相乘，验证结果，结果为：
 V’[vx * cost + vy *sint, vy * cost – vx * sint, 0, 0],结果完全正确。下面我们来演示图元旋转的一些步骤，这里我只给出图形说明，不给出详细的文字说明：
 步骤一：建立图元的局部坐标系：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix012.jpeg" alt="image" />图12</p>
+<img src="../../../../images/client/cg/matrix012.jpeg" alt="image" />图12</p>
 
 <p>步骤二：将每一个顶点与旋转矩阵相乘，实现旋转：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix013.jpeg" alt="image" />图13</p>
+<img src="../../../../images/client/cg/matrix013.jpeg" alt="image" />图13</p>
 
 <p>步骤三：平移到其该去的地方：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix014.jpeg" alt="image" />图14</p>
+<img src="../../../../images/client/cg/matrix014.jpeg" alt="image" />图14</p>
 
 <p>现在我们已经完成了缩放和旋转的变换原理，还有一定就是平移，其实平移是那么多变换里最简单的一种，只需要对顶点的x，y或z坐标加上要移动的值就可以实现平移，这里不再赘述.</p>
 
 <p>2、绕任意轴旋转：<br />
 关于绕任意轴旋转的内容，网络上有很多类似的文章，我也看了一些，不过由于叙述方式非常简略，所以我当时也是真心没看懂，直到遇到了《3D数学基础：图形与游戏开发》这本书，再结合自己所学的数学知识，现在基本上能够弄明白这个推导过程。现在我们来推导这个过程：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix015.jpeg" alt="image" />图15</p>
+<img src="../../../../images/client/cg/matrix015.jpeg" alt="image" />图15</p>
 
 <p>假设向量V绕任意轴N旋转θ度，为了简化操作，这里直接在与向量N垂直的二维平面上进行讨论，如上图所示，我们将V设置为要旋转的向量，P为V在N方向上的投影，V，U为与N垂直的向量，且P+U=V，W为N×U，且|W|=|U|;（这里的N为单位向量），现在我们来讨论投影截面：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix016.jpeg" alt="image" />图16</p>
+<img src="../../../../images/client/cg/matrix016.jpeg" alt="image" />图16</p>
 
 <p>由于U’由U逆时针旋转θ所得，所以|W|=|U|=|U’|,设U’在W处的投影投影向量为a，在U上的投影向量为b，则有：
 cosθ=|b|/|U’|
@@ -163,7 +317,7 @@ sinθ=|a|/|U’|</p>
 <p>现在，是要将（1）式转化为只有V和N的式子，
 U=V-P；
 因为P为V在N上的投影，现在我们来推导一下投影的公式；<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix017.jpeg" alt="image" />图17</p>
+<img src="../../../../images/client/cg/matrix017.jpeg" alt="image" />图17</p>
 
 <p>如上图，P为V在N向量上的投影，设θ为V与N向量的夹角，
 cosθ=|P|/|V|
@@ -200,29 +354,126 @@ V’=P+U=N(V.N)+sinθ<em>(N×V)+cosθ</em>(V-N(V.N))
 
 <p>将Px代入（3）式得：
 （Px-Px(Px.N)）cosθ+sinθ(N×Px)+N(Px.N)，经过计算得到如下式子；<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix018.jpeg" alt="image" />图18<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix019.jpeg" alt="image" />图19</p>
+<img src="../../../../images/client/cg/matrix018.jpeg" alt="image" />图18<br />
+<img src="../../../../images/client/cg/matrix019.jpeg" alt="image" />图19</p>
 
 <p>依次类推，将Py和Pz分别代入（3）得：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix020.jpeg" alt="image" />图20<br />
+<img src="../../../../images/client/cg/matrix020.jpeg" alt="image" />图20<br />
 和<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix021.jpeg" alt="image" />图21</p>
+<img src="../../../../images/client/cg/matrix021.jpeg" alt="image" />图21</p>
 
 <p>最终结果为：<br />
-<img src="https://raw.githubusercontent.com/Manistein/blog/master/static/images/client/cg/matrix022.jpeg" alt="image" />图22</p>
-  </section>
-</article>
+<img src="../../../../images/client/cg/matrix022.jpeg" alt="image" />图22</p>
 
-</main>
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/cg/">cg</a>&nbsp;
+            
+          </div>
+        
 
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/tools/git/github%E4%BD%BF%E7%94%A8totoisegit%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B/" data-toggle="tooltip" data-placement="top" title="Github使用TotoiseGit配置流程">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
-<footer>
+    <footer>
   <div class="container">
-    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
 </html>
 

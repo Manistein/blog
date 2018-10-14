@@ -1,70 +1,224 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>数据包在网络层中的传输</title>
+  <meta property="og:title" content="数据包在网络层中的传输" />
+  <meta name="twitter:title" content="数据包在网络层中的传输" />
+  <meta name="description" content="前言
 
-  gtag('config', 'UA-122943512-1');
-</script>
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="Manistein">
-<meta name="generator" content="Hugo 0.37" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
-<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
-<title>数据包在网络层中的传输 - Manistein&#39;s Blog</title>
+好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解 卷1》来看，不过结合个人的学习经历，相比于Top-Down，个人认为这本书其实并不适合刚入门的初学者看，它略过了太多的细节，相反《Computer Networking A Top-Down Approach》这本，不论在内容编排上，还是在内容阐述上都非常合理、清晰，循序渐进，对于想入门计算机网络的人来说，是绝佳的经典教程。
+按照我自己的习惯，每经历一个阶段的学习，我就会进行一次知识的梳理和总结，今天写的这篇目的是通过阐述数据包在网络层中的流转，梳理网络层的整体结构，运作流程。最终串联各个知识点。本文将通过3个数据包流转的例子（其中一个是在一个很小的局域网内的传输，一个是在AS内的传输，还有一个是跨AS的传输），来逐步展现网络层的基本组成成分，以及不同规模情况下的基本运作流程。网络层数据包协议主要有IPv4和IPv6两种，目前广泛运用的仍然是IPv4，为了解决IPv4地址耗尽的问题，专家们提出了IPv6。本文探讨的内容，主要针对IPv4，不对IPv6作深入探讨。
+本文旨在梳理网络层的基本结构和运作流程，并不涉及到网络层的方方面面，文章也会大量引用《计算机网络》、《网络是怎样连接的》、《Computer Networking A Top-Down Approach》以及其他一些论文的论述和插图，最后本人学识水平有限，如有疏漏，欢迎大家批评指正。
+
+">
+  <meta property="og:description" content="前言
+
+好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解 卷1》来看，不过结合个人的学习经历，相比于Top-Down，个人认为这本书其实并不适合刚入门的初学者看，它略过了太多的细节，相反《Computer Networking A Top-Down Approach》这本，不论在内容编排上，还是在内容阐述上都非常合理、清晰，循序渐进，对于想入门计算机网络的人来说，是绝佳的经典教程。
+按照我自己的习惯，每经历一个阶段的学习，我就会进行一次知识的梳理和总结，今天写的这篇目的是通过阐述数据包在网络层中的流转，梳理网络层的整体结构，运作流程。最终串联各个知识点。本文将通过3个数据包流转的例子（其中一个是在一个很小的局域网内的传输，一个是在AS内的传输，还有一个是跨AS的传输），来逐步展现网络层的基本组成成分，以及不同规模情况下的基本运作流程。网络层数据包协议主要有IPv4和IPv6两种，目前广泛运用的仍然是IPv4，为了解决IPv4地址耗尽的问题，专家们提出了IPv6。本文探讨的内容，主要针对IPv4，不对IPv6作深入探讨。
+本文旨在梳理网络层的基本结构和运作流程，并不涉及到网络层的方方面面，文章也会大量引用《计算机网络》、《网络是怎样连接的》、《Computer Networking A Top-Down Approach》以及其他一些论文的论述和插图，最后本人学识水平有限，如有疏漏，欢迎大家批评指正。
+
+">
+  <meta name="twitter:description" content="前言
+
+好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解  …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
 </head>
-<body>
 
-<header>
-  <div class="container clearfix">
-    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
-    <span class="caret"># _</span>
-    <div class="right">
-      
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
   </div>
-</header>
-
-<div class="container">
+</nav>
 
 
-<main role="main" class="article">
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
   
-<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="meta">
-
-    <span class="key">published on</span>
-    <span class="val"><time itemprop="datePublished" datetime="2018-04-14">April 14, 2018</time></span>
+  
+  
 
 
-    <span class="key">in</span>
-    <span class="val">
-
-        <a href="/blog/categories/network">network</a>
-
-    </span>
 
 
-    <br>
-    <span class="key">tags:</span>
-    <span class="val">
 
-        <a href="/blog/tags/network">network</a>
 
-    </span>
+  
 
-  </div>
-  <h1 class="headline" itemprop="headline">数据包在网络层中的传输</h1>
-  <section class="body" itemprop="articleBody">
-    <h2 id="前言">前言</h2>
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>数据包在网络层中的传输</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 14, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 9 minutes (1711 words)
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="前言">前言</h2>
 
 <p>好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解 卷1》来看，不过结合个人的学习经历，相比于Top-Down，个人认为这本书其实并不适合刚入门的初学者看，它略过了太多的细节，相反《Computer Networking A Top-Down Approach》这本，不论在内容编排上，还是在内容阐述上都非常合理、清晰，循序渐进，对于想入门计算机网络的人来说，是绝佳的经典教程。<br />
 按照我自己的习惯，每经历一个阶段的学习，我就会进行一次知识的梳理和总结，今天写的这篇<strong>目的是通过阐述数据包在网络层中的流转，梳理网络层的整体结构，运作流程。最终串联各个知识点</strong>。本文将通过3个数据包流转的例子（其中一个是在一个很小的局域网内的传输，一个是在AS内的传输，还有一个是跨AS的传输），来逐步展现网络层的基本组成成分，以及不同规模情况下的基本运作流程。网络层数据包协议主要有IPv4和IPv6两种，目前广泛运用的仍然是IPv4，为了解决IPv4地址耗尽的问题，专家们提出了IPv6。本文探讨的内容，主要针对IPv4，不对IPv6作深入探讨。<br />
@@ -368,8 +522,7 @@ MTU是数据链路层的限制，而MSS则是运输层中，TCP协议单个数�
 我们算法的伪代码如下所示：<br />
 <br /></li>
 </ul>
-
-<pre><code>Initialization:
+<div class="highlight"><pre class="chroma">Initialization:
   N’ = {u}
   for all nodes v
       if v is a neighbor of u
@@ -383,9 +536,7 @@ Loop
       D(v) = min( D(v), D(w) + c(w,v) )
       /* new cost to v is either old cost to v or known
       least path cost to w plus cost from w to v */
- until N’= N
-</code></pre>
-
+ until N’= N</pre></div>
 <ul>
 <li>初始化阶段，将节点u放入集合N&rsquo;，因为v,x和w均和u相邻，则D(v) = 2, D(x) = 1, D(w) = 5，其他的都是无穷大（即D(y) = ∞，D(z) = ∞），且P(v)=P(w)=P(x)=u</li>
 <li>从没有在N&rsquo;中的节点中，选出一个最短距离的节点x（因为D(x)最小为1），则将x放入N&rsquo;中，并且此时P(x)=u，N&rsquo;={u,x}；计算从u经过x到x邻近节点m的D&rsquo;(m)值，得到一组数据D&rsquo;(v) = 3, D&rsquo;(w) = 4, D&rsquo;(y) = 2；因为D&rsquo;(w) &lt; D(w)，D&rsquo;(y) &lt; D(y)，因此D(w) = 4，D(y) = 2;此时P(w)更新为x，P(y)更新为x，进入下一个loop</li>
@@ -413,8 +564,7 @@ Dx(y) = min{C(x,v) + Dv(y)}<br />
 <p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/dv_algorithm_map.png" alt="image" />图18</p>
 
 <p>现在我们引入距离向量算法，他的伪代码如下所示：</p>
-
-<pre><code>Initialization:  
+<div class="highlight"><pre class="chroma">Initialization:  
   for all destinations y in N:
       Dx(y) = c(x,y) /* if y is not a neighbor then c(x,y) = ∞ */
   for each neighbor w
@@ -432,9 +582,7 @@ loop
   if Dx(y) changed for any destination y
       send distance vector Dx = [Dx(y): y in N] to all neighbors
     
-forever
-</code></pre>
-
+forever</pre></div>
 <p>我们现在来梳理x节点的运作流程，其中N为整个节点的集合：</p>
 
 <ul>
@@ -858,19 +1006,120 @@ Deterministic or pessimistic MAC algorithms. These algorithms assume that collis
 [16] [Computer Networking A Top-Down Approach 6th;4.5.3 Hierarchical Routing]<br />
 [17] see <a href="http://cnp3book.info.ucl.ac.be/2nd/html/protocols/bgp.html">Computer Networking : Principles, Protocols and Practice</a> section:Interdomain routing<br />
 [18] [Computer Networking A Top-Down Approach 6th;4.6.3 Inter-AS Routing: BGP; BGP Basics]</p>
-  </section>
-</article>
 
-</main>
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
+            
+          </div>
+        
 
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/" data-toggle="tooltip" data-placement="top" title="skynet源码赏析">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%BC%AB%E8%B0%88/" data-toggle="tooltip" data-placement="top" title="数据链路层漫谈">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
-<footer>
+    <footer>
   <div class="container">
-    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
 </html>
 

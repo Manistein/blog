@@ -5,8 +5,8 @@
     <link>https://manistein.github.io/blog/tags/skynet/</link>
     <description>Recent content in Skynet on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <copyright>© 2017 All rights reserved</copyright>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
     <lastBuildDate>Wed, 16 Aug 2017 19:41:45 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/tags/skynet/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>skynet源码赏析</title>
       <link>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</link>
       <pubDate>Wed, 16 Aug 2017 19:41:45 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/</guid>
       <description>&lt;h4 id=&#34;写在最前面&#34;&gt;写在最前面&lt;/h4&gt;
 
@@ -29,7 +29,7 @@
       <title>skynet开发环境部署</title>
       <link>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</link>
       <pubDate>Sun, 01 Nov 2015 16:02:45 +0800</pubDate>
-      
+      <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 

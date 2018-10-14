@@ -1,70 +1,220 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>网络安全初探</title>
+  <meta property="og:title" content="网络安全初探" />
+  <meta name="twitter:title" content="网络安全初探" />
+  <meta name="description" content="写在最前面
 
-  gtag('config', 'UA-122943512-1');
-</script>
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="Manistein">
-<meta name="generator" content="Hugo 0.37" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/blog/css/style.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700" type="text/css">
-<link rel="alternate" href="/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
-<title>网络安全初探 - Manistein&#39;s Blog</title>
+&emsp;&emsp;网络安全是个很大的话题，它包括了网络加密、数据真实性认证、终端身份认证、防火墙等技术，而网络加密、数据真实性验证，终端身份认证，则是网络安全中的重要一环，学习和掌握它具有重要意义，通过学习网络安全的相关知识，有助于我们理解生活中一些关于网络安全方面的现象。这样也可以做到知其然，并且知其所以然。最近一段时间，我发现自己对这块的掌握并不牢靠，于是参阅了一些资料和论文，主要的参阅资料是《Computer Networking A Top-Down Approach》的第八章Secure In Computer Networks，也包含了多篇paper。本文主要阐述网络加密、数据验证、身份验证的一些基本知识，并不涉及网络安全的其他方面。由于本人水平有限，有不正确的地方，欢迎批评指正，最后原创不易，转载请注明出处。
+
+">
+  <meta property="og:description" content="写在最前面
+
+&emsp;&emsp;网络安全是个很大的话题，它包括了网络加密、数据真实性认证、终端身份认证、防火墙等技术，而网络加密、数据真实性验证，终端身份认证，则是网络安全中的重要一环，学习和掌握它具有重要意义，通过学习网络安全的相关知识，有助于我们理解生活中一些关于网络安全方面的现象。这样也可以做到知其然，并且知其所以然。最近一段时间，我发现自己对这块的掌握并不牢靠，于是参阅了一些资料和论文，主要的参阅资料是《Computer Networking A Top-Down Approach》的第八章Secure In Computer Networks，也包含了多篇paper。本文主要阐述网络加密、数据验证、身份验证的一些基本知识，并不涉及网络安全的其他方面。由于本人水平有限，有不正确的地方，欢迎批评指正，最后原创不易，转载请注明出处。
+
+">
+  <meta name="twitter:description" content="写在最前面
+
+&emsp;&emsp;网络安全是个很大的话题，它包括了网络加密、数据真实性认证、终端身份认证、防火墙等技术，而网络加密、数据真实性验证，终端身份认证，则是网络安全中的重要一环，学习和掌握它具有重要意义，通过学习网络安全的相关知识，有助于我们理解生活中一些关于网络安全方面的现象。这样也可以做到知其然，并且知其所以然。最近一段时间，我发现自己对这块的掌握并不牢靠，于是参阅了一些资料和论 …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
 </head>
-<body>
 
-<header>
-  <div class="container clearfix">
-    <a class="path" href="https://manistein.github.io/blog/">[Manistein&#39;s Blog]</a>
-    <span class="caret"># _</span>
-    <div class="right">
-      
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
   </div>
-</header>
-
-<div class="container">
+</nav>
 
 
-<main role="main" class="article">
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
   
-<article class="single" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="meta">
-
-    <span class="key">published on</span>
-    <span class="val"><time itemprop="datePublished" datetime="2018-07-09">July 09, 2018</time></span>
+  
+  
 
 
-    <span class="key">in</span>
-    <span class="val">
-
-        <a href="/blog/categories/network">network</a>
-
-    </span>
 
 
-    <br>
-    <span class="key">tags:</span>
-    <span class="val">
 
-        <a href="/blog/tags/network">network</a>
 
-    </span>
+  
 
-  </div>
-  <h1 class="headline" itemprop="headline">网络安全初探</h1>
-  <section class="body" itemprop="articleBody">
-    <h1 id="写在最前面">写在最前面</h1>
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>网络安全初探</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on July 9, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 8 minutes (1521 words)
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="写在最前面">写在最前面</h1>
 
 <p>&emsp;&emsp;网络安全是个很大的话题，它包括了网络加密、数据真实性认证、终端身份认证、防火墙等技术，而网络加密、数据真实性验证，终端身份认证，则是网络安全中的重要一环，学习和掌握它具有重要意义，通过学习网络安全的相关知识，有助于我们理解生活中一些关于网络安全方面的现象。这样也可以做到知其然，并且知其所以然。最近一段时间，我发现自己对这块的掌握并不牢靠，于是参阅了一些资料和论文，主要的参阅资料是《Computer Networking A Top-Down Approach》的第八章Secure In Computer Networks，也包含了多篇paper。本文主要阐述网络加密、数据验证、身份验证的一些基本知识，并不涉及网络安全的其他方面。由于本人水平有限，有不正确的地方，欢迎批评指正，最后原创不易，转载请注明出处。</p>
 
@@ -274,15 +424,11 @@
 <h4 id="多张乱序字母表-按一定顺序加密">多张乱序字母表，按一定顺序加密</h4>
 
 <p>&emsp;&emsp;除了上节论述的加密方式，还有一种更加改进的加密方式，就是如表2所示，生成多张不相等的乱序字母表C1~C5，然后生成一个key，key的值为C1~C5的随机组合数组，如{ C2, C1, C5, C4, C3, }，则在加密的时候，每个字母按照顺序，先后按照顺序，找到对应的乱序表，查找对应的输出字符，如此循环往复。本质就是，要采用哪个表来替换，该逻辑也很简单，假设字母在原文中所处的位置为index，etbl_index为key数组的下标，于是有：</p>
-
-<pre><code>当index % len(key)不为0时：
+<div class="highlight"><pre class="chroma">当index % len(key)不为0时：
 etbl_index = index % len(key)
 
 当index % len(key)为0时
-etbl_index = len(key)
-
-</code></pre>
-
+etbl_index = len(key)</pre></div>
 <p>比如明文&rsquo;i love you&rsquo;中，i为第1个字母，那么key列表下标则为1 % 5 = 1，那么它的字母替换表则是key[1]，也就是C2；l为第2个字母，则它所采用的字母表下标为2 % 5 = 2，那么它的字母替换表则是key[2]也就是C1；依此类推，o、v、e、y、o和u，分别是第3、4、5、6、7和8个字母，因此他们对应的key列表下标分别是3、4、5、1、2、3，在key列表找，则是C5、C4、C3、C1、C2和C3。<br />
 &emsp;&emsp;解密的时候，也按照该顺序表，找到对应的字符进行解密，还原原文。现在假设网络上两个通信实体A和B进行加密通信，他们共享如表2所示的乱序字母表（包含原字母表和C1~C5），使用key = { C2, C1, C5, C4, C3, }，则有：</p>
 
@@ -490,13 +636,10 @@ etbl_index = len(key)
 <p>(2) RSA算法推导<br />
 &emsp;&emsp;要证明上面展示的例子，具有一般性，那么就必须证明m^ed mod n = m mod n。<br />
 &emsp;&emsp;首先我们还要承认几个公理，他们分别是：</p>
-
-<pre><code>[(a mod n) + (b mod n)] mod n = (a + b) mod n  
+<div class="highlight"><pre class="chroma">[(a mod n) + (b mod n)] mod n = (a + b) mod n  
 [(a mod n) – (b mod n)] mod n = (a – b) mod n  
 [(a mod n) • (b mod n)] mod n = (a • b) mod n  
-(a mod n)^d mod n = a^d mod n  
-</code></pre>
-
+(a mod n)^d mod n = a^d mod n  </pre></div>
 <p>以下是证明流程(更丰富的证明，请参阅[9])：</p>
 
 <ul>
@@ -669,19 +812,120 @@ hash值的不可逆性，也是hash函数和加密解密的重要区别之一。
 [11] [Computer Networking A Top-Down Approach 6th:Section 8.3.3 Digital Signatures]<br />
 [12] [<a href="https://en.wikipedia.org/wiki/Collision_attack">Collision attack</a>]<br />
 [13] [Computer Networking A Top-Down Approach 6th:8.6 Securing TCP Connections: SSL]</p>
-  </section>
-</article>
 
-</main>
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
+            
+          </div>
+        
 
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%BC%AB%E8%B0%88/" data-toggle="tooltip" data-placement="top" title="数据链路层漫谈">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/program/c_c&#43;&#43;/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" data-toggle="tooltip" data-placement="top" title="关于sizeof的一些思考">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
-<footer>
+    <footer>
   <div class="container">
-    <span class="copyright">&copy; 2018 Manistein&#39;s Blog - <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2018
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
 </html>
 
