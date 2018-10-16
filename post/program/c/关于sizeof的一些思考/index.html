@@ -17,41 +17,23 @@
   </script>
 
 
-  <title>Git使用总结</title>
-  <meta property="og:title" content="Git使用总结" />
-  <meta name="twitter:title" content="Git使用总结" />
-  <meta name="description" content="远程分支
-
-
-项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支
-
-
-">
-  <meta property="og:description" content="远程分支
-
-
-项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支
-
-
-">
-  <meta name="twitter:description" content="远程分支
-
-
-项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支
-
-
-">
+  <title>关于sizeof的一些思考</title>
+  <meta property="og:title" content="关于sizeof的一些思考" />
+  <meta name="twitter:title" content="关于sizeof的一些思考" />
+  <meta name="description" content="program">
+  <meta property="og:description" content="program">
+  <meta name="twitter:description" content="program">
   <meta name="author" content="Manistein"/>
   <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
   <meta name="generator" content="Hugo 0.37" />
-  <link rel="canonical" href="https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -202,7 +184,7 @@
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="post-heading">
               
-                <h1>Git使用总结</h1>
+                <h1>关于sizeof的一些思考</h1>
               
               
               
@@ -210,7 +192,7 @@
                 <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 11, 2016
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 24, 2018
   
   
   
@@ -231,128 +213,209 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        <h1 id="远程分支">远程分支</h1>
+        <h2 id="前言">前言</h2>
 
-<ul>
-<li>项目开发，需要使用版本控制器，来控制开发流程，一般有一台公用服务器用于存放远程分支</li>
-</ul>
+<p>今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。</p>
 
 <p></p>
 
-<ul>
-<li><p>假设远程分支如下所示</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G(HEAD||master)
-            \--&gt;F--&gt;H(asshole_branch)
-    </pre></div></li>
+<h2 id="sizeof-实现">sizeof 实现</h2>
 
-<li><p>这里有两个分支，一个是master分支，另一个则是asshole_branch分支，HEAD指代的是远程分支的默认分支，即远程仓库中当前所处的分支</p></li>
+<p>关于sizeof的实现，如下所示[1]：</p>
+<div class="highlight"><pre class="chroma">#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)</pre></div>
+<p>我们可以看到，计算某个变量的字节数，本质是取到该变量的地址后，经过一次+1运算，获得下一个变量的起始地址，最后通过相减获得字节数。</p>
 
-<li><p><strong>git init</strong>:如果现在在服务器上，想直接自己建个仓库，比如在~/wuyinjie/myproject/greatfighter目录下建一个仓库，那么直接切换到这个目录下，并且打开git bash，输入git init即可创建一个仓库</p></li>
-</ul>
+<h2 id="测试">测试</h2>
 
-<h1 id="本地分支">本地分支</h1>
+<p>现在我们拿自己实现的SIZEOF和官方实现的sizeof作对比，来测试这段代码。</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-<ul>
-<li><p><strong>git clone</strong>:本机上现在什么都没有，需要从远程分支上clone分支下来，使用git clone url指令将远程分支clone到本地，注意，这里的url是一个地址，例如git@oa.ejoy.com/afc.git，clone以后，本地分支的表现形式为：</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G(origin/HEAD||origin/master||master)
-            \--&gt;F--&gt;H(origin/asshole_branch)
-    </pre></div></li>
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
 
-<li><p>在本地分支中，origin是clone后默认生成的，表示远程分支的标志，意味着上一次更新远程分支的状态，master则是当前的主干分支，本地HEAD指针目前指向master节点</p></li>
+char array[10] = { 0 };
+char* a = NULL;
 
-<li><p><strong>git status</strong>:这个指令用来查看git目前的状态，会将unstage，stage，commit的信息输出</p></li>
+int main() {
+    printf(&#34;array SIZEOF size:%ld \n&#34;, SIZEOF(array));
+    printf(&#34;array sizeof size:%ld \n&#34;, sizeof(array));
+    
+    printf(&#34;a SIZEOF size:%ld \n&#34;, SIZEOF(a));
+    printf(&#34;a sizeof size:%ld \n&#34;, sizeof(a));
+    
+    return 0;
+}
 
-<li><p><strong>git add</strong>：我们在本地，新建一个文件，或者修改一个文件的时候，这个文件就是unstage状态的文件，unstage状态的文件是不能直接commit的，需要通过git add指令来将这些文件标记为stage状态</p></li>
+-- 输出
+array SIZEOF size:10 
+array sizeof size:10 
+a SIZEOF size:8 
+a sizeof size:8 </pre></div>
+<p>由此我们可以看到，即便是值为NULL的指针变量，其实质在程序启动时，也已经被分配了内存，sizeof其实质是在计算a，这个指针变量的字节数。</p>
 
-<li><p><strong>git commit</strong>：文件暂存起来以后，就能进行提交了，通过git commit -m comment的方式，将信息提交，比如在此过程中，我提交了三次，那么节点会变为</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G(origin/HEAD||origin/master||)--&gt;I--&gt;J--&gt;K(master)
-            \--&gt;F--&gt;H(origin/asshole_branch)
-    </pre></div>
-<p>如果此时远程分支有人提交了两次，生成L，M节点那么远程分支就变为</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G--&gt;L--&gt;M(HEAD||master)
-            \--&gt;F--&gt;H(origin/asshole_branch)
-    </pre></div></li>
+<h2 id="关于计算malloc和realloc字节大小的问题">关于计算malloc和realloc字节大小的问题</h2>
 
-<li><p><strong>git stash save</strong>:更新前要保持本地分支干净，因此先进行statsh save操作，将本地所有的改动放到一个stack中</p></li>
+<p>对上面的例子，进行修改，得到如下代码</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<li><p><strong>git fetch</strong>:从远程更新代码，可以用git pull指令，或者是git fetch指令，使用git pull指令，最后会将本地改动和远程改动全部merge到一个节点中，这样会导致项目线条非常复杂，而且所有的改动合并到一个节点内也不容易被回滚，因此这里主场使用fetch指令，fetch指令，会将远程分支考到本地，因为本地也有一个远程分支的索引，因此fetch以后，会改变本地的远程分支分布情况</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G--&gt;I--&gt;J--&gt;K(HEAD||master)
-            \       \--&gt;L--&gt;M(origin/HEAD||origin/master)
-            \--&gt;F--&gt;H(origin/asshole_branch)
-    </pre></div>
-<ul>
-<li>用法
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
 
-<ul>
-<li>git fetch             直接把远程分支更新到本地</li>
-<li>git fetch origin branch_name  将远程指定分支更新到本地</li>
-</ul></li>
-</ul></li>
+char array[10] = { 0 };
+char* a = NULL;
 
-<li><p><strong>git rebase</strong>：因为git fetch只是把远程分支更新到本地，并不作任何处理，因此更新好以后，像上面举的例子那样，现在本地有三个分支分别是master，远程分支和asshole_branch分支，我们更新的数据都在本地的远程分支上，因此需要合并两个分支使用git rebase指令更好，例如git rebase origin/master，因为此时是在master分支上，因此这段指令是直接拿本地分支和本地远程分支合并，最后得到的结果是</p>
-<div class="highlight"><pre class="chroma">A--&gt;B--&gt;C--&gt;D--&gt;E--&gt;G--&gt;L--&gt;M
-            \               \--&gt;I&#39;--&gt;J&#39;--&gt;K&#39;
-            \--&gt;F--&gt;H(origin/asshole_branch)
-    </pre></div>
-<p>这里，I先和M合并一次，得到I&rsquo;,然后J再和I&rsquo;合并得到J&rsquo;,再和K合并得到K&rsquo;，此时K&rsquo;变成origin/master,origin/head,HEAD,master于一身的节点</p></li>
+int main() {
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(a));
+    free(a);
+    
+    return 0;
+}
 
-<li><p><strong>git push</strong>：push要先进行更新合并，到这一步，直接调用git push就能把节点分布同步到远程分支上</p></li>
+-- 输出
+after malloc sizeof(a) = 8</pre></div>
+<p>由此可见，在对a变量malloc分配空间前，和对a分配空间后的sizeof值大小是一致的，这是因为a在程序启动的时候，已经被分配了内存，sizeof只是计算a这个变量的内存字节大小，而malloc出来的内存块的地址，只是作为值保存在a中，然而我们并不能通过sizeof(*a)得到malloc出来的完整的内存块字节，只能获得1：</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<li><p><strong>git stash pop</strong>:分支合并完，就可以将原来stash save起来的数据，再弹出来</p></li>
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
 
-<li><p><strong>git reset</strong>：回滚专用，如果想将代码上次改为上个commit的状态，直接调git reset HEAD，那么此时本地所有改动添加都会被撤销掉，想要重置回远程节点的状态，只需要git reset origin/branch_name即可</p></li>
+char array[10] = { 0 };
+char* a = NULL;
 
-<li><p>git reset HEAD：撤销所有的添加和改动，还原到和最新一次commit的节点一致</p></li>
+int main() {
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
+    free(a);
+    
+    return 0;
+}
 
-<li><p>git reset hash_key:直接撤销到指定commit节点</p></li>
+-- 输出
+after malloc sizeof(*a) = 1</pre></div>
+<p>因此，malloc出来的大小，只能我们自己去记录。同时realloc的情况也类似</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<li><p>git reset &ndash;soft HEAD：回滚到本地HEAD，但是修改/添加的数据不清理</p></li>
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
 
-<li><p>git reset &ndash;hard HEAD：回滚到本地HEAD，但是清理修改，新增的数据</p></li>
-</ul>
+char array[10] = { 0 };
+char* a = NULL;
 
-<h1 id="分支操作">分支操作</h1>
+int main() {
+    a = (char*)realloc(a, strlen(CONST_STR) + 1);
+    printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
+    free(a);
+    
+    return 0;
+}
 
-<ul>
-<li>git branch：罗列本地分支</li>
-<li>git branch -a:查看所有分支</li>
-<li>git branch -r：查看远程分支</li>
-<li>git branch -b branch_name：新建一个叫做branch_name的分支</li>
-<li>git checkout branch_name：切到对应分支</li>
-<li>git checkout -b branch_name：新建一个分支，并切到该分支</li>
-</ul>
+-- 输出
+after malloc sizeof(a) = 1</pre></div>
+<h2 id="关于字符串赋值">关于字符串赋值</h2>
 
-<h1 id="查看所有提交记录">查看所有提交记录：</h1>
+<p>对于字符串赋值，最好的方式就是使用<a href="http://www.cplusplus.com/reference/cstring/strcpy/">strcpy</a>，不过今天和别人讨论的时候，发现一个有意思的问题，有个朋友非得用memcpy来进行拷贝，于是有了这样的场景：</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<p>git log</p>
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
 
-<h1 id="撤销">撤销</h1>
+char array[10] = { &#39;H&#39;, &#39;e&#39;, &#39;l&#39;, &#39;l&#39;, &#39;o&#39; };
+char array2[20] = { 0 };
 
-<ul>
-<li>有时候不小心commit了东西，但是没有push的前提下，还是可以撤销的，使用git reset &ndash;soft HEAD^指令，可以撤销刚刚进行的commit，&ndash;soft的意思撤销提交但是保留修改</li>
-<li>某个文件要撤销stage状态，只需使用git reset HEAD filename</li>
-</ul>
+int main() {
+    printf(&#34;1 %s \n&#34;, array2);
+    memcpy(array2, array, sizeof(array));  
+    printf(&#34;2 %s \n&#34;, array2);
+    
+    return 0;
+}
 
-<h1 id="与github设置关联">与github设置关联</h1>
+-- 输出
+1  
+2 Hello </pre></div>
+<p>emmmm，一切看上去是正常的。如果我们换一种方式，假设两个字符串变量的内存，都是通过malloc开辟的堆内存，那么我们来看一下如下的场景：</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<p>要使得本地git仓库和github通过ssh进行通信，需要生成一个public key和private key，这里有两种方式
-1. 使用TotoiseGit的PuTTYGen工具，生成一个public key和一个包含私钥的.ppk文件，然后在TotoiseGit设置界面，指定.ppk文件的路径，这样就可以使用TotoiseGit工具，就能从github上clone仓库，fetch更新，push commit等
-2. 还有一种方式，则是通过secureCRT工具，生成一个.pub文件的公钥和一个私钥文件，此时只需要将两个名字改名为id_rsa即可，并且将两个文件拷贝到git安装目录的.ssh文件夹下，同时在github上add新增加的ssh public key，这样就能和github进行交互了</p>
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
 
-<h1 id="参考文献">参考文献</h1>
+char* a = NULL;
+char* b = NULL;
 
-<ul>
-<li><a href="http://gogojimmy.net/2012/01/17/how-to-use-git-1-git-basic/">http://gogojimmy.net/2012/01/17/how-to-use-git-1-git-basic/</a></li>
-<li><a href="http://blog.gogojimmy.net/2012/01/21/how-to-use-git-2-basic-usage-and-worflow/">http://blog.gogojimmy.net/2012/01/21/how-to-use-git-2-basic-usage-and-worflow/</a></li>
-<li><a href="http://blog.gogojimmy.net/2012/02/29/git-scenario/">http://blog.gogojimmy.net/2012/02/29/git-scenario/</a></li>
-<li><a href="https://git-scm.com/docs/git-fetch">https://git-scm.com/docs/git-fetch</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/06/git_remote.html">http://www.ruanyifeng.com/blog/2014/06/git_remote.html</a></li>
-</ul>
+int main() {
+    printf(&#34;before malloc sizeof(a) = %ld \n&#34;, sizeof(a));
+    
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    printf(&#34;after malloc sizeof(a) = %ld \n&#34;, sizeof(a));
+    strcpy(a, CONST_STR);
+    
+    b = (char*)malloc(strlen(CONST_STR) + 1);
+    memcpy(b, a, sizeof(a));
+    printf(&#34;b str = %s \n&#34;, b);
+    
+    free(b);
+    free(a);
+    return 0;
+}
+
+-- 输出
+before malloc sizeof(a) = 8 
+after malloc sizeof(a) = 8 
+b str = Hello Wo </pre></div>
+<p>emmmmm&hellip;b字符串被截取了，因为正如我们前面看到，sizeof(a)拿到的是，a这个指针变量的字节，而不是a所指向的内存块的字节大小，这台测试机是64位的，因此它是8个字节，如果非得用memcpy的话，那么需要将sizeof(a)修改成strlen(a)</p>
+<div class="highlight"><pre class="chroma">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define SIZEOF(v) (char*)(&amp;v + 1) - (char*)(&amp;v)
+#define CONST_STR &#34;Hello World&#34;
+
+char* a = NULL;
+char* b = NULL;
+
+int main() {
+    printf(&#34;before malloc sizeof(a) = %ld \n&#34;, sizeof(a));
+    
+    a = (char*)malloc(strlen(CONST_STR) + 1);
+    strcpy(a, CONST_STR);
+    printf(&#34;after malloc sizeof(a) = %ld  strlen(a) = %ld \n&#34;, sizeof(a), strlen(a));
+    
+    b = (char*)malloc(strlen(CONST_STR) + 1);
+    memcpy(b, a, strlen(a));
+    printf(&#34;b str = %s \n&#34;, b);
+    
+    free(b);
+    free(a);
+    return 0;
+}
+
+-- 输出
+before malloc sizeof(a) = 8 
+after malloc sizeof(a) = 8  strlen(a) = 11 
+b str = Hello World </pre></div>
+<h2 id="结论">结论</h2>
+
+<p>sizeof返回一个变量，连续的字节大小，如果是个指针变量，那么它只作用在指针变量本身，而不是其所指向的内存地址块。</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>[1] <a href="http://cs-fundamentals.com/tech-interview/c/implement-sizeof-operator-in-c.php">implement sizeof operator in c</a></p>
 
         
           <div class="blog-tags">
             
-              <a href="https://manistein.github.io/blog//tags/git/">git</a>&nbsp;
+              <a href="https://manistein.github.io/blog//tags/c/">C</a>&nbsp;
             
           </div>
         
@@ -364,12 +427,12 @@
         <ul class="pager blog-pager">
           
             <li class="previous">
-              <a href="https://manistein.github.io/blog/post/server/skynet/skynet%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/" data-toggle="tooltip" data-placement="top" title="skynet开发环境部署">&larr; Previous Post</a>
+              <a href="https://manistein.github.io/blog/post/network/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%88%9D%E6%8E%A2/" data-toggle="tooltip" data-placement="top" title="网络安全初探">&larr; Previous Post</a>
             </li>
           
           
             <li class="next">
-              <a href="https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/" data-toggle="tooltip" data-placement="top" title="《TCP/IP详解》网络层总结">Next Post &rarr;</a>
+              <a href="https://manistein.github.io/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part0">Next Post &rarr;</a>
             </li>
           
         </ul>

@@ -71,7 +71,7 @@
               <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
               <div class="navlinks-children">
                 
-                  <a href="/blog/">构建Lua解释器（敬请期待）</a>
+                  <a href="/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0">构建Lua解释器</a>
                 
                   <a href="/blog/">开源RTS Demo（敬请期待）</a>
                 
@@ -208,6 +208,89 @@
 
         <div class="posts-list">
           
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/">
+                <h2 class="post-title">《TCP/IP详解》运输层总结</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 27, 2017
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h2 id="运输层协议公有特征">运输层协议公有特征</h2>
+
+<h4 id="应用进程之间的通信">应用进程之间的通信</h4>
+
+<ul>
+<li>两台主机之间的通信，实际上是两台主机上应用进程之间的通信</li>
+<li>主机上所有使用网络功能的应用进程，共享操作系统内核提供的网络通信功能</li>
+<li>因为操作系统上应用进程众多，因此为了将数据包准确交付给目标机器上的指定进程，因此需要通过端口号来区分不同的进程</li>
+<li>IP+Port能够将数据包发送到指定机器上的指定进程</li>
+<li>运输层位于内核通信服务的最高层，接收应用进程交付的数据包，同时将收到的数据包交付给应用进程</li>
+<li>IP层负责将数据包交付给目标机器，而运输层则负责将数据包交付给指定应用进程，部分运输层协议（如TCP协议）实现可靠数据交付，流量控制，拥塞控制和连接状态控制等。</li>
+</ul>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
+                  
+                </div>
+              
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/">
+                <h2 class="post-title">《TCP/IP详解》网络层总结</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 25, 2017
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h1 id="ip协议层概述">IP协议层概述</h1>
+
+<p>通过数据包的目标IP地址，不断得找出通往该IP地址的路由器（下一跳路由器地址），并最终将数据包送到目标机器上的协议层。本质的功效是导航数据包去往目标机器。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/network/ip%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE%E5%B1%82%E6%80%BB%E7%BB%93/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
+                  
+                </div>
+              
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/tools/git/git%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">

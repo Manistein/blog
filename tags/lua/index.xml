@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Program on Manistein&#39;s Blog</title>
-    <link>https://manistein.github.io/blog/categories/program/</link>
-    <description>Recent content in Program on Manistein&#39;s Blog</description>
+    <title>Lua on Manistein&#39;s Blog</title>
+    <link>https://manistein.github.io/blog/tags/lua/</link>
+    <description>Recent content in Lua on Manistein&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
     <lastBuildDate>Tue, 16 Oct 2018 09:26:50 +0800</lastBuildDate>
     
-	<atom:link href="https://manistein.github.io/blog/categories/program/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://manistein.github.io/blog/tags/lua/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -37,19 +37,6 @@
 
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本项目采取和官方版本的近似的命名规范，并尽最大努力遵循lua官方的设计主线。由于开发过程是我自己重新手写的，因此不会在所有细节和官方版本保持一致。同时这是一份参考资料，主旨是提供一条主线，不建议&lt;strong&gt;只&lt;/strong&gt;跟随本旅程来研究lua。最终希望回到研究lua官方源码的道路上。&lt;br /&gt;
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本系列将会为一些观点，理论附注上引证来源，并在Reference页上展示，最后本人水平有限，如果有错误的地方，希望大家联系我加以指正。同时欢迎大家加入我创建的qq群185017593一起讨论技术。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>关于sizeof的一些思考</title>
-      <link>https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/</link>
-      <pubDate>Fri, 24 Aug 2018 16:02:45 +0800</pubDate>
-      <author>1518986465@qq.com (Manistein)</author>
-      <guid>https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/</guid>
-      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-
-&lt;p&gt;今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
