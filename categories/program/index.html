@@ -71,7 +71,7 @@
               <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
               <div class="navlinks-children">
                 
-                  <a href="/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">构建Lua解释器</a>
+                  <a href="/blog/tags/build-a-lua-interpreter/">构建Lua解释器</a>
                 
                   <a href="/blog/">开源RTS Demo（敬请期待）</a>
                 
@@ -204,8 +204,8 @@
         <div class="posts-list">
           
             <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8reference/">
-                <h2 class="post-title">Reference</h2>
+              <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/">
+                <h2 class="post-title">构建Lua解释器Part1：虚拟机的基础--Lua基本数据结构、栈和基于栈的C函数调用的设计与实现</h2>
 
                 
               </a>
@@ -214,7 +214,7 @@
                 <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 16, 2018
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 17, 2018
   
   
   
@@ -224,19 +224,19 @@
               </p>
               <div class="post-entry">
                 
-                  <h2 id="说明">说明</h2>
+                  <h2 id="前言">前言</h2>
 
-<p>这是引证来源的附注，凡是右上角有<sup>[number]</sup>标记的附注，均可以在这里找到。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从本篇开始，我们正式进入到Lua解释器的开发阶段（这是一个遵循Lua5.3标准的项目）。本篇并不直接接入到设计和实现语法分析器和词法分析器的阶段，而是先设计和实现Lua虚拟机的基础数据结构（包括Lua最基本的数据结构，如基本数据类型，表示虚拟机状态的global_State和lua_State结构，在函数调用中扮演重要角色的CallInfo结构等）以及设计和实现基于栈的C函数调用流程。这些都是理解后面虚拟机运作的基础。由于这是一个仿制项目，为了和官方版本做区分，就称之为dummylua，后面要称呼本项目时，一律用dummylua来表示。</p>
 
 <p></p>
-                  <a href="https://manistein.github.io/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8reference/" class="post-read-more">[Read More]</a>
+                  <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/" class="post-read-more">[Read More]</a>
                 
               </div>
 
               
                 <div class="blog-tags">
                   
-                    <a href="https://manistein.github.io/blog//tags/lua/">Lua</a>&nbsp;
+                    <a href="https://manistein.github.io/blog//tags/build-a-lua-interpreter/">build a lua interpreter</a>&nbsp;
                   
                 </div>
               
@@ -244,8 +244,8 @@
             </article>
           
             <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">
-                <h2 class="post-title">构建Lua解释器Part0</h2>
+              <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">
+                <h2 class="post-title">构建Lua解释器Part0：综述</h2>
 
                 
               </a>
@@ -266,18 +266,17 @@
                 
                   <h2 id="项目简介">项目简介</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。<br />
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。</p>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本项目采取和官方版本的近似的命名规范，并尽最大努力遵循lua官方的设计主线。由于开发过程是我自己重新手写的，因此不会在所有细节和官方版本保持一致。同时这是一份参考资料，主旨是提供一条主线，不建议<strong>只</strong>跟随本旅程来研究lua。最终希望回到研究lua官方源码的道路上。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本系列将会为一些观点，理论附注上引证来源，并在Reference页上展示，最后本人水平有限，如果有错误的地方，希望大家联系我加以指正。同时欢迎大家加入我创建的qq群185017593一起讨论技术。</p>
-                  <a href="https://manistein.github.io/blog/post/program/lua/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" class="post-read-more">[Read More]</a>
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" class="post-read-more">[Read More]</a>
                 
               </div>
 
               
                 <div class="blog-tags">
                   
-                    <a href="https://manistein.github.io/blog//tags/lua/">Lua</a>&nbsp;
+                    <a href="https://manistein.github.io/blog//tags/build-a-lua-interpreter/">build a lua interpreter</a>&nbsp;
                   
                 </div>
               
