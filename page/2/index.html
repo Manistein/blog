@@ -210,6 +210,49 @@
           
           
             <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/">
+                <h2 class="post-title">mutex lock，spinlock，rwlock和condlock的理解</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 3, 2017
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h2 id="mutex-lock">Mutex Lock</h2>
+
+<h4 id="概述">概述</h4>
+
+<p>互斥锁，一条线程加锁锁住临界区，另一条线程尝试访问改临界区的时候，会发生阻塞，并进入休眠状态。</p>
+
+<h4 id="具体说明">具体说明</h4>
+
+<p>假设一台机器上的cpu有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B使用Mutex锁，锁住一个临界区，当线程A试图访问该临界区时，因为线程B已经将其锁住，因此线程A被挂起，进入休眠状态，此时core0进行上下文切换，将线程A放入休眠队列中，然后core0运行线程C，当线程B完成临界区的流程并执行解锁之后，线程A又会被唤醒，core0重新运行线程A</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/os/mutex-lockspinlockrwlock%E5%92%8Ccondlock%E7%9A%84%E7%90%86%E8%A7%A3/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/lock/">lock</a>&nbsp;
+                  
+                </div>
+              
+            </article>
+          
+            <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/network/%E8%BF%90%E8%BE%93%E5%B1%82%E6%80%BB%E7%BB%93/">
                 <h2 class="post-title">《TCP/IP详解》运输层总结</h2>
                 
