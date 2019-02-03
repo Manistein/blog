@@ -13,6 +13,20 @@
     
     
     <item>
+      <title>构建Lua解释器Part3：String设计与实现</title>
+      <link>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/</link>
+      <pubDate>Fri, 01 Feb 2019 00:15:10 +3400</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href=&#34;https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/&#34;&gt;上一章节&lt;/a&gt;我介绍了&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua&lt;/a&gt;项目的gc的设计原理和实现方式，该部分我基本是仿造了官方lua-5.3.4的做法。本章节，我将为大家带来dummylua项目TString的设计实现讲解。和以往任何一篇一样，本篇我也是基本遵循lua-5.3的设计思想，但由于实现是我凭理解自己手动实现，因此不会在所有的细节上和官方lua保持一致。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;任何一门语言都要支持字符串，lua也一样，本章将从lua string的数据结构开始阐述，然后深入其他细节进行阐述，并试图揭露这些设计的历史背景和原因，由于本人能力有限，如有不当之处想要指明，或是想和我一起讨论，欢迎加Q群与我讨论(QQ185017593)，我是群主，欢迎大家的到来。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>构建Lua解释器Part2：Garbage Collection基础架构</title>
       <link>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/</link>
       <pubDate>Tue, 13 Nov 2018 00:05:25 +0800</pubDate>

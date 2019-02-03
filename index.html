@@ -29,7 +29,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  <meta name="generator" content="Hugo 0.37" />
+  <meta name="generator" content="Hugo 0.36" />
   <link rel="canonical" href="https://manistein.github.io/blog/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -208,6 +208,44 @@
 
         <div class="posts-list">
           
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/">
+                <h2 class="post-title">构建Lua解释器Part3：String设计与实现</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 1, 2019
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h2 id="前言">前言</h2>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">上一章节</a>我介绍了<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>项目的gc的设计原理和实现方式，该部分我基本是仿造了官方lua-5.3.4的做法。本章节，我将为大家带来dummylua项目TString的设计实现讲解。和以往任何一篇一样，本篇我也是基本遵循lua-5.3的设计思想，但由于实现是我凭理解自己手动实现，因此不会在所有的细节上和官方lua保持一致。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一门语言都要支持字符串，lua也一样，本章将从lua string的数据结构开始阐述，然后深入其他细节进行阐述，并试图揭露这些设计的历史背景和原因，由于本人能力有限，如有不当之处想要指明，或是想和我一起讨论，欢迎加Q群与我讨论(QQ185017593)，我是群主，欢迎大家的到来。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/build-a-lua-interpreter/">build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">
@@ -548,43 +586,6 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
               
             </article>
           
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/">
-                <h2 class="post-title">计算机漫游</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on May 30, 2017
-  
-  
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <h4 id="overview">Overview</h4>
-
-<p>我们的计算机能够运作起来，是我们将源代码编译成机器能够识别的二进制机器指令后，打包进可执行文件，并存入磁盘中。当我们运行一个程序的时候，首先会将磁盘内的二进制文件加载到内存中，然后通过CPU来解释和运行。为了能够做到，通过统一的方式使用不同型号的硬件，并且防止失控的程序滥用硬件资源，人们则通过操作系统来处理这些事情。此外操作系统还负责不同进程间的上下文切换，以实现多任务执行（分时调度不同的进程）。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/os/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%BC%AB%E6%B8%B8/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86/">计算机原理</a>&nbsp;
-                  
-                </div>
-              
-            </article>
-          
         </div>
 
         
@@ -644,7 +645,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
           
 
           &nbsp;&bull;&nbsp;
-          2018
+          2019
 
           
             &nbsp;&bull;&nbsp;
@@ -653,7 +654,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          <a href="http://gohugo.io">Hugo v0.36</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
       </div>
