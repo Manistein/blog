@@ -237,9 +237,9 @@
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在论述Lua字符串结构之前，首先我们要捋清楚c语言字符串和lua字符串的关系，我们都知道，lua代码是需要通过c来编译解析生成opcode，最后交给由c写的解释器负责执行这些指令，因此lua脚本首先要经过c的解析，才能转换成lua所能使用的内部结构，比如下面一段lua代码：</p>
 <div class="highlight"><pre class="chroma">local str = &#34;hello world&#34;
 print(str)</pre></div>
-<p>很直观，str是一个lua字符串，当lua解释器运行这个脚本时，需要创建一个&rdquo;hello world&rdquo;的字符串。然而实际上，这段脚本，lua解释器并非新建一个c的char*变量或者是char数组去存放并使用这个&rdquo;hello world&rdquo;，而是需要创建lua内部能够使用的字符串类型，其步骤是，&rdquo;hello world&rdquo;这个str首先只能被c读取，然后存入c的char*或char[SIZE]对应的buffer中，再以buffer为内容创建对应的lua字符串，以备其（指的是包含“hello world”的lua字符串）能够在虚拟机中被使用。对此，我们后续只需要关注，lua如何通过char*变量创建lua字符串即可，后文中，我们统一将lua字符串成为TString。</p>
+<p>很直观，str是一个lua字符串，当lua解释器运行这个脚本时，需要创建一个&rdquo;hello world&rdquo;的字符串。然而实际上，这段脚本，lua解释器并非新建一个c的char*变量或者是char数组去存放并使用这个&rdquo;hello world&rdquo;，而是需要创建lua内部能够使用的字符串类型，其步骤是，&rdquo;hello world&rdquo;这个str首先只能被c读取，然后存入c的char*或char[SIZE]对应的buffer中，再以buffer为内容创建对应的lua字符串，以备其（指的是包含“hello world”的lua字符串）能够在虚拟机中被使用。对此，我们后续只需要关注，lua如何通过char*变量创建lua字符串即可，后文中，我们统一将lua字符串称为TString类型的字符串。</p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从lua-5.2.1开始，字符串就分为长字符串和短字符串了<sup>[1]</sup>，其中短字符串会进行充分的hash运算，并且进行内部化处理，借以提高lua虚拟机对字符串操作的效率,和节约内存（极可能少去malloc新内存）。而长字符串则不进行充分的hash运算，且不进行内部化，关于为何要这样做，后续小节我会详细进行讨论。dummylua也是遵循这种区分长短字符串的方式进行设计和实现的。<br />
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从lua-5.2.1开始，字符串就分为长字符串和短字符串了<sup>[1]</sup>，其中短字符串会进行充分的hash运算，并且进行内部化处理，借以提高lua虚拟机对字符串操作的效率,和节约内存（尽可能少去malloc新内存）。而长字符串则不进行充分的hash运算，且不进行内部化，关于为何要这样做，后续小节我会详细进行讨论。dummylua也是遵循这种区分长短字符串的方式进行设计和实现的。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在开始深入探讨其他部分之前，我先来介绍一下dummylua字符串的结构，我并不想在一开始就贴上大段的代码，这里只展示一个概念图，因为大段的代码只会过早暴露太多的设计细节，使得我们讨论的问题变得索然无味，现在我们来看看图1的结构：<br />
 <img src="../../../../images/build-a-lua-interpreter/part3/string_struct01.png" alt="image" />图1<br />
 上图给我们展示了一块连续的内存块，这里包含了String的Header和String的Body部分，Header包含了String的类型（长字符串或短字符串）、hash值、长度等信息。不同类型的字符串包含的头部字段也是不同的，虽然他们内部字段不同，但是Header的size都是一致的，而String的Body部分，则是字符串内容的本体所在，真正放字符串内容的地方，相当于char*。在lua中，String Body短于或等于40字节的是短字符串，长于40字节的是长字符串。<br />
@@ -314,7 +314,7 @@ A B XOR
 <p><img src="../../../../images/build-a-lua-interpreter/part3/new_string02.gif" alt="Alt Text" />图6<br />
 图6展示的是，要创建内容为“GTA”的lua TString实例，先计算“GTA”的hash值，再计算出“GTA”可能在的Slot位置，并遍历查找对应的TString链表，最后没找到，则新创建一个lua TString实例，并插入该Slot位置的TString链表首部。</p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面我们展示了创建字符串的两个流程，查找和新建。而如果全局字符串表strt如果是固定的，那么TString链表将会很长，最终查找效率会退化成O(n)，这显然不是我们愿意见到的，因此，当字符串数量到达一定数量时，strt就会拓展为原来的两倍，并且所有的字符串都会重新做mod操作（即hash &amp; (new_size - 1)）分配到新的Slot中，组建新的TString链表。而在什么情况下会触发resize呢？一种是已经存在的lua TString数量&gt;=strt-&gt;size的时候会触发，还有一种则是lua TString数量&lt;=strt-&gt;size / 2时，需要缩小为原来的一半。这里有一个特点，即TString的数量，始终不能超过strt的size。这样做有个好处，则是每个Slot尽可能保证只有一个lua TString实例，即便偶尔有hash碰撞，组成的TString链表也不会太长，是的查找效率保持在O(1)。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面我们展示了创建字符串的两个流程，查找和新建。而如果全局字符串表strt如果是固定的，那么TString链表将会很长，最终查找效率会退化成O(n)，这显然不是我们愿意见到的，因此，当字符串数量到达一定数量时，strt就会拓展为原来的两倍，并且所有的字符串都会重新做mod操作（即hash &amp; (new_size - 1)）分配到新的Slot中，组建新的TString链表。而在什么情况下会触发resize呢？一种是已经存在的lua TString数量&gt;=strt-&gt;size的时候会触发，还有一种则是lua TString数量&lt;=strt-&gt;size / 2时，需要缩小为原来的一半。这里有一个特点，即TString的数量，始终不能超过strt的size。这样做有个好处，则是每个Slot尽可能保证只有一个lua TString实例，即便偶尔有hash碰撞，组成的TString链表也不会太长，使得查找效率保持在O(1)。</p>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们先来看看拓展的情况，如图7所示，此时新建一个全新的短字符串s = &ldquo;Red Dead Redemption&rdquo;，我们先计算它的hash值，不论它放到哪个位置，当前的TString实例已经超过了全局字符串表strt的当前总长，因此此时，strt需要扩充为原来的两倍，并且所有的TString实例将会被重新分配到新的Slot中，如图8所示。
 <img src="../../../../images/build-a-lua-interpreter/part3/strt_resize01.png" alt="image" />图7<br />
@@ -330,7 +330,7 @@ A B XOR
 
 <h2 id="长字符串与惰性哈希">长字符串与惰性哈希</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和短字符串不同，lua的长字符串不会进行内部化，与全局字符串列表没有任何关系，因此对于长字符串，lua虚拟机是直接创建它的，因为和strt没有关联，所以在创建阶段，它甚至不需要进行hash值运算，这样的结果就是，对于长字符串而言，哪怕String Body完全一致，lua虚拟机也会为其创建独立的TString实例。长字符串的hash运算，并不是充分的hash运算，并且只有在需要的时候才进行，借以提高lua虚拟机的运行效率。具体的处理，我们会在程序实现一节充分介绍。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和短字符串不同，lua的长字符串不会进行内部化，与全局字符串列表没有任何关系，因此对于长字符串，lua虚拟机是直接创建它的，因为和strt没有关联，所以在创建阶段，它甚至不需要进行hash值运算，这样的结果就是，对于长字符串而言，哪怕String Body完全一致，lua虚拟机也会为其创建独立的TString实例。长字符串的hash运算，并不是充分的hash运算，并且只有在需要的时候才进行，借以提高lua虚拟机的运行效率。</p>
 
 <h2 id="lua-5-2-0的hash-dos攻击">Lua-5.2.0的Hash Dos攻击</h2>
 
@@ -391,7 +391,7 @@ int main(void) {
         hash(strlen(str1), str1), hash(strlen(str2), str2), hash(strlen(str3), str3));
     return 0;
 }</pre></div>
-<p>上述代码我截取了hash计算的部分，str1、str2和str3均是不同的字符串，而str1和str2则是高度相似，但是却不完全相同，通过提出去来的hash算法，我们得到如下的结果：</p>
+<p>上述代码我截取了hash计算的部分，str1、str2和str3均是不同的字符串，而str1和str2则是高度相似，但是却不完全相同，通过提取出来hash算法，我们得到如下的结果：</p>
 <div class="highlight"><pre class="chroma">str1 len = 49, str2 len = 49, str3 len = 49
 str1 hash = 2931300550, str2 hash = 2931300550, str3 hash = 3850065186</pre></div>
 <p>我们可以发现，str1和str2的hash值相同，长度相同，但是内容不同，由于lua-5.2.0的长字符串hash运算并不充分，使得我们有机会构造hash值相同、长度相同、但是值不同的字符串，如上所示的代码，由于字符串长49字节，偶数位字符并不参与hash运算，因此我们可以修改这些字符为其他字符，使其在保持hash值相同的情况下，改变内容。换句话说，只要我的字符足够长，我们完全有可能构建几百万甚至上千万个符合这种条件的不同字符串。</p>
