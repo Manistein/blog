@@ -32,7 +32,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  <meta name="generator" content="Hugo 0.36" />
+  <meta name="generator" content="Hugo 0.37" />
   <link rel="canonical" href="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -221,7 +221,7 @@
 
 <p>对于一些概念，我也本着严谨的原则，尽可能注明了引证来源的出处，引证自维基百科的内容，基本上是没有争议的词条。由于本人水平有限，如果发现文中内容有错误的地方，或者写的不好的地方，欢迎大家批评指正。我目前建立了一个技术交流群（qq185017593），讨论问题不局限于服务端技术，也包括客户端，游戏设计，我是群主，欢迎大家加入。最后原创不易，请大家转载注明出处。</p>
 
-<p>这篇文章，实际上在今年5月份就已经在有道云笔记上写完，最近搭建了自己的博客，刚脆就迁过来。不过在拷贝过来的过程中，发现hugo的markdown渲染引擎和有道云的并不相同，因此做了些格式调整，事实上我更喜欢有道云的风格，<a href="http://note.youdao.com/share/?id=9d2b8a03fdd9cd4947ca4128d30af420&amp;type=note#/">原文链接</a></p>
+<p>这篇文章，实际上在今年5月份就已经在有道云笔记上写完，最近搭建了自己的博客，干脆就迁过来。不过在拷贝过来的过程中，发现hugo的markdown渲染引擎和有道云的并不相同，因此做了些格式调整，事实上我更喜欢有道云的风格，<a href="http://note.youdao.com/share/?id=9d2b8a03fdd9cd4947ca4128d30af420&amp;type=note#/">原文链接</a></p>
 
 <h4 id="对于skynet-需要屡清楚的几个问题">对于skynet，需要屡清楚的几个问题</h4>
 
@@ -461,144 +461,144 @@ skynet_handle_grab(uint32_t handle) {
 <div class="highlight"><pre class="chroma">// skynet_server.c
 struct skynet_context * 
 skynet_context_new(const char * name, const char *param) {
-	struct skynet_module * mod = skynet_module_query(name);
+    struct skynet_module * mod = skynet_module_query(name);
 
-	if (mod == NULL)
-		return NULL;
+    if (mod == NULL)
+        return NULL;
 
-	void *inst = skynet_module_instance_create(mod);
-	if (inst == NULL)
-		return NULL;
-	struct skynet_context * ctx = skynet_malloc(sizeof(*ctx));
-	CHECKCALLING_INIT(ctx)
+    void *inst = skynet_module_instance_create(mod);
+    if (inst == NULL)
+        return NULL;
+    struct skynet_context * ctx = skynet_malloc(sizeof(*ctx));
+    CHECKCALLING_INIT(ctx)
 
-	ctx-&gt;mod = mod;
-	ctx-&gt;instance = inst;
-	ctx-&gt;ref = 2;
-	ctx-&gt;cb = NULL;
-	ctx-&gt;cb_ud = NULL;
-	ctx-&gt;session_id = 0;
-	ctx-&gt;logfile = NULL;
+    ctx-&gt;mod = mod;
+    ctx-&gt;instance = inst;
+    ctx-&gt;ref = 2;
+    ctx-&gt;cb = NULL;
+    ctx-&gt;cb_ud = NULL;
+    ctx-&gt;session_id = 0;
+    ctx-&gt;logfile = NULL;
 
-	ctx-&gt;init = false;
-	ctx-&gt;endless = false;
-	// Should set to 0 first to avoid skynet_handle_retireall get an uninitialized handle
-	ctx-&gt;handle = 0;	
-	ctx-&gt;handle = skynet_handle_register(ctx);
-	struct message_queue * queue = ctx-&gt;queue = skynet_mq_create(ctx-&gt;handle);
-	// init function maybe use ctx-&gt;handle, so it must init at last
-	context_inc();
+    ctx-&gt;init = false;
+    ctx-&gt;endless = false;
+    // Should set to 0 first to avoid skynet_handle_retireall get an uninitialized handle
+    ctx-&gt;handle = 0;    
+    ctx-&gt;handle = skynet_handle_register(ctx);
+    struct message_queue * queue = ctx-&gt;queue = skynet_mq_create(ctx-&gt;handle);
+    // init function maybe use ctx-&gt;handle, so it must init at last
+    context_inc();
 
-	CHECKCALLING_BEGIN(ctx)
-	int r = skynet_module_instance_init(mod, inst, ctx, param);
-	CHECKCALLING_END(ctx)
-	if (r == 0) {
-		struct skynet_context * ret = skynet_context_release(ctx);
-		if (ret) {
-			ctx-&gt;init = true;
-		}
-		skynet_globalmq_push(queue);
-		if (ret) {
-			skynet_error(ret, &#34;LAUNCH %s %s&#34;, name, param ? param : &#34;&#34;);
-		}
-		return ret;
-	} else {
-		skynet_error(ctx, &#34;FAILED launch %s&#34;, name);
-		uint32_t handle = ctx-&gt;handle;
-		skynet_context_release(ctx);
-		skynet_handle_retire(handle);
-		struct drop_t d = { handle };
-		skynet_mq_release(queue, drop_message, &amp;d);
-		return NULL;
-	}
+    CHECKCALLING_BEGIN(ctx)
+    int r = skynet_module_instance_init(mod, inst, ctx, param);
+    CHECKCALLING_END(ctx)
+    if (r == 0) {
+        struct skynet_context * ret = skynet_context_release(ctx);
+        if (ret) {
+            ctx-&gt;init = true;
+        }
+        skynet_globalmq_push(queue);
+        if (ret) {
+            skynet_error(ret, &#34;LAUNCH %s %s&#34;, name, param ? param : &#34;&#34;);
+        }
+        return ret;
+    } else {
+        skynet_error(ctx, &#34;FAILED launch %s&#34;, name);
+        uint32_t handle = ctx-&gt;handle;
+        skynet_context_release(ctx);
+        skynet_handle_retire(handle);
+        struct drop_t d = { handle };
+        skynet_mq_release(queue, drop_message, &amp;d);
+        return NULL;
+    }
 }
 
 // skynet_module.c
 struct skynet_module * 
 skynet_module_query(const char * name) {
-	struct skynet_module * result = _query(name);
-	if (result)
-		return result;
+    struct skynet_module * result = _query(name);
+    if (result)
+        return result;
 
-	SPIN_LOCK(M)
+    SPIN_LOCK(M)
 
-	result = _query(name); // double check
+    result = _query(name); // double check
 
-	if (result == NULL &amp;&amp; M-&gt;count &lt; MAX_MODULE_TYPE) {
-		int index = M-&gt;count;
-		void * dl = _try_open(M,name);
-		if (dl) {
-			M-&gt;m[index].name = name;
-			M-&gt;m[index].module = dl;
+    if (result == NULL &amp;&amp; M-&gt;count &lt; MAX_MODULE_TYPE) {
+        int index = M-&gt;count;
+        void * dl = _try_open(M,name);
+        if (dl) {
+            M-&gt;m[index].name = name;
+            M-&gt;m[index].module = dl;
 
-			if (_open_sym(&amp;M-&gt;m[index]) == 0) {
-				M-&gt;m[index].name = skynet_strdup(name);
-				M-&gt;count ++;
-				result = &amp;M-&gt;m[index];
-			}
-		}
-	}
+            if (_open_sym(&amp;M-&gt;m[index]) == 0) {
+                M-&gt;m[index].name = skynet_strdup(name);
+                M-&gt;count ++;
+                result = &amp;M-&gt;m[index];
+            }
+        }
+    }
 
-	SPIN_UNLOCK(M)
+    SPIN_UNLOCK(M)
 
-	return result;
+    return result;
 }
 
 static void *
 _try_open(struct modules *m, const char * name) {
-	const char *l;
-	const char * path = m-&gt;path;
-	size_t path_size = strlen(path);
-	size_t name_size = strlen(name);
+    const char *l;
+    const char * path = m-&gt;path;
+    size_t path_size = strlen(path);
+    size_t name_size = strlen(name);
 
-	int sz = path_size + name_size;
-	//search path
-	void * dl = NULL;
-	char tmp[sz];
-	do
-	{
-		memset(tmp,0,sz);
-		while (*path == &#39;;&#39;) path++;
-		if (*path == &#39;\0&#39;) break;
-		l = strchr(path, &#39;;&#39;);
-		if (l == NULL) l = path + strlen(path);
-		int len = l - path;
-		int i;
-		for (i=0;path[i]!=&#39;?&#39; &amp;&amp; i &lt; len ;i++) {
-			tmp[i] = path[i];
-		}
-		memcpy(tmp+i,name,name_size);
-		if (path[i] == &#39;?&#39;) {
-			strncpy(tmp+i+name_size,path+i+1,len - i - 1);
-		} else {
-			fprintf(stderr,&#34;Invalid C service path\n&#34;);
-			exit(1);
-		}
-		dl = dlopen(tmp, RTLD_NOW | RTLD_GLOBAL);
-		path = l;
-	}while(dl == NULL);
+    int sz = path_size + name_size;
+    //search path
+    void * dl = NULL;
+    char tmp[sz];
+    do
+    {
+        memset(tmp,0,sz);
+        while (*path == &#39;;&#39;) path++;
+        if (*path == &#39;\0&#39;) break;
+        l = strchr(path, &#39;;&#39;);
+        if (l == NULL) l = path + strlen(path);
+        int len = l - path;
+        int i;
+        for (i=0;path[i]!=&#39;?&#39; &amp;&amp; i &lt; len ;i++) {
+            tmp[i] = path[i];
+        }
+        memcpy(tmp+i,name,name_size);
+        if (path[i] == &#39;?&#39;) {
+            strncpy(tmp+i+name_size,path+i+1,len - i - 1);
+        } else {
+            fprintf(stderr,&#34;Invalid C service path\n&#34;);
+            exit(1);
+        }
+        dl = dlopen(tmp, RTLD_NOW | RTLD_GLOBAL);
+        path = l;
+    }while(dl == NULL);
 
-	if (dl == NULL) {
-		fprintf(stderr, &#34;try open %s failed : %s\n&#34;,name,dlerror());
-	}
+    if (dl == NULL) {
+        fprintf(stderr, &#34;try open %s failed : %s\n&#34;,name,dlerror());
+    }
 
-	return dl;
+    return dl;
 }
 
 _open_sym(struct skynet_module *mod) {
-	size_t name_size = strlen(mod-&gt;name);
-	char tmp[name_size + 9]; // create/init/release/signal , longest name is release (7)
-	memcpy(tmp, mod-&gt;name, name_size);
-	strcpy(tmp+name_size, &#34;_create&#34;);
-	mod-&gt;create = dlsym(mod-&gt;module, tmp);
-	strcpy(tmp+name_size, &#34;_init&#34;);
-	mod-&gt;init = dlsym(mod-&gt;module, tmp);
-	strcpy(tmp+name_size, &#34;_release&#34;);
-	mod-&gt;release = dlsym(mod-&gt;module, tmp);
-	strcpy(tmp+name_size, &#34;_signal&#34;);
-	mod-&gt;signal = dlsym(mod-&gt;module, tmp);
+    size_t name_size = strlen(mod-&gt;name);
+    char tmp[name_size + 9]; // create/init/release/signal , longest name is release (7)
+    memcpy(tmp, mod-&gt;name, name_size);
+    strcpy(tmp+name_size, &#34;_create&#34;);
+    mod-&gt;create = dlsym(mod-&gt;module, tmp);
+    strcpy(tmp+name_size, &#34;_init&#34;);
+    mod-&gt;init = dlsym(mod-&gt;module, tmp);
+    strcpy(tmp+name_size, &#34;_release&#34;);
+    mod-&gt;release = dlsym(mod-&gt;module, tmp);
+    strcpy(tmp+name_size, &#34;_signal&#34;);
+    mod-&gt;signal = dlsym(mod-&gt;module, tmp);
 
-	return mod-&gt;init == NULL;
+    return mod-&gt;init == NULL;
 }</pre></div>
 <p>我们要创建一个c服务，首先要获取对应c服务的模块对象，在上一节中，我们已经介绍了skynet的modules对象，它包含skynet_module列表，so库所在路径，创建一个c服务，一般要经历下面几个步骤：</p>
 
@@ -622,13 +622,13 @@ _open_sym(struct skynet_module *mod) {
 <div class="highlight"><pre class="chroma">// skynet_start.c
 void
 skynet_start(struct skynet_config * config) {
-	...
-	struct skynet_context *ctx = skynet_context_new(config-&gt;logservice, config-&gt;logger);
-	if (ctx == NULL) {
-		fprintf(stderr, &#34;Can&#39;t launch %s service\n&#34;, config-&gt;logservice);
-		exit(1);
-	}
-	...
+...
+struct skynet_context *ctx = skynet_context_new(config-&gt;logservice, config-&gt;logger);
+if (ctx == NULL) {
+    fprintf(stderr, &#34;Can&#39;t launch %s service\n&#34;, config-&gt;logservice);
+    exit(1);
+}
+...
 }</pre></div>
 <p>其中配置中的logservice指名log服务的so库名称，用于后面加载服务时使用，后面的logger字段则指定log的输出路径。</p></li>
 
@@ -639,15 +639,15 @@ skynet_start(struct skynet_config * config) {
 <li><p>创建一个logger服务的数据实例，调用logger服务的create函数：</p>
 <div class="highlight"><pre class="chroma">// service_logger.c
 struct logger {
-	FILE * handle;
-	int close;
+FILE * handle;
+int close;
 };
 struct logger *
 logger_create(void) {
-	struct logger * inst = skynet_malloc(sizeof(*inst));
-	inst-&gt;handle = NULL;
-	inst-&gt;close = 0;
-	return inst;
+struct logger * inst = skynet_malloc(sizeof(*inst));
+inst-&gt;handle = NULL;
+inst-&gt;close = 0;
+return inst;
 }</pre></div>
 <p>此时，将新创建的数据实例赋值给skynet_context的instance变量，此时，一个服务对象运行时，所要用到的逻辑，能够通过mod变量，访问logger服务对应的函数，而通过instance可以找到该服务自己的数据块。</p></li>
 
@@ -657,36 +657,36 @@ logger_create(void) {
 <div class="highlight"><pre class="chroma">// service_logger.c
 static int
 _logger(struct skynet_context * context, void *ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
-	struct logger * inst = ud;
-	fprintf(inst-&gt;handle, &#34;[:%08x] &#34;,source);
-	fwrite(msg, sz , 1, inst-&gt;handle);
-	fprintf(inst-&gt;handle, &#34;\n&#34;);
-	fflush(inst-&gt;handle);
-	return 0;
+struct logger * inst = ud;
+fprintf(inst-&gt;handle, &#34;[:%08x] &#34;,source);
+fwrite(msg, sz , 1, inst-&gt;handle);
+fprintf(inst-&gt;handle, &#34;\n&#34;);
+fflush(inst-&gt;handle);
+return 0;
 }
 int
 logger_init(struct logger * inst, struct skynet_context *ctx, const char * parm) {
-	if (parm) {
-		inst-&gt;handle = fopen(parm,&#34;w&#34;);
-		if (inst-&gt;handle == NULL) {
-			return 1;
-		}
-		inst-&gt;close = 1;
-	} else {
-		inst-&gt;handle = stdout;
-	}
-	if (inst-&gt;handle) {
-		skynet_callback(ctx, inst, _logger);
-		skynet_command(ctx, &#34;REG&#34;, &#34;.logger&#34;);
-		return 0;
-	}
-	return 1;
+if (parm) {
+    inst-&gt;handle = fopen(parm,&#34;w&#34;);
+    if (inst-&gt;handle == NULL) {
+        return 1;
+    }
+    inst-&gt;close = 1;
+} else {
+    inst-&gt;handle = stdout;
+}
+if (inst-&gt;handle) {
+    skynet_callback(ctx, inst, _logger);
+    skynet_command(ctx, &#34;REG&#34;, &#34;.logger&#34;);
+    return 0;
+}
+return 1;
 }
 // skynet_server.c
 void 
 skynet_callback(struct skynet_context * context, void *ud, skynet_cb cb) {
-	context-&gt;cb = cb;
-	context-&gt;cb_ud = ud;
+context-&gt;cb = cb;
+context-&gt;cb_ud = ud;
 }</pre></div>
 <p>上面这段逻辑，将skynet_context的callback函数设置为logger服务的_logger函数，并将调用callback时，传入的userdata设置为先前创建的数据实例</p></li>
 
@@ -1046,157 +1046,157 @@ skynet_handle_grab(uint32_t handle) {
 <p>每个skynet进程在启动时，都会启动一个lua层的launcher服务，该服务主要负责skynet运作期间，服务的创建工作。我们在lua层创建一个lua层服务时，通常会调用skynet.newservice函数</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.newservice(name, ...)
-	return skynet.call(&#34;.launcher&#34;, &#34;lua&#34; , &#34;LAUNCH&#34;, &#34;snlua&#34;, name, ...)
+    return skynet.call(&#34;.launcher&#34;, &#34;lua&#34; , &#34;LAUNCH&#34;, &#34;snlua&#34;, name, ...)
 end
 
 -- launcher.lua
 local function launch_service(service, ...)
-	local param = table.concat({...}, &#34; &#34;)
-	local inst = skynet.launch(service, param)
-	local response = skynet.response()
-	if inst then
-		services[inst] = service .. &#34; &#34; .. param
-		instance[inst] = response
-	else
-		response(false)
-		return
-	end
-	return inst
+    local param = table.concat({...}, &#34; &#34;)
+    local inst = skynet.launch(service, param)
+    local response = skynet.response()
+    if inst then
+        services[inst] = service .. &#34; &#34; .. param
+        instance[inst] = response
+    else
+        response(false)
+        return
+    end
+    return inst
 end
 
 function command.LAUNCH(_, service, ...)
-	launch_service(service, ...)
-	return NORET
+    launch_service(service, ...)
+    return NORET
 end</pre></div>
 <p>此时会发送消息给launcher服务，告诉launcher服务，要去创建一个snlua的c服务，并且绑定一个lua_State，该lua_State运行名称为name的lua脚本（这个脚本是入口），这里将c服务名称、脚本名称和参数，拼成一个字符串，并下传给c层</p>
 <div class="highlight"><pre class="chroma">-- skynet.manager
 function skynet.launch(...)
-	local addr = c.command(&#34;LAUNCH&#34;, table.concat({...},&#34; &#34;))
-	if addr then
-		return tonumber(&#34;0x&#34; .. string.sub(addr , 2))
-	end
+    local addr = c.command(&#34;LAUNCH&#34;, table.concat({...},&#34; &#34;))
+    if addr then
+        return tonumber(&#34;0x&#34; .. string.sub(addr , 2))
+    end
 end
 
 // lua-skynet.c
 static int
 _command(lua_State *L) {
-	struct skynet_context * context = lua_touserdata(L, lua_upvalueindex(1));
-	const char * cmd = luaL_checkstring(L,1);
-	const char * result;
-	const char * parm = NULL;
-	if (lua_gettop(L) == 2) {
-		parm = luaL_checkstring(L,2);
-	}
+    struct skynet_context * context = lua_touserdata(L, lua_upvalueindex(1));
+    const char * cmd = luaL_checkstring(L,1);
+    const char * result;
+    const char * parm = NULL;
+    if (lua_gettop(L) == 2) {
+        parm = luaL_checkstring(L,2);
+    }
 
-	result = skynet_command(context, cmd, parm);
-	if (result) {
-		lua_pushstring(L, result);
-		return 1;
-	}
-	return 0;
+    result = skynet_command(context, cmd, parm);
+    if (result) {
+        lua_pushstring(L, result);
+        return 1;
+    }
+    return 0;
 }
 
 // skynet_server.c
 static const char *
 cmd_launch(struct skynet_context * context, const char * param) {
-	size_t sz = strlen(param);
-	char tmp[sz+1];
-	strcpy(tmp,param);
-	char * args = tmp;
-	char * mod = strsep(&amp;args, &#34; \t\r\n&#34;);
-	args = strsep(&amp;args, &#34;\r\n&#34;);
-	struct skynet_context * inst = skynet_context_new(mod,args);
-	if (inst == NULL) {
-		return NULL;
-	} else {
-		id_to_hex(context-&gt;result, inst-&gt;handle);
-		return context-&gt;result;
-	}
+    size_t sz = strlen(param);
+    char tmp[sz+1];
+    strcpy(tmp,param);
+    char * args = tmp;
+    char * mod = strsep(&amp;args, &#34; \t\r\n&#34;);
+    args = strsep(&amp;args, &#34;\r\n&#34;);
+    struct skynet_context * inst = skynet_context_new(mod,args);
+    if (inst == NULL) {
+        return NULL;
+    } else {
+        id_to_hex(context-&gt;result, inst-&gt;handle);
+        return context-&gt;result;
+    }
 }</pre></div>
 <p>此时，我们就已经创建了一个snlua的c服务（c服务创建流程，上文已经有说明，这里不再赘述），在创建snlua服务的过程中，会对新的snlua服务进行初始化操作</p>
 <div class="highlight"><pre class="chroma">// service_snlua.c
 static int
 _launch(struct skynet_context * context, void *ud, int type, int session, uint32_t source , const void * msg, size_t sz) {
-	assert(type == 0 &amp;&amp; session == 0);
-	struct snlua *l = ud;
-	skynet_callback(context, NULL, NULL);
-	int err = _init(l, context, msg, sz);
-	if (err) {
-		skynet_command(context, &#34;EXIT&#34;, NULL);
-	}
+    assert(type == 0 &amp;&amp; session == 0);
+    struct snlua *l = ud;
+    skynet_callback(context, NULL, NULL);
+    int err = _init(l, context, msg, sz);
+    if (err) {
+        skynet_command(context, &#34;EXIT&#34;, NULL);
+    }
 
-	return 0;
+    return 0;
 }
 
 int
 snlua_init(struct snlua *l, struct skynet_context *ctx, const char * args) {
-	int sz = strlen(args);
-	char * tmp = skynet_malloc(sz);
-	memcpy(tmp, args, sz);
-	skynet_callback(ctx, l , _launch);
-	const char * self = skynet_command(ctx, &#34;REG&#34;, NULL);
-	uint32_t handle_id = strtoul(self+1, NULL, 16);
-	// it must be first message
-	skynet_send(ctx, 0, handle_id, PTYPE_TAG_DONTCOPY,0, tmp, sz);
-	return 0;
+    int sz = strlen(args);
+    char * tmp = skynet_malloc(sz);
+    memcpy(tmp, args, sz);
+    skynet_callback(ctx, l , _launch);
+    const char * self = skynet_command(ctx, &#34;REG&#34;, NULL);
+    uint32_t handle_id = strtoul(self+1, NULL, 16);
+    // it must be first message
+    skynet_send(ctx, 0, handle_id, PTYPE_TAG_DONTCOPY,0, tmp, sz);
+    return 0;
 }</pre></div>
 <p>这里将_launch作为该snlua服务的callback函数，完成注册以后，向自己发送了一个消息，本snlua服务在接收到消息以后，就会调用_launch函数，此时，snlua服务的回调函数会被赋空值，并进行一次snlua绑定的lua_State的初始化</p>
 <div class="highlight"><pre class="chroma">// service_snlua.c
 static int
 _init(struct snlua *l, struct skynet_context *ctx, const char * args, size_t sz) {
-	lua_State *L = l-&gt;L;
-	l-&gt;ctx = ctx;
-	lua_gc(L, LUA_GCSTOP, 0);
-	lua_pushboolean(L, 1);  /* signal for libraries to ignore env. vars. */
-	lua_setfield(L, LUA_REGISTRYINDEX, &#34;LUA_NOENV&#34;);
-	luaL_openlibs(L);
-	lua_pushlightuserdata(L, ctx);
-	lua_setfield(L, LUA_REGISTRYINDEX, &#34;skynet_context&#34;);
-	luaL_requiref(L, &#34;skynet.codecache&#34;, codecache , 0);
-	lua_pop(L,1);
+    lua_State *L = l-&gt;L;
+    l-&gt;ctx = ctx;
+    lua_gc(L, LUA_GCSTOP, 0);
+    lua_pushboolean(L, 1);  /* signal for libraries to ignore env. vars. */
+    lua_setfield(L, LUA_REGISTRYINDEX, &#34;LUA_NOENV&#34;);
+    luaL_openlibs(L);
+    lua_pushlightuserdata(L, ctx);
+    lua_setfield(L, LUA_REGISTRYINDEX, &#34;skynet_context&#34;);
+    luaL_requiref(L, &#34;skynet.codecache&#34;, codecache , 0);
+    lua_pop(L,1);
 
-	const char *path = optstring(ctx, &#34;lua_path&#34;,&#34;./lualib/?.lua;./lualib/?/init.lua&#34;);
-	lua_pushstring(L, path);
-	lua_setglobal(L, &#34;LUA_PATH&#34;);
-	const char *cpath = optstring(ctx, &#34;lua_cpath&#34;,&#34;./luaclib/?.so&#34;);
-	lua_pushstring(L, cpath);
-	lua_setglobal(L, &#34;LUA_CPATH&#34;);
-	const char *service = optstring(ctx, &#34;luaservice&#34;, &#34;./service/?.lua&#34;);
-	lua_pushstring(L, service);
-	lua_setglobal(L, &#34;LUA_SERVICE&#34;);
-	const char *preload = skynet_command(ctx, &#34;GETENV&#34;, &#34;preload&#34;);
-	lua_pushstring(L, preload);
-	lua_setglobal(L, &#34;LUA_PRELOAD&#34;);
+    const char *path = optstring(ctx, &#34;lua_path&#34;,&#34;./lualib/?.lua;./lualib/?/init.lua&#34;);
+    lua_pushstring(L, path);
+    lua_setglobal(L, &#34;LUA_PATH&#34;);
+    const char *cpath = optstring(ctx, &#34;lua_cpath&#34;,&#34;./luaclib/?.so&#34;);
+    lua_pushstring(L, cpath);
+    lua_setglobal(L, &#34;LUA_CPATH&#34;);
+    const char *service = optstring(ctx, &#34;luaservice&#34;, &#34;./service/?.lua&#34;);
+    lua_pushstring(L, service);
+    lua_setglobal(L, &#34;LUA_SERVICE&#34;);
+    const char *preload = skynet_command(ctx, &#34;GETENV&#34;, &#34;preload&#34;);
+    lua_pushstring(L, preload);
+    lua_setglobal(L, &#34;LUA_PRELOAD&#34;);
 
-	lua_pushcfunction(L, traceback);
-	assert(lua_gettop(L) == 1);
+    lua_pushcfunction(L, traceback);
+    assert(lua_gettop(L) == 1);
 
-	const char * loader = optstring(ctx, &#34;lualoader&#34;, &#34;./lualib/loader.lua&#34;);
+    const char * loader = optstring(ctx, &#34;lualoader&#34;, &#34;./lualib/loader.lua&#34;);
 
-	int r = luaL_loadfile(L,loader);
-	if (r != LUA_OK) {
-		skynet_error(ctx, &#34;Can&#39;t load %s : %s&#34;, loader, lua_tostring(L, -1));
-		_report_launcher_error(ctx);
-		return 1;
-	}
-	lua_pushlstring(L, args, sz);
-	r = lua_pcall(L,1,0,1);
-	if (r != LUA_OK) {
-		skynet_error(ctx, &#34;lua loader error : %s&#34;, lua_tostring(L, -1));
-		_report_launcher_error(ctx);
-		return 1;
-	}
-	lua_settop(L,0);
+    int r = luaL_loadfile(L,loader);
+    if (r != LUA_OK) {
+        skynet_error(ctx, &#34;Can&#39;t load %s : %s&#34;, loader, lua_tostring(L, -1));
+        _report_launcher_error(ctx);
+        return 1;
+    }
+    lua_pushlstring(L, args, sz);
+    r = lua_pcall(L,1,0,1);
+    if (r != LUA_OK) {
+        skynet_error(ctx, &#34;lua loader error : %s&#34;, lua_tostring(L, -1));
+        _report_launcher_error(ctx);
+        return 1;
+    }
+    lua_settop(L,0);
 
-	lua_gc(L, LUA_GCRESTART, 0);
+    lua_gc(L, LUA_GCRESTART, 0);
 
-	return 0;
+    return 0;
 }</pre></div>
 <p>c初始化lua_State，先是将服务指针，skynet_context保存起来，以方便lua层调c的时候使用，然后就是一些配置设置，如设置lua服务脚本的存放路径，c服务so库的存放路径，lualib的存放路径等（加载和调用的时候，回到这些路径里找），然后该lua_State会加载一个用于执行指定脚本的loader.lua脚本，并将参数传给这个脚本（参数就是snlua服务绑定的lua脚本名称和传给这个脚本的参数拼起来的字符串，比如要启动一个名为scene的服务，那么对应的脚本名称就是scene.lua）</p>
 <div class="highlight"><pre class="chroma">-- lualib.loader.lua
 local args = {}
 for word in string.gmatch(..., &#34;%S+&#34;) do
-	table.insert(args, word)
+    table.insert(args, word)
 end
 
 SERVICE_NAME = args[1]
@@ -1205,15 +1205,15 @@ local main, pattern
 
 local err = {}
 for pat in string.gmatch(LUA_SERVICE, &#34;([^;]+);*&#34;) do
-	local filename = string.gsub(pat, &#34;?&#34;, SERVICE_NAME)
-	local f, msg = loadfile(filename)
-	if not f then
-		table.insert(err, msg)
-	else
-		pattern = pat
-		main = f
-		break
-	end
+    local filename = string.gsub(pat, &#34;?&#34;, SERVICE_NAME)
+    local f, msg = loadfile(filename)
+    if not f then
+        table.insert(err, msg)
+    else
+        pattern = pat
+        main = f
+        break
+    end
 end
 
 ...
@@ -1235,19 +1235,19 @@ main(select(2, table.unpack(args)))</pre></div>
 
 <li><p>id：标识协议类型的整型值，类型有</p>
 <div class="highlight"><pre class="chroma">local skynet = {
-	-- read skynet.h
-	PTYPE_TEXT = 0,
-	PTYPE_RESPONSE = 1,
-	PTYPE_MULTICAST = 2,
-	PTYPE_CLIENT = 3,
-	PTYPE_SYSTEM = 4,
-	PTYPE_HARBOR = 5,
-	PTYPE_SOCKET = 6,
-	PTYPE_ERROR = 7,
-	PTYPE_QUEUE = 8,	-- used in deprecated mqueue, use skynet.queue instead
-	PTYPE_DEBUG = 9,
-	PTYPE_LUA = 10,
-	PTYPE_SNAX = 11,
+-- read skynet.h
+PTYPE_TEXT = 0,
+PTYPE_RESPONSE = 1,
+PTYPE_MULTICAST = 2,
+PTYPE_CLIENT = 3,
+PTYPE_SYSTEM = 4,
+PTYPE_HARBOR = 5,
+PTYPE_SOCKET = 6,
+PTYPE_ERROR = 7,
+PTYPE_QUEUE = 8,    -- used in deprecated mqueue, use skynet.queue instead
+PTYPE_DEBUG = 9,
+PTYPE_LUA = 10,
+PTYPE_SNAX = 11,
 }</pre></div></li>
 
 <li><p>pack：发送消息时，对消息进行打包的函数</p></li>
@@ -1262,29 +1262,29 @@ main(select(2, table.unpack(args)))</pre></div>
 local skynet = require &#34;skynet&#34;
 
 skynet.register_protocol {
-	name = &#34;text&#34;,
-	id = skynet.PTYPE_TEXT,
-	unpack = function (msg, sz)
-		return skynet.tostring(msg, sz)
-	end,
-	dispatch = function (_, _, type, arg)
-		skynet.error(arg)
-	end
+    name = &#34;text&#34;,
+    id = skynet.PTYPE_TEXT,
+    unpack = function (msg, sz)
+        return skynet.tostring(msg, sz)
+    end,
+    dispatch = function (_, _, type, arg)
+        skynet.error(arg)
+    end
 }
 
 local CMD = {}
 
 function CMD.do_something(...)
-	-- TODO
+    -- TODO
 end
 
 skynet.dispatch(&#34;lua&#34;, function(_,_, command, ...)
-	local f = CMD[command]
-	skynet.ret(skynet.pack(f(...)))
+    local f = CMD[command]
+    skynet.ret(skynet.pack(f(...)))
 end)
 
 skynet.start(function()
-	-- TODO
+    -- TODO
 end)</pre></div>
 <p>启动一个example服务，意味着loader脚本，最终执行的那个脚本就是example.lua这个脚本，在执行这个脚本的过程中，首先和其他所有的lua服务一样，这个example服务需要调用skynet.lua里的api，因此，需要require一下skynet.lua这个脚本，而在require的过程中，就已经注册了几个回调消息处理协议：</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
@@ -1293,131 +1293,131 @@ end)</pre></div>
 
 ----- register protocol
 do
-	local REG = skynet.register_protocol
+    local REG = skynet.register_protocol
 
-	REG {
-		name = &#34;lua&#34;,
-		id = skynet.PTYPE_LUA,
-		pack = skynet.pack,
-		unpack = skynet.unpack,
-	}
+    REG {
+        name = &#34;lua&#34;,
+        id = skynet.PTYPE_LUA,
+        pack = skynet.pack,
+        unpack = skynet.unpack,
+    }
 
-	REG {
-		name = &#34;response&#34;,
-		id = skynet.PTYPE_RESPONSE,
-	}
+    REG {
+        name = &#34;response&#34;,
+        id = skynet.PTYPE_RESPONSE,
+    }
 
-	REG {
-		name = &#34;error&#34;,
-		id = skynet.PTYPE_ERROR,
-		unpack = function(...) return ... end,
-		dispatch = _error_dispatch,
-	}
+    REG {
+        name = &#34;error&#34;,
+        id = skynet.PTYPE_ERROR,
+        unpack = function(...) return ... end,
+        dispatch = _error_dispatch,
+    }
 end
 
 ...</pre></div>
 <p>这里事先注册了lua类型，response类型和error类型的消息处理协议，也就是说，一个lua服务至少保证lua类型、response类型和error类型默认有消息处理协议，而注册函数的流程就是将这个消息处理协议的结构存入proto表中，当一个lua服务接收到消息时，则会根据其消息类型，在proto表中找到对应的处理协议以后，调用该协议的unpack函数，将参数解包以后，再传给该协议的dispatch函数，最后达到驱动lua服务的目的：</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.register_protocol(class)
-	local name = class.name
-	local id = class.id
-	assert(proto[name] == nil)
-	assert(type(name) == &#34;string&#34; and type(id) == &#34;number&#34; and id &gt;=0 and id &lt;=255)
-	proto[name] = class
-	proto[id] = class
+    local name = class.name
+    local id = class.id
+    assert(proto[name] == nil)
+    assert(type(name) == &#34;string&#34; and type(id) == &#34;number&#34; and id &gt;=0 and id &lt;=255)
+    proto[name] = class
+    proto[id] = class
 end</pre></div>
 <p>现在回到我们的example脚本，它注册了一个text类消息处理协议，然后为lua协议注册了一个回调函数，我们注意到，在skynet.lua这个脚本中，虽然有在proto表中注册lua类型协议（其中包括解包函数unpack），但是没有定义消费lua类型消息的回调函数dispatch，这个dispatch函数，需要用户自己定义，一般使用skynet.dispatch来完成</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.dispatch(typename, func)
-	local p = proto[typename]
-	if func then
-		local ret = p.dispatch
-		p.dispatch = func
-		return ret
-	else
-		return p and p.dispatch
-	end
+    local p = proto[typename]
+    if func then
+        local ret = p.dispatch
+        p.dispatch = func
+        return ret
+    else
+        return p and p.dispatch
+    end
 end</pre></div>
 <p>exmaple脚本为lua协议，注册了一个lua层消息回调函数，后面example服务接收到的lua类型消息，都会被传到这个函数内<br />
 最后，example脚本执行了skynet.start函数，完成启动一个lua服务的最后工作</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.start(start_func)
-	c.callback(skynet.dispatch_message)
-	skynet.timeout(0, function()
-		skynet.init_service(start_func)
-	end)
+    c.callback(skynet.dispatch_message)
+    skynet.timeout(0, function()
+        skynet.init_service(start_func)
+    end)
 end</pre></div>
 <p>这个函数，首先lua服务注册了一个lua层的消息回调函数，前面已经讨论过，一个c服务在消费次级消息队列的消息时，最终会调用callback函数，而这里做的工作则是，通过这个c层的callback函数，再转调lua层消息回调函数skynet.dispatch_message</p>
 <div class="highlight"><pre class="chroma">// lua-skynet.c
 static int
 _cb(struct skynet_context * context, void * ud, int type, int session, uint32_t source, const void * msg, size_t sz) {
-	lua_State *L = ud;
-	int trace = 1;
-	int r;
-	int top = lua_gettop(L);
-	if (top == 0) {
-		lua_pushcfunction(L, traceback);
-		lua_rawgetp(L, LUA_REGISTRYINDEX, _cb);
-	} else {
-		assert(top == 2);
-	}
-	lua_pushvalue(L,2);
+    lua_State *L = ud;
+    int trace = 1;
+    int r;
+    int top = lua_gettop(L);
+    if (top == 0) {
+        lua_pushcfunction(L, traceback);
+        lua_rawgetp(L, LUA_REGISTRYINDEX, _cb);
+    } else {
+        assert(top == 2);
+    }
+    lua_pushvalue(L,2);
 
-	lua_pushinteger(L, type);
-	lua_pushlightuserdata(L, (void *)msg);
-	lua_pushinteger(L,sz);
-	lua_pushinteger(L, session);
-	lua_pushinteger(L, source);
+    lua_pushinteger(L, type);
+    lua_pushlightuserdata(L, (void *)msg);
+    lua_pushinteger(L,sz);
+    lua_pushinteger(L, session);
+    lua_pushinteger(L, source);
 
-	r = lua_pcall(L, 5, 0 , trace);
+    r = lua_pcall(L, 5, 0 , trace);
 
     ...
 
-	return 0;
+    return 0;
 }
 
 static int
 _callback(lua_State *L) {
-	struct skynet_context * context = lua_touserdata(L, lua_upvalueindex(1));
-	int forward = lua_toboolean(L, 2);
-	luaL_checktype(L,1,LUA_TFUNCTION);
-	lua_settop(L,1);
-	lua_rawsetp(L, LUA_REGISTRYINDEX, _cb);
+    struct skynet_context * context = lua_touserdata(L, lua_upvalueindex(1));
+    int forward = lua_toboolean(L, 2);
+    luaL_checktype(L,1,LUA_TFUNCTION);
+    lua_settop(L,1);
+    lua_rawsetp(L, LUA_REGISTRYINDEX, _cb);
 
-	lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_MAINTHREAD);
-	lua_State *gL = lua_tothread(L,-1);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_MAINTHREAD);
+    lua_State *gL = lua_tothread(L,-1);
 
-	if (forward) {
-		skynet_callback(context, gL, forward_cb);
-	} else {
-		skynet_callback(context, gL, _cb);
-	}
+    if (forward) {
+        skynet_callback(context, gL, forward_cb);
+    } else {
+        skynet_callback(context, gL, _cb);
+    }
 
-	return 0;
+    return 0;
 }</pre></div>
 <p>这里将snlua这个skynet_context的callback函数赋值为_cb，而_cb最终又会通过lua_State转调lua层的skynet.dispatch_message函数，也就是说，发送给snlua服务的消息，最终都是交给lua层去处理的<br />
 在完成lua层callback函数的注册以后，接下来就是执行lua服务的启动函数</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 local function init_template(start)
-	init_all()
-	init_func = {}
-	start()
-	init_all()
+    init_all()
+    init_func = {}
+    start()
+    init_all()
 end
 
 function skynet.pcall(start)
-	return xpcall(init_template, debug.traceback, start)
+    return xpcall(init_template, debug.traceback, start)
 end
 
 function skynet.init_service(start)
-	local ok, err = skynet.pcall(start)
-	if not ok then
-		skynet.error(&#34;init service failed: &#34; .. tostring(err))
-		skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;ERROR&#34;)
-		skynet.exit()
-	else
-		skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;LAUNCHOK&#34;)
-	end
+    local ok, err = skynet.pcall(start)
+    if not ok then
+        skynet.error(&#34;init service failed: &#34; .. tostring(err))
+        skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;ERROR&#34;)
+        skynet.exit()
+    else
+        skynet.send(&#34;.launcher&#34;,&#34;lua&#34;, &#34;LAUNCHOK&#34;)
+    end
 end</pre></div>
 <p>这里并没有立即执行这个start函数，而是故意放在了下一帧进行。到了目前这一步，整个example服务就被启动起来了，虽然他并没有执行什么逻辑，但是却展现了一个lua层服务完整的创建流程，下一节将介绍lua层消息处理机制。</p>
 
@@ -1490,57 +1490,57 @@ Lua 支持协程，也叫 协同式多线程。 一个协程在 Lua 中代表了
 <p>在前文，我们已经说明了，一个lua服务在接收消息时，最终会传给lua层的消息回调函数skynet.dispatch_message</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.dispatch_message(...)
-	local succ, err = pcall(raw_dispatch_message,...)
-	while true do
-		local key,co = next(fork_queue)
-		if co == nil then
-			break
-		end
-		fork_queue[key] = nil
-		local fork_succ, fork_err = pcall(suspend,co,coroutine.resume(co))
-		if not fork_succ then
-			if succ then
-				succ = false
-				err = tostring(fork_err)
-			else
-				err = tostring(err) .. &#34;\n&#34; .. tostring(fork_err)
-			end
-		end
-	end
-	assert(succ, tostring(err))
+    local succ, err = pcall(raw_dispatch_message,...)
+    while true do
+        local key,co = next(fork_queue)
+        if co == nil then
+            break
+        end
+        fork_queue[key] = nil
+        local fork_succ, fork_err = pcall(suspend,co,coroutine.resume(co))
+        if not fork_succ then
+            if succ then
+                succ = false
+                err = tostring(fork_err)
+            else
+                err = tostring(err) .. &#34;\n&#34; .. tostring(fork_err)
+            end
+        end
+    end
+    assert(succ, tostring(err))
 end</pre></div>
 <p>消息处理函数，只做两件事情，一件是消费当前消息，另一件则是按顺序执行之前通过调用skynet.fork创建的协程，这里我么只关注处理当前消息的情况raw_dispatch_message</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
-	-- skynet.PTYPE_RESPONSE = 1, read skynet.h
-	if prototype == 1 then
+    -- skynet.PTYPE_RESPONSE = 1, read skynet.h
+    if prototype == 1 then
         ... -- 暂不讨论，直接忽略
-	else
-		local p = proto[prototype]    -- 找到与消息类型对应的解析协议
-		if p == nil then
-			if session ~= 0 then
-				c.send(source, skynet.PTYPE_ERROR, session, &#34;&#34;)
-			else
-				unknown_request(session, source, msg, sz, prototype)
-			end
-			return
-		end
-		local f = p.dispatch  -- 获取消息处理函数，可以视为该类协议的消息回调函数
-		if f then
-			local ref = watching_service[source]
-			if ref then
-				watching_service[source] = ref + 1
-			else
-				watching_service[source] = 1
-			end
-			local co = co_create(f)   -- 如果协程池内有空闲的协程，则直接返回，否则创建一个新的协程，该协程用于执行该类协议的消息处理函数dispatch
-			session_coroutine_id[co] = session
-			session_coroutine_address[co] = source
-			suspend(co, coroutine.resume(co, session,source, p.unpack(msg,sz, ...)))  -- 启动并执行协程，将结果返回给suspend
-		else
-			unknown_request(session, source, msg, sz, proto[prototype].name)
-		end
-	end
+    else
+        local p = proto[prototype]    -- 找到与消息类型对应的解析协议
+        if p == nil then
+            if session ~= 0 then
+                c.send(source, skynet.PTYPE_ERROR, session, &#34;&#34;)
+            else
+                unknown_request(session, source, msg, sz, prototype)
+            end
+            return
+        end
+        local f = p.dispatch  -- 获取消息处理函数，可以视为该类协议的消息回调函数
+        if f then
+            local ref = watching_service[source]
+            if ref then
+                watching_service[source] = ref + 1
+            else
+                watching_service[source] = 1
+            end
+            local co = co_create(f)   -- 如果协程池内有空闲的协程，则直接返回，否则创建一个新的协程，该协程用于执行该类协议的消息处理函数dispatch
+            session_coroutine_id[co] = session
+            session_coroutine_address[co] = source
+            suspend(co, coroutine.resume(co, session,source, p.unpack(msg,sz, ...)))  -- 启动并执行协程，将结果返回给suspend
+        else
+            unknown_request(session, source, msg, sz, proto[prototype].name)
+        end
+    end
 end</pre></div>
 <p>消息处理的分为两种情况，一种是其他服务send过来的消息，还有一种就是自己发起同步rpc调用（调用call）后，获得的返回结果（返回消息的类型是PTYPE_RESPONSE）。关于call的情况，后面会详细讨论，现在只讨论如何处理其他服务send过来的消息。<br />
 整个执行的流程如下所示：</p>
@@ -1554,25 +1554,25 @@ end</pre></div>
 <p>这里对协程的复用，做一些小小的说明，创建协程的函数，非常有意思，为了进一步提高性能，skynet对协程做了缓存，也就是说，一个协程在使用完以后，并不是让他结束掉，而是把上一次使用的dispatch函数清掉，并且挂起协程，放入一个协程池中，供下一次调用。下次使用时，他将执行新的dispatch函数，只有当协程池中没有协程时，才会去创建新协程，如此循环往复</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 local function co_create(f)
-	local co = table.remove(coroutine_pool)
-	if co == nil then  -- 协程池中，再也找不到可以用的协程时，将重新创建一个
-		co = coroutine.create(function(...)
-			f(...)  -- 执行回调函数，创建协程时，并不会立即执行，只有调用coroutine.resume时，才会执行内部逻辑，这行代码，只有在首次创建时会被调用
-			
-			-- 回调函数执行完，协程本次调用的使命就完成了，但是为了实现复用，这里不能让协程退出，而是将
-			-- upvalue回调函数f赋值为空，再放入协程缓存池中，并且挂起，以便下次使用
-			while true do
-				f = nil
-				coroutine_pool[#coroutine_pool+1] = co
-				
-				f = coroutine_yield &#34;EXIT&#34;  -- （1）
-				f(coroutine_yield())  -- （2）
-			end
-		end)
-	else
-		coroutine.resume(co, f)  -- 唤醒第（1）处代码，并将新的回调函数，赋值给（1）处的upvalue f函数，此时在第（2）个yield处挂起
-	end
-	return co
+    local co = table.remove(coroutine_pool)
+    if co == nil then  -- 协程池中，再也找不到可以用的协程时，将重新创建一个
+        co = coroutine.create(function(...)
+            f(...)  -- 执行回调函数，创建协程时，并不会立即执行，只有调用coroutine.resume时，才会执行内部逻辑，这行代码，只有在首次创建时会被调用
+            
+            -- 回调函数执行完，协程本次调用的使命就完成了，但是为了实现复用，这里不能让协程退出，而是将
+            -- upvalue回调函数f赋值为空，再放入协程缓存池中，并且挂起，以便下次使用
+            while true do
+                f = nil
+                coroutine_pool[#coroutine_pool+1] = co
+                
+                f = coroutine_yield &#34;EXIT&#34;  -- （1）
+                f(coroutine_yield())  -- （2）
+            end
+        end)
+    else
+        coroutine.resume(co, f)  -- 唤醒第（1）处代码，并将新的回调函数，赋值给（1）处的upvalue f函数，此时在第（2）个yield处挂起
+    end
+    return co
 end
 
 local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
@@ -1586,13 +1586,13 @@ end</pre></div>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function suspend(co, result, command, param, size)
 ...
-	elseif command == &#34;EXIT&#34; then
-		-- coroutine exit
-		local address = session_coroutine_address[co]
-		release_watching(address)
-		session_coroutine_id[co] = nil
-		session_coroutine_address[co] = nil
-		session_response[co] = nil
+    elseif command == &#34;EXIT&#34; then
+        -- coroutine exit
+        local address = session_coroutine_address[co]
+        release_watching(address)
+        session_coroutine_id[co] = nil
+        session_coroutine_address[co] = nil
+        session_response[co] = nil
 ...
 end</pre></div>
 <p>其实这里是将与本协程关联的数据清空，包括向本服务发送消息的服务的地址，session，以及本服务对请求服务返回消息的确认信息。在lua层处理一条消息，本质上是在一个协程里进行的，因此要以协程句柄作为key，保存这些变量。协程每次暂停，都需要使用或处理这些数据，并告知当前协程的状态，以及要根据不同的状态做出相应的处理逻辑，比如当一个协程使用完毕时，就会挂起，并返回“EXIT”类型，意味着协程已经和之前的消息无关系了，需要清空与本协程关联的所有消息相关的信息，以便下一条消息使用。<br />
@@ -1600,31 +1600,31 @@ end</pre></div>
 当一个服务向本服务发起一次call调用时，本服务需要返回一个结果变量给请求者，此时也需要将本协程挂起，向请求者返回结果时，需要调用如下接口</p>
 <div class="highlight"><pre class="chroma"><span class="o">--</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">lua</span>
 <span class="nx">function</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">ret</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">sz</span><span class="p">)</span>
-	<span class="nx">msg</span> <span class="p">=</span> <span class="nx">msg</span> <span class="nx">or</span> <span class="s">&#34;&#34;</span>
-	<span class="k">return</span> <span class="nx">coroutine_yield</span><span class="p">(</span><span class="s">&#34;RETURN&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">sz</span><span class="p">)</span> <span class="o">--</span> <span class="err">（</span><span class="mi">1</span><span class="err">）</span>
+    <span class="nx">msg</span> <span class="p">=</span> <span class="nx">msg</span> <span class="nx">or</span> <span class="s">&#34;&#34;</span>
+    <span class="k">return</span> <span class="nx">coroutine_yield</span><span class="p">(</span><span class="s">&#34;RETURN&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">sz</span><span class="p">)</span> <span class="o">--</span> <span class="err">（</span><span class="mi">1</span><span class="err">）</span>
 <span class="nx">end</span>
 
 <span class="nx">function</span> <span class="nx">suspend</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">command</span><span class="p">,</span> <span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
 <span class="o">...</span>
-	<span class="nx">elseif</span> <span class="nx">command</span> <span class="o">==</span> <span class="s">&#34;RETURN&#34;</span> <span class="nx">then</span>
-		<span class="nx">local</span> <span class="nx">co_session</span> <span class="p">=</span> <span class="nx">session_coroutine_id</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
-		<span class="nx">local</span> <span class="nx">co_address</span> <span class="p">=</span> <span class="nx">session_coroutine_address</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
-		<span class="k">if</span> <span class="nx">param</span> <span class="o">==</span> <span class="kc">nil</span> <span class="nx">or</span> <span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="nx">then</span>
-			<span class="nb">error</span><span class="p">(</span><span class="nx">debug</span><span class="p">.</span><span class="nx">traceback</span><span class="p">(</span><span class="nx">co</span><span class="p">))</span>
-		<span class="nx">end</span>
-		<span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="p">=</span> <span class="kc">true</span>
-		<span class="nx">local</span> <span class="nx">ret</span>
-		<span class="k">if</span> <span class="nx">not</span> <span class="nx">dead_service</span><span class="p">[</span><span class="nx">co_address</span><span class="p">]</span> <span class="nx">then</span>
-			<span class="nx">ret</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_RESPONSE</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span>
-			<span class="k">if</span> <span class="nx">not</span> <span class="nx">ret</span> <span class="nx">then</span>
-				<span class="o">--</span> <span class="nx">If</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">is</span> <span class="nx">too</span> <span class="nx">large</span><span class="p">,</span> <span class="nx">returns</span> <span class="kc">nil</span><span class="p">.</span> <span class="nx">so</span> <span class="nx">we</span> <span class="nx">should</span> <span class="nx">report</span> <span class="kt">error</span> <span class="nx">back</span>
-				<span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_ERROR</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
-			<span class="nx">end</span>
-		<span class="nx">elseif</span> <span class="nx">size</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span> <span class="nx">then</span>
-			<span class="nx">c</span><span class="p">.</span><span class="nx">trash</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
-			<span class="nx">ret</span> <span class="p">=</span> <span class="kc">false</span>
-		<span class="nx">end</span>
-		<span class="k">return</span> <span class="nx">suspend</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">coroutine</span><span class="p">.</span><span class="nx">resume</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">ret</span><span class="p">))</span> <span class="o">--</span> <span class="nx">重新唤醒</span><span class="err">（</span><span class="mi">1</span><span class="err">）</span><span class="nx">处</span><span class="err">，</span><span class="nx">此时skynet</span><span class="p">.</span><span class="nx">ret返回</span>
+    <span class="nx">elseif</span> <span class="nx">command</span> <span class="o">==</span> <span class="s">&#34;RETURN&#34;</span> <span class="nx">then</span>
+        <span class="nx">local</span> <span class="nx">co_session</span> <span class="p">=</span> <span class="nx">session_coroutine_id</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
+        <span class="nx">local</span> <span class="nx">co_address</span> <span class="p">=</span> <span class="nx">session_coroutine_address</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nx">param</span> <span class="o">==</span> <span class="kc">nil</span> <span class="nx">or</span> <span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="nx">then</span>
+            <span class="nb">error</span><span class="p">(</span><span class="nx">debug</span><span class="p">.</span><span class="nx">traceback</span><span class="p">(</span><span class="nx">co</span><span class="p">))</span>
+        <span class="nx">end</span>
+        <span class="nx">session_response</span><span class="p">[</span><span class="nx">co</span><span class="p">]</span> <span class="p">=</span> <span class="kc">true</span>
+        <span class="nx">local</span> <span class="nx">ret</span>
+        <span class="k">if</span> <span class="nx">not</span> <span class="nx">dead_service</span><span class="p">[</span><span class="nx">co_address</span><span class="p">]</span> <span class="nx">then</span>
+            <span class="nx">ret</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_RESPONSE</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span>
+            <span class="k">if</span> <span class="nx">not</span> <span class="nx">ret</span> <span class="nx">then</span>
+                <span class="o">--</span> <span class="nx">If</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">is</span> <span class="nx">too</span> <span class="nx">large</span><span class="p">,</span> <span class="nx">returns</span> <span class="kc">nil</span><span class="p">.</span> <span class="nx">so</span> <span class="nx">we</span> <span class="nx">should</span> <span class="nx">report</span> <span class="kt">error</span> <span class="nx">back</span>
+                <span class="nx">c</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">co_address</span><span class="p">,</span> <span class="nx">skynet</span><span class="p">.</span><span class="nx">PTYPE_ERROR</span><span class="p">,</span> <span class="nx">co_session</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+            <span class="nx">end</span>
+        <span class="nx">elseif</span> <span class="nx">size</span> <span class="err">~</span><span class="p">=</span> <span class="kc">nil</span> <span class="nx">then</span>
+            <span class="nx">c</span><span class="p">.</span><span class="nx">trash</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span>
+            <span class="nx">ret</span> <span class="p">=</span> <span class="kc">false</span>
+        <span class="nx">end</span>
+        <span class="k">return</span> <span class="nx">suspend</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">coroutine</span><span class="p">.</span><span class="nx">resume</span><span class="p">(</span><span class="nx">co</span><span class="p">,</span> <span class="nx">ret</span><span class="p">))</span> <span class="o">--</span> <span class="nx">重新唤醒</span><span class="err">（</span><span class="mi">1</span><span class="err">）</span><span class="nx">处</span><span class="err">，</span><span class="nx">此时skynet</span><span class="p">.</span><span class="nx">ret返回</span>
 <span class="o">...</span>
 <span class="nx">end</span></pre></div>
 <p>在调用skynet.ret以后，调用该接口的协程就会挂起，此时挂起的状态类型是“RETURN”，这里挂起的目的是，等待返回消息的逻辑处理完，再接着执行协程挂起处后面的逻辑。suspend里所做的处理，也就是，将消息插入目的服务的次级消息队列中，然后再唤醒已经挂起的协程。</p>
@@ -1634,46 +1634,46 @@ end</pre></div>
 <p>一个服务，向另一个服务发起同步rpc调用，首先要挂起当前协程，然后是将目的服务发送一个消息，并且在本地记录一个唯一的session值，并以其为key，以挂起的协程地址为value存入一个table中，当目标服务返回结果时，根据这个session找回对应的协程，并且调用resume函数唤醒他。</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 local function yield_call(service, session)
-	watching_session[session] = service
-	local succ, msg, sz = coroutine_yield(&#34;CALL&#34;, session)
-	watching_session[session] = nil
-	if not succ then
-		error &#34;call failed&#34;
-	end
-	return msg,sz
+    watching_session[session] = service
+    local succ, msg, sz = coroutine_yield(&#34;CALL&#34;, session)
+    watching_session[session] = nil
+    if not succ then
+        error &#34;call failed&#34;
+    end
+    return msg,sz
 end
 
 function skynet.call(addr, typename, ...)
-	local p = proto[typename]
-	local session = c.send(addr, p.id , nil , p.pack(...))
-	if session == nil then
-		error(&#34;call to invalid address &#34; .. skynet.address(addr))
-	end
-	return p.unpack(yield_call(addr, session))
+    local p = proto[typename]
+    local session = c.send(addr, p.id , nil , p.pack(...))
+    if session == nil then
+        error(&#34;call to invalid address &#34; .. skynet.address(addr))
+    end
+    return p.unpack(yield_call(addr, session))
 end
 
 function suspend(co, result, command, param, size)
 ...
-	if command == &#34;CALL&#34; then
-		session_id_coroutine[param] = co
+    if command == &#34;CALL&#34; then
+        session_id_coroutine[param] = co
 ...
 end
 
 local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
-	-- skynet.PTYPE_RESPONSE = 1, read skynet.h
-	if prototype == 1 then
-		local co = session_id_coroutine[session]
-		if co == &#34;BREAK&#34; then
-			session_id_coroutine[session] = nil
-		elseif co == nil then
-			unknown_response(session, source, msg, sz)
-		else
-			session_id_coroutine[session] = nil
-			suspend(co, coroutine.resume(co, true, msg, sz))
-		end
-	else
-	...
-	end</pre></div>
+    -- skynet.PTYPE_RESPONSE = 1, read skynet.h
+    if prototype == 1 then
+        local co = session_id_coroutine[session]
+        if co == &#34;BREAK&#34; then
+            session_id_coroutine[session] = nil
+        elseif co == nil then
+            unknown_response(session, source, msg, sz)
+        else
+            session_id_coroutine[session] = nil
+            suspend(co, coroutine.resume(co, true, msg, sz))
+        end
+    else
+    ...
+    end</pre></div>
 <p>上面一段逻辑的流程如下所示：</p>
 
 <ul>
@@ -1688,47 +1688,47 @@ local function raw_dispatch_message(prototype, msg, sz, session, source, ...)
 第一种情况，我们使用skynet.timeout来执行：</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.timeout(ti, func)
-	local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
-	assert(session)
-	local co = co_create(func)
-	assert(session_id_coroutine[session] == nil)
-	session_id_coroutine[session] = co
+    local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
+    assert(session)
+    local co = co_create(func)
+    assert(session_id_coroutine[session] == nil)
+    session_id_coroutine[session] = co
 end</pre></div>
 <p>这里，首先向定时器注册了一个事件，这个事件的信息包含服务地址、多少秒后触发定时事件以及一个session变量；然后为执行函数创建一个协程，协程创建后默认不执行，因此目前的func相当于冻结状态，最后lua层会以session为key，协程地址为value存入一个table表中。当该事件的触发时间到的时候，timer线程会取出时间数据，向事件所属的地址发送一条RESPONSE类型的消息</p>
 <div class="highlight"><pre class="chroma">// skynet_timer.c
 static inline void
 dispatch_list(struct timer_node *current) {
-	do {
-		struct timer_event * event = (struct timer_event *)(current+1);
-		struct skynet_message message;
-		message.source = 0;
-		message.session = event-&gt;session;
-		message.data = NULL;
-		message.sz = (size_t)PTYPE_RESPONSE &lt;&lt; MESSAGE_TYPE_SHIFT;
+    do {
+        struct timer_event * event = (struct timer_event *)(current+1);
+        struct skynet_message message;
+        message.source = 0;
+        message.session = event-&gt;session;
+        message.data = NULL;
+        message.sz = (size_t)PTYPE_RESPONSE &lt;&lt; MESSAGE_TYPE_SHIFT;
 
-		skynet_context_push(event-&gt;handle, &amp;message);
-		
-		struct timer_node * temp = current;
-		current=current-&gt;next;
-		skynet_free(temp);	
-	} while (current);
+        skynet_context_push(event-&gt;handle, &amp;message);
+        
+        struct timer_node * temp = current;
+        current=current-&gt;next;
+        skynet_free(temp);  
+    } while (current);
 }</pre></div>
 <p>服务收到这个消息以后，会根据session的值，找回协程地址，并调用resume函数，唤醒这个协程，这样就完成了t秒后执行某个函数的功能。<br />
 第二种情况，我们使用skynet.sleep来执行</p>
 <div class="highlight"><pre class="chroma">-- skynet.lua
 function skynet.sleep(ti)
-	local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
-	assert(session)
-	local succ, ret = coroutine_yield(&#34;SLEEP&#34;, session)
-	sleep_session[coroutine.running()] = nil
-	if succ then
-		return
-	end
-	if ret == &#34;BREAK&#34; then
-		return &#34;BREAK&#34;
-	else
-		error(ret)
-	end
+    local session = c.intcommand(&#34;TIMEOUT&#34;,ti)
+    assert(session)
+    local succ, ret = coroutine_yield(&#34;SLEEP&#34;, session)
+    sleep_session[coroutine.running()] = nil
+    if succ then
+        return
+    end
+    if ret == &#34;BREAK&#34; then
+        return &#34;BREAK&#34;
+    else
+        error(ret)
+    end
 end</pre></div>
 <p>一个协程内的函数，在执行的过程中，调用了sleep函数以后，此时首先会向定时器注册一个事件，这个时间包含了服务地址、睡眠时间ti和一个session变量，然后就对当前协程执行挂起操作，挂起类型为SLEEP，此时会触发对suspend函数的调用，前面已经讨论过，suspend函数对SLEEP这种挂起类型的处理是，以session为key，再以协程地址为value存入一个table中（详见 lua层消息处理机制 一节）。在ti秒以后，timer线程触发定时事件，并向服务发送一个RESPONSE类型的消息，服务收到消息以后会调用resume唤醒该协程，从而使该协程继续执行后面的逻辑。<br />
 本节讨论了定时器最常见的两种使用情况，并且讨论了timer线程如何和worker线程内的服务进行交互，本节为了突出问题关键，并未对timer内部的运作细节进行一一讨论，但是这些事没有必要的，我们只要知道timer事件如何添加，timer何时会通知服务，如何通知即可，无需在一些复杂的细节里耗费太多的时间和精力。</p>
@@ -2073,7 +2073,7 @@ Cluster设计请查看<a href="http://blog.codingnow.com/2017/03/skynet_cluster.
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="http://gohugo.io">Hugo v0.36</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
       </div>

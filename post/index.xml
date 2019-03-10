@@ -13,6 +13,19 @@
     
     
     <item>
+      <title>构建Lua解释器Part4：Table设计与实现</title>
+      <link>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/</link>
+      <pubDate>Mon, 25 Feb 2019 22:24:19 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本篇我将对&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua&lt;/a&gt;中Table的设计和实现进行介绍和说明。本文的目的旨在梳理清dummylua项目Table的数据结构和运作流程，该部分深度参考了lua-5.3.4的Table设计与实现，由于所有的细节是我自己根据理解重新实现，因此不会在所有的设计细节上和官方lua保持一致，但是遵循了基本的设计思路。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Table是Lua语言中举足轻重的组成部分，掌握和理解它具有战略意义，这也是实现Lua虚拟机的基础所在，本文首先介绍dummylua项目Table的数据结构，然后在概念上介绍一些基本的操作流程，如创建、resize、查询、插入和迭代等操作。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>构建Lua解释器Part3：String设计与实现</title>
       <link>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/</link>
       <pubDate>Fri, 01 Feb 2019 00:15:10 +3400</pubDate>

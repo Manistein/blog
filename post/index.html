@@ -32,7 +32,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  <meta name="generator" content="Hugo 0.36" />
+  <meta name="generator" content="Hugo 0.37" />
   <link rel="canonical" href="https://manistein.github.io/blog/post/" />
   <link rel="alternate" href="https://manistein.github.io/blog/post/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -219,6 +219,46 @@
           </div>
         
         <div class="posts-list">
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/">
+                <h2 class="post-title">构建Lua解释器Part4：Table设计与实现</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 25, 2019
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h2 id="前言">前言</h2>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本篇我将对<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>中Table的设计和实现进行介绍和说明。本文的目的旨在梳理清dummylua项目Table的数据结构和运作流程，该部分深度参考了lua-5.3.4的Table设计与实现，由于所有的细节是我自己根据理解重新实现，因此不会在所有的设计细节上和官方lua保持一致，但是遵循了基本的设计思路。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Table是Lua语言中举足轻重的组成部分，掌握和理解它具有战略意义，这也是实现Lua虚拟机的基础所在，本文首先介绍dummylua项目Table的数据结构，然后在概念上介绍一些基本的操作流程，如创建、resize、查询、插入和迭代等操作。
+</p>
+                  <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/build-a-lua-interpreter/">build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/">
@@ -584,49 +624,6 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
 
             </article>
           
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/">
-                <h2 class="post-title">《TCP/IP详解》数据链路层总结</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 7, 2017
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h1 id="数据链路层概述">数据链路层概述</h1>
-
-<ul>
-<li>计算机网络的形成<br />
-计算机最初只是孤立的一个运算机器，随着业务需求的不断发展，单台孤立的计算机已经不能够满足我们的需求，因此人们把一个区域内的多台计算机连接成一个网络即局域网，然而这些小的网络并不能满足对计算机日益增长的需求，因此把不同的局域网连接成一个全球性质的网络，我们称之为互联网，互联网就是把不同的局域网通过路由器连接起来的网络。</li>
-</ul>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%80%BB%E7%BB%93/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
-          
         </div>
         
           <ul class="pager main-pager">
@@ -694,7 +691,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="http://gohugo.io">Hugo v0.36</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
       </div>

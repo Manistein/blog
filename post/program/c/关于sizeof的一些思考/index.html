@@ -32,7 +32,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
-  <meta name="generator" content="Hugo 0.36" />
+  <meta name="generator" content="Hugo 0.37" />
   <link rel="canonical" href="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -243,7 +243,7 @@ int main() {
     printf(&#34;a SIZEOF size:%ld \n&#34;, SIZEOF(a));
     printf(&#34;a sizeof size:%ld \n&#34;, sizeof(a));
     
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -271,7 +271,7 @@ int main() {
     printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(a));
     free(a);
     
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -292,7 +292,7 @@ int main() {
     printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
     free(a);
     
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -313,7 +313,7 @@ int main() {
     printf(&#34;after malloc sizeof(a) = %ld&#34;, sizeof(*a));
     free(a);
     
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -336,7 +336,7 @@ int main() {
     memcpy(array2, array, sizeof(array));  
     printf(&#34;2 %s \n&#34;, array2);
     
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -366,7 +366,7 @@ int main() {
     
     free(b);
     free(a);
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -397,7 +397,7 @@ int main() {
     
     free(b);
     free(a);
-	return 0;
+    return 0;
 }
 
 -- 输出
@@ -500,7 +500,7 @@ b str = Hello World </pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="http://gohugo.io">Hugo v0.36</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
       </div>
