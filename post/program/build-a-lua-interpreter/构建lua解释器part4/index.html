@@ -416,8 +416,8 @@ CommonHeader和gclist是gc相关的变量，table被创建时，每个变量都�
 <ul>
 <li>计算&rdquo;table&rdquo;这个字符串的hash值，假设得到01101011 00100100 10001101 00101100<sub>2</sub></li>
 <li>table的hash表的lsizenode值为3，也就是size为8，于是有(2^lsizenode)-1 = 7<sub>10</sub> = 0111<sub>2</sub></li>
-<li>计算&rdquo;test&rdquo;在hash表中的下标，于是有01101011 00100100 10001101 00101100<sub>2</sub> &amp; 0111<sub>2</sub>，由于右边的值高位全是0，因此只需要截取&rdquo;test&rdquo;字符串hash值的低4位即可，于是有index = 1100<sub>2</sub> &amp; 0111<sub>2</sub> = 0100<sub>2</sub> = 4<sub>10</sub></li>
-<li>于是key为“test”的node，将会被定位到hash[4]的位置上</li>
+<li>计算&rdquo;table&rdquo;在hash表中的下标，于是有01101011 00100100 10001101 00101100<sub>2</sub> &amp; 0111<sub>2</sub>，由于右边的值高位全是0，因此只需要截取&rdquo;table&rdquo;字符串hash值的低4位即可，于是有index = 1100<sub>2</sub> &amp; 0111<sub>2</sub> = 0100<sub>2</sub> = 4<sub>10</sub></li>
+<li>于是key为&rdquo;table&rdquo;的node，将会被定位到hash[4]的位置上</li>
 </ul>
 
 <p>经过这种操作，hash运算得到的int型数值，最终都会被映射到hash表尺寸范围内的下标中，不用担心超出边界的问题。hash运算本身具备离散性，因此key值可以相对均匀地分布在hash表中，这种设计使得lua table的插入和查找都可以保持很高的效率。</p>
