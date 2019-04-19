@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Wed, 16 Aug 2017 19:41:45 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 18 Apr 2019 22:22:24 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/categories/server/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>C#服务端框架设计与实现</title>
+      <link>https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 18 Apr 2019 22:22:24 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在完成&lt;a href=&#34;https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/&#34;&gt;构建Lua解释器Part4&lt;/a&gt;以后，我原计划是将业余时间投入到Lua虚拟机的研究之中。不过最近，我们项目希望服务端和客户端共享战斗逻辑，功能由客户端实现，借以降低开发联调的成本，而客户端主要使用C#语言，在确定客户端能够做到表现和逻辑分离以后，我们决定服务端也搭建C#战斗集群来运行战斗逻辑。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>skynet源码赏析</title>

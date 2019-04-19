@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2019-04-18T22:22:24+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/</loc>
     <lastmod>2019-02-25T22:24:19+08:00</lastmod>
   </url>
@@ -144,6 +149,12 @@
   </url>
   
   <url>
+    <loc>https://manistein.github.io/blog/tags/csharp-server/</loc>
+    <lastmod>2019-04-18T22:22:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://manistein.github.io/blog/tags/git/</loc>
     <lastmod>2016-08-11T20:36:00+08:00</lastmod>
     <priority>0</priority>
@@ -157,7 +168,7 @@
   
   <url>
     <loc>https://manistein.github.io/blog/</loc>
-    <lastmod>2019-02-25T22:24:19+08:00</lastmod>
+    <lastmod>2019-04-18T22:22:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -192,7 +203,7 @@
   
   <url>
     <loc>https://manistein.github.io/blog/categories/server/</loc>
-    <lastmod>2017-08-16T19:41:45+08:00</lastmod>
+    <lastmod>2019-04-18T22:22:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   

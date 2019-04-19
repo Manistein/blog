@@ -498,7 +498,7 @@ union GCUnion {
 #define white2gray(o) resetbits((o)-&gt;marked, WHITEBITS)
 #define gray2black(o) l_setbit((o)-&gt;marked, BLACKBIT)
 #define black2gray(o) resetbit((o)-&gt;marked, BLACKBIT)</pre></div>
-<p>从上可以看到，从白色转到灰色，需要把白色标记为清掉，因为灰色的值是0，黑色转灰色也是要把黑色标记位清掉，而灰色转灰色，则相当于把值设置为100<sub>2</sub>。</p>
+<p>从上可以看到，从白色转到灰色，需要把白色标记位清掉，因为灰色的值是0，黑色转灰色也是要把黑色标记位清掉，而灰色转黑色，则相当于把值设置为100<sub>2</sub>。</p>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在迅速过一篇，基本的定义以后，我们要看看最终要的数据结构global_State和lua_State到底新增了什么字段：</p>
 <div class="highlight"><pre class="chroma">// luastate.h
