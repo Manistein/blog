@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Common on Manistein&#39;s Blog</title>
+    <link>https://manistein.github.io/blog/tags/common/</link>
+    <description>Recent content in Common on Manistein&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
+    <lastBuildDate>Wed, 30 Oct 2019 13:46:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://manistein.github.io/blog/tags/common/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Understanding computer endianness</title>
+      <link>https://manistein.github.io/blog/post/common/understanding_computer_endianness/</link>
+      <pubDate>Wed, 30 Oct 2019 13:46:00 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/common/understanding_computer_endianness/</guid>
+      <description>&lt;h1 id=&#34;preface&#34;&gt;Preface&lt;/h1&gt;
+
+&lt;p&gt;After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can make a thousand miles. I am going to talk about the endianness in this post.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

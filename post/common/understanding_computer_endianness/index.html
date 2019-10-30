@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122943512-1');
+  </script>
+
+
+  <title>Understanding computer endianness</title>
+  <meta property="og:title" content="Understanding computer endianness" />
+  <meta name="twitter:title" content="Understanding computer endianness" />
+  <meta name="description" content="Preface
+
+After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can make a thousand miles. I am going to talk about the endianness in this post.
+
+">
+  <meta property="og:description" content="Preface
+
+After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can make a thousand miles. I am going to talk about the endianness in this post.
+
+">
+  <meta name="twitter:description" content="Preface
+
+After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/common/understanding_computer_endianness/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/common/understanding_computer_endianness/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/tags/let-us-build-a-lua-interpreter/">构建Lua解释器</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>Understanding computer endianness</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 30, 2019
+  
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="preface">Preface</h1>
+
+<p>After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can make a thousand miles. I am going to talk about the endianness in this post.</p>
+
+<p></p>
+
+<h1 id="overview">Overview</h1>
+
+<p>The problems of endianness are always confusing us, today I am trying to explain these problems, what is endianness? And how it affects our program? And when shall we pay attention to these problems?</p>
+
+<h1 id="nuts-and-bolts-of-endianness">Nuts and Bolts of Endianness</h1>
+
+<p>What is endianness? It is the byte-order convention of a multi-byte numeric object stored in memory.<br />
+The multi-byte numeric types in c such as int, float, long, double will have the endianness problems. The endianness is determined by CPU, not the OS. There are two types of endianness, little-endian and big-endian. Suppose we wrote a piece of code for the 32-bit system as following</p>
+<div class="highlight"><pre class="chroma"> // test.c 
+ #include &lt;stdio.h&gt;
+ 
+ int main(int argc, char** argv) {
+     printf(&#34;%x&#34;, 0x01234567);
+ }</pre></div>
+<p>what is the representation of 0x01234567 both in little endian and big endian computer?<br />
+The define of little-endian is that the right-most byte of a numeric value is in the lowest address, and the left-most byte is in the highest address.The value stored in memory is ordered from least significant byte<sup>[1]</sup> to most significant byte<sup>[2]</sup>.<br />
+Oppositely, the define of big-endian is that the left-most byte of a numeric value is in the lowest address and the right-most byte is in the highest address. The value stored in memory is ordered from the most significant byte to least significant byte. As an example, we can see both different representations of 0x01234567 in the following table.</p>
+
+<table>
+<thead>
+<tr>
+<th>Endianness</th>
+<th>0x0000</th>
+<th>0x0001</th>
+<th>0x0002</th>
+<th>0x0003</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>little endian</td>
+<td>0x67</td>
+<td>0x45</td>
+<td>0x23</td>
+<td>0x01</td>
+</tr>
+
+<tr>
+<td>big endian</td>
+<td>0x01</td>
+<td>0x23</td>
+<td>0x45</td>
+<td>0x67</td>
+</tr>
+</tbody>
+</table>
+
+<p>The terms &ldquo;little-endian&rdquo; and &ldquo;big-endian&rdquo; come from Gulliver&rsquo;s Travels by Jonathan Swift, where two warring factions could not agree as to how a soft-boiled egg should be opened, by the little end or by the big. There is no technological reason to use little-endian or big-endian, it can be selected arbitrarily.<br />
+Now we know that endianness is the byte-order convention of a number stored in memory. It is invisible for most programmers, except the scenario of developing a network library. I am discussing these later.</p>
+
+<h1 id="is-endianness-determined-at-compile-time">Is endianness determined at compile time?</h1>
+
+<p>Before we discuss the endianness problems of network programming, it is better to explore more about when the endianness is determined. As we know, at the runtime, the byte-order of a number stored in memory is fit to the hardware system (which the program is running on), little-endian or big-endian. The thing we are concerning is that, is endianness determined at compile time? or is it being transformed at the time when os load program from disk to memory?</p>
+
+<p>In order to get a correct answer, we should do some experiment, just use GCC to compile the code in the file of test.c, and then check the binary file, looking for the representation of 0x01234567 in the file</p>
+
+<p>Before we compile the source file, we first should prepare two different machines, one is little-endian and the other is big-endian. It is easy to get a little-endian machine, but hard to get a big-endian one, I log in my Tencent cloud-server, type &ldquo;lscpu&rdquo; command, and then press the enter key, after that, I get the following information</p>
+<div class="highlight"><pre class="chroma">Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                1
+On-line CPU(s) list:   0
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-26xx v3
+Stepping:              2
+CPU MHz:               2294.686
+BogoMIPS:              4589.37
+Hypervisor vendor:     KVM
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              4096K
+NUMA node0 CPU(s):     0</pre></div>
+<p>Look at line 3, it tells us it is a little-endian machine. Now I should get another one, it is cheap for me to install an emulator of the big-endian machine. I download QEMU for windows, and install it, and then boot debian-powerpc on it. After booting success, I type &ldquo;lscpu&rdquo; command and press enter key, the console shows the following information</p>
+<div class="highlight"><pre class="chroma">Architecture:          ppc
+Byte Order:            Big Endian
+CPU(s):                1
+On-line CPU(s) list:   0
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             1
+Model:                 Power Macintosh</pre></div>
+<p>Good! I have all the environments which I need. I upload the test.c file into little-endian machine, and then run the &ldquo;gcc -c test.c&rdquo; command, it then generates a new file called test.o which contains machine code for the specific machine. After that, I run the &ldquo;objdump -d test.o&rdquo; command, and the console shows the following information</p>
+<div class="highlight"><pre class="chroma">test.o:     file format elf64-x86-64
+Disassembly of section .text:
+
+0000000000000000 &lt;main&gt;:
+line 1    0:   55                      push   %rbp
+line 2    1:   48 89 e5                mov    %rsp,%rbp
+line 3    4:   48 83 ec 10             sub    $0x10,%rsp
+line 4    8:   89 7d fc                mov    %edi,-0x4(%rbp)
+line 5    b:   48 89 75 f0             mov    %rsi,-0x10(%rbp)
+line 6    f:   ba 00 00 00 00          mov    $0x0,%edx
+line 7   14:   be 67 45 23 01          mov    $0x1234567,%esi
+line 8   19:   bf 00 00 00 00          mov    $0x0,%edi
+line 9   1e:   b8 00 00 00 00          mov    $0x0,%eax
+line 10  23:   e8 00 00 00 00          callq  28 &lt;main+0x28&gt;
+line 11  28:   b8 00 00 00 00          mov    $0x0,%eax
+line 12  2d:   c9                      leaveq 
+line 13  2e:   c3                      retq   </pre></div>
+<p>Pay attention to the line 7, the value of 0x01234567 is little-endian.</p>
+
+<p>I do the same operations as above on my big-endian machine, and I get the following information</p>
+<div class="highlight"><pre class="chroma">test.o      file  format elf32-powerpc
+Disassembly of section .text
+
+
+00000000    &lt;main&gt;:
+line 1   0:    94 21 ff e0             stwu     r1,-32(r1)
+line 2   4:    7c 08 02 a6             mflr     r0
+line 3   8:    90 01 00 24             stw      r0,36(r1)
+line 4   c:    93 e1 00 1c             stw      r31,28(r1)
+line 5   10:   7c 3f 0b 78             mr       r31,r1
+line 6   14:   90 7f 00 08             stw      r3,8(r31)
+line 7   18:   90 9f 00 0c             stw      r4,12(r31)
+line 8   1c:   3d 20 00 00             lis      r9,0
+line 9   20:   38 69 00 00             addi     r3,r9,0
+line 10  24:   3d 20 01 23             lis      r9,291
+line 11  28:   61 24 45 67             ori      r4,r9,17767
+line 12  2c:   4c c6 31 82             crclr    4*cr1+eq
+line 13  30:   48 00 00 01             bl       30 &lt;main+0x30&gt;
+line 14  34:   7d 23 4b 78             mr       r3,r9
+line 15  38:   39 7f 99 29             addi     r11,r31,32
+line 16  3c:   80 0b 00 04             lwz      r0,4(r11)
+line 17  40:   7c 08 03 a6             mtlr     r0
+line 18  44:   83 eb ff fc             lwz      r31,-4(r11)
+line 19  48:   7d 61 5b 78             mr       r1,r11
+line 20  4c:   4e 80 00 20             blr</pre></div>
+<p>Pay attention to the lines from line 10 to line 11, the value of 0x01234567 is big-endian.</p>
+
+<p>The byte-order of numeric values in the compiled binary file is fit to the hardware system(where they are compiled), it shows the truth that compiler knows the byte-order, and it determined the machine level endianness of numeric constants, we now can conclude that endianness is determined at compile time.</p>
+
+<h1 id="when-shall-we-pay-attention-to-the-problems-of-endianness">When shall we pay attention to the problems of endianness</h1>
+
+<p>In most cases, endianness is invisible for us, but when we develop a network library, we should write a &ldquo;send&rdquo; method to send packages to remote side, and write a &ldquo;receive&rdquo; method to receive the packages from sender, it is necessary for us to encode the length of the package into the package&rsquo;s header, so that remote side can read the package correctly. Suppose every package we send is less than 64kb, and so we only need 2 more bytes to represent the length of packages. To simplify our scenario, I won&rsquo;t copy codes from any network library, that will complicate our scenario. The example code is not used in any project, it just shows the incorrect demonstration of endianness processing, the pseudocode is shown as following</p>
+<div class="highlight"><pre class="chroma"><span class="mi">1</span>  <span class="kt">int</span> <span class="nx">send</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span> <span class="kn">package</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">2</span>      <span class="nx">len</span> <span class="p">=</span> <span class="nx">calc_len</span><span class="p">(</span><span class="kn">package</span><span class="p">)</span>
+<span class="mi">3</span>      <span class="nx">buffer</span> <span class="p">=</span> <span class="nx">new</span> <span class="kt">byte</span><span class="p">[</span><span class="nx">len</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+<span class="mi">4</span>      <span class="nx">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">len</span><span class="p">,</span> <span class="nx">buffer</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">// copy len value to first two byte of buffer
+</span><span class="c1"></span><span class="mi">5</span>      <span class="nx">memcpy</span><span class="p">(</span><span class="kn">package</span><span class="p">,</span> <span class="nx">buffer</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">len</span><span class="p">)</span> <span class="c1">// copy content of the package into buffer
+</span><span class="c1"></span><span class="mi">6</span>      <span class="nx">socket_send</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span> <span class="nx">buffer</span><span class="p">)</span>
+<span class="mi">7</span>      
+<span class="mi">8</span>      <span class="k">return</span> <span class="kc">true</span>
+<span class="mi">9</span>  <span class="p">}</span>
+<span class="mi">10</span> 
+<span class="mi">11</span> <span class="kn">package</span> <span class="nx">receive</span><span class="p">(</span><span class="nx">fd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="mi">21</span>  <span class="c1">// this method 
+</span><span class="c1"></span><span class="mi">22</span>  <span class="nx">header_buff</span> <span class="p">=</span> <span class="nx">new</span> <span class="kt">byte</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="mi">23</span>  <span class="nx">read_header_until_complete</span><span class="p">(</span><span class="nx">header_buff</span><span class="p">)</span>
+<span class="mi">24</span>    
+<span class="mi">25</span>  <span class="nx">header_len</span> <span class="p">=</span> <span class="mi">0</span>
+<span class="mi">26</span>  <span class="nx">memcpy</span><span class="p">(</span><span class="nx">header_buff</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">header_len</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// copy len value into header_len
+</span><span class="c1"></span>    <span class="o">...</span>
+<span class="mi">33</span>  <span class="k">return</span> <span class="kn">package</span>
+<span class="p">}</span></pre></div>
+<p>If the CPUs of both sender and receiver are the same endianness, everything is ok. But if the machine of the sender is little-endian and the receiver is big-endian, or vice verse, something will be wrong.<br />
+Now suppose sender is little-endian and receiver is big-endian, we also amuse that the length of package in sender side is 15, it&rsquo;s representation in memory is 0x0f00, if we encode the 0x0f00 into the first two bytes of buffer, receiver will also receive 0x0f00, it looks well until now, but after &ldquo;receive&rdquo; method execute the codes at line 26, the value of header_len will be 0x0f00, which is 3840 in decimal, it means that the &ldquo;receive&rdquo; method can not read package correctly, and the connection will be lost efficacy.</p>
+
+<p>To resolve this problem, we should write an endian-independent code. The solution is simple, we can use shift operation, instead of calling memcpy. For example, printed results of the following code are the same both in the little-endian machine and big-endian machine.</p>
+<div class="highlight"><pre class="chroma"> #include &lt;stdio.h&gt;
+ 
+ int main(int argc, char** argv) {
+     int x = 0x01234567;
+     int lsb = x &amp; 0xff;
+     int msb = (x &gt;&gt; 24) &amp; 0xff;
+     printf(&#34;msb:%x lsb:%x&#34;, msb, lsb);
+     return 0;
+ }
+ 
+ // print msb:1 lsb:67</pre></div>
+<p>You can copy the above code into a file in your machine and then run &ldquo;gcc yourfilename.c&rdquo;, gcc will generate a binary file called a.out, afterward, run &ldquo;./a.out&rdquo;, finally it will print the result on the displayer.</p>
+
+<p>Now we have a nice solution to resolve the problems of endianness, we then just modify the &ldquo;send&rdquo; and &ldquo;receive&rdquo; methods as following</p>
+<div class="highlight"><pre class="chroma">  <span class="kt">int</span> <span class="nx">send</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span> <span class="kn">package</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">len</span> <span class="p">=</span> <span class="nx">calc_len</span><span class="p">(</span><span class="kn">package</span><span class="p">)</span>
+      <span class="nx">buffer</span> <span class="p">=</span> <span class="nx">new</span> <span class="kt">byte</span><span class="p">[</span><span class="nx">len</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+      <span class="nx">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">(</span><span class="nx">len</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span> <span class="c1">// copy the high 16 bits to buffer[0]
+</span><span class="c1"></span>      <span class="nx">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="nx">len</span> <span class="o">&amp;</span> <span class="mh">0xff</span>        <span class="c1">// copy the low 16 bits to buffer[1]
+</span><span class="c1"></span>      <span class="nx">memcpy</span><span class="p">(</span><span class="kn">package</span><span class="p">,</span> <span class="nx">buffer</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">len</span><span class="p">)</span> <span class="c1">// copy content of the package into buffer
+</span><span class="c1"></span>      <span class="nx">socket_send</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span> <span class="nx">buffer</span><span class="p">)</span>
+      
+      <span class="k">return</span> <span class="kc">true</span>
+  <span class="p">}</span>
+ 
+ <span class="kn">package</span> <span class="nx">receive</span><span class="p">(</span><span class="nx">fd</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+  <span class="c1">// this method 
+</span><span class="c1"></span>  <span class="nx">header_buff</span> <span class="p">=</span> <span class="nx">new</span> <span class="kt">byte</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+  <span class="nx">read_header_until_complete</span><span class="p">(</span><span class="nx">header_buff</span><span class="p">)</span>
+    
+  <span class="nx">header_len</span> <span class="p">=</span> <span class="nx">header_buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="p">|</span> <span class="nx">header_buff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1">// now header_len is 15
+</span><span class="c1"></span>  
+  <span class="o">...</span>
+  <span class="k">return</span> <span class="kn">package</span>
+<span class="p">}</span></pre></div>
+<p>Why shift operation can do the right thing? Because CPU processes the endianness of numbers carefully, it can give the right value which we want.</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>In this post, we have discussed many problems about endianness, we now know that what endianness it is, endianness is determined at compile-time, and we also discussed when we should pay attention to the problems of numeric endianness, and how to resolve it. I hope it can be helpful for you, thanks for reading.</p>
+
+<h1 id="reference">Reference</h1>
+
+<p>[1] if you want to know what is the significant byte, maybe you should know what is the significant bit first, you can read this article <a href="https://bit-calculator.com/most-and-least-significant-bit">Understanding the most and least significant bit</a>, it can help you to understand this concept<br />
+[2] [Computer Systems A Programmer&rsquo;s Perspective 3 edition] 2.1.3 Addressing and Byte Ordering</p>
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/common/">common</a>&nbsp;
+            
+          </div>
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-toggle="tooltip" data-placement="top" title="C#服务端框架设计与实现">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2019
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
+
