@@ -13,6 +13,19 @@
     
     
     <item>
+      <title>构建Lua解释器Part5：脚本运行基础架构的设计与实现</title>
+      <link>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/</link>
+      <pubDate>Thu, 06 Feb 2020 13:52:40 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在经过漫长的准备，我终于完成了《构建Lua解释器》系列的第五部分的代码编写，并且通过了预定的测试。本篇我将对&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua&lt;/a&gt;项目中的脚本运行基础架构的设计与实现进行介绍和解析，它包括了lua编译器基础架构以及虚拟机基础架构。过去4个部分的开发，为本部分提供了坚实且必要的基础，本篇将为编译与运行lua脚本搭建最基础的架构，后续内容将在此架构上继续填充与丰富，本部分，我们的目标是编译并运行如下所示的一段脚本代码：&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Understanding computer endianness</title>
       <link>https://manistein.github.io/blog/post/common/understanding_computer_endianness/</link>
       <pubDate>Wed, 30 Oct 2019 13:46:00 +0800</pubDate>
