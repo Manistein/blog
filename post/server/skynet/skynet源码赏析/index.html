@@ -251,7 +251,7 @@ skynet本质是什么？它为我们提供了什么机制？如何正确使用�
 <li>skynet一共有4种线程，monitor线程用于检测节点内的消息是否堵住，timer线程运行定时器，socket线程进行网络数据的收发，worker线程则负责对消息队列进行调度（worker线程的数量，可以通过配置表指定）。消息调度规则是，每条worker线程，每次从全局消息队列中pop出一个次级消息队列，并从次级消息队列中pop出一条消息，并找到该次级消息队列的所属服务，将消息传给该服务的callback函数，执行指定业务，当逻辑执行完毕时，再将次级消息队列push回全局消息队列中。因为每个服务只有一个次级消息队列，每当一条worker线程，从全局消息队列中pop出一个次级消息队列时，其他线程是拿不到同一个服务，并调用callback函数，因此不用担心一个服务同时在多条线程内消费不同的消息，一个服务执行，不存在并发，线程是安全的</li>
 <li>socket线程、timer线程甚至是worker线程，都有可能会往指定服务的次级消息队列中push消息，push函数内有加一个自旋锁，避免同时多条线程同时向一个次级消息队列push消息的惨局。<br />
 综上所述，我们可以将skynet的机制，用一张图概括<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/002skynet_message_transfer.png" alt="image" />图1<br />
+<img src="../../../../images/server/read_skynet_source/002skynet_message_transfer.png" alt="image" />图1<br />
 从上面讨论可以得出如下结论，我们所写的不同的业务逻辑，可以运行在不同的独立的沙盒环境中，他们之间是通过消息队列来进行交互的。worker、timer和socket线程里运行的模块，都有机会向特定的服务push消息，他们是消息的生产者，而worker线程内的模块，同时也是消息的消费者（确切的说，应该是那些服务）<br />
 注意：服务模块要将数据，通过socket发送给客户端时，并不是将数据写入消息队列，而是通过管道从worker线程，发送给socket线程，并交由socket转发。此外，设置定时器也不走消息队列，而是直接将在定时器模块，加入一个timer_node。其实这样也很好理解，因为timer和socket线程内运行的模块并不是这里的context，因此消息队列他们无法消费。<br />
 在overview中，我们讨论了skynet的部分核心机制（如消息调度），很多细节并未展开仔细去讨论，不过本节的目标就是为了树立一个宏观的概述，后面的内容，将基于此框架更加深入的进行讨论与研究。对于本文，我极力避免贴大段的代码，因为大段的代码，只会让我们迷失在汪洋大海之中，只有在必要的地方，才会贴上代码加以论述。<br />
@@ -263,7 +263,7 @@ skynet本质是什么？它为我们提供了什么机制？如何正确使用�
 <h5 id="1-skynet目录结构">1.skynet目录结构</h5>
 
 <p>学习一个开源框架，首先要做的就是查看目录结构，我们有理由相信，越好的项目，目录组织越合理，结构越清晰，代码目录必然是按照某种规律进行组织，目录组织也是构架的一部分。skynet目录组织如下所示<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/001skynet_folder_architecture.png" alt="image" />图2<br />
+<img src="../../../../images/server/read_skynet_source/001skynet_folder_architecture.png" alt="image" />图2<br />
 从上面目录结构图来看，越是往下的层次，应用领域越广泛。越是往上的层级，针对性越强，应用领域越小，和业务越相关。</p>
 
 <ul>
@@ -452,7 +452,7 @@ skynet_handle_grab(uint32_t handle) {
 }</pre></div>
 <p>因为我们访问一个服务的机会，远大于创建一个服务并写入列表的机会，因此这里用了读写锁，在通过handle获取context指针时，加了一个读取锁，这样当在读取的过程中，同时有新的服务创建，并且存在要扩充skynet_context list容量的风险，因此不论如何，他都应当被阻塞住，直到所有的读取锁都释放掉。<br />
 次级消息队列，实际上是一个数组，并且用两个int型数据，分别指向他的头部和尾部（head和tail），不论是head还是tail，当他们的值&gt;=数组尺寸时，都会进行回绕（即从下标为0开始，比如值为数组的size时，会被重新赋值为0），在push操作后，head等于tail意味着队列已满（此时，队列会扩充两倍，并从头到尾重新赋值，此时head指向0，而tail为扩充前，数组的大小），在pop操作后，head等于tail意味着队列已经空了（后面他会从skynet全局消息队列中，被剔除掉）。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/003skynet_mq.png" alt="image" />图3</p></li>
+<img src="../../../../images/server/read_skynet_source/003skynet_mq.png" alt="image" />图3</p></li>
 </ul>
 
 <h4 id="skynet如何启动一个c服务">skynet如何启动一个c服务</h4>
@@ -1010,7 +1010,7 @@ d) 返回第a步</p></li>
 
 <ul>
 <li>整个消费流程，每条worker线程，从global_mq取出的次级消息队列都是唯一的，并且有且只有一个服务与之对应，取出之后，在该worker线程完成所有callback调用之前，不会push回global_mq中，也就是说，在这段时间内，其他worker线程不能拿到这个次级消息队列所对应的服务，并调用callback函数，也就是说一个服务不可能同时在多条worker线程内执行callback函数，从而保证了线程安全<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/004thread_safe.png" alt="image" /><br /></li>
+<img src="../../../../images/server/read_skynet_source/004thread_safe.png" alt="image" /><br /></li>
 <li>不论是global_mq也好，次级消息队列也好，他们在入队和出队操作时，都有加上spinlock，这样多个线程同时访问mq的时候，第一个访问者会进入临界区并锁住，其他线程会阻塞等待，直至该锁解除，这样也保证了线程安全。global_mq会同时被多个worker线程访问，这个很好理解，因为worker线程总是在不断尝试驱动不同的服务，要驱动服务，首先要取出至少一个消息，要获得消息，就要取出一个次级消息队列，而这个次级消息队列要从全局消息队列里取。虽然一个服务的callback函数，只能在一个worker线程内被调用，但是在多个worker线程中，可以向同一个次级消息队列push消息，即便是该次级消息队列所对应的服务正在执行callback函数，由于次级消息队列不是skynet_context的成员（skynet_context只是包含了次级消息队列的指针），因此改变次级消息队列不等于改变skynet_context上的数据，不会影响到该服务自身内存的数据，次级消息队列在进行push和pop操作的时候，会加上一个spinlock，当多个worker线程同时向同一个次级消息队列push消息时，第一个访问的worker线程，能够进入临界区，其他worker线程就阻塞等待，直至该临界区解锁，这样保证了线程安全。</li>
 
 <li><p>我们在通过handle从skynet_context list里获取skynet_context的过程中（比如派发消息时，要要先获取skynet_context指针，再调用该服务的callback函数），需要加上一个读写锁，因为在skynet运作的过程中，获取skynet_context，比创建skynet_context的情况要多得多，因此这里用了读写锁：</p>
@@ -1960,19 +1960,19 @@ older kernels.</p>
 
 <li><p>skynet监听和绑定端口的流程<br />
 我们要真正接收来自客户端的消息时，通常需要创建一个gate服务，用于接收从socket线程发送过来的消息，首先我们要通过gate，绑定和监听一个端口。这里，我们在gate创建阶段监听一个端口，在worker线程内，gate服务创建绑定了一个端口，并且监听了它，此时，gate服务（worker线程内）通过管道向socket线程发送了一个请求，向socket slot里添加一个专门用于监听端口的socket（类型为SOCKET_TYPE_LISTEN），并且在epoll里添加这个socket的监听事件，这样当有关于该socket的epoll事件触发时，由于epoll的event数据包含socket的指针，该socket对应的类型为SOCKET_TYPE_LISTEN，因此我们可以知道该epoll事件，其实是有一个连接可以建立了。在连接建立以后，socket线程会向gate服务发送一条消息，通知gate服务新建立连接socket的slot id，让gate自己处理。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/005socket_listen.png" alt="image" /></p></li>
+<img src="../../../../images/server/read_skynet_source/005socket_listen.png" alt="image" /></p></li>
 
 <li><p>skynet建立和客户端连接流程<br />
 我们在创建了一个监听端口的socket并且为其添加epoll事件以后，当有客户端发送连接请求的时候，socket线程会accept他们，并在socket slot里添加新的socket，此时，socket线程也会向gate服务的次级消息队列，插入一个消息，告知它，有新的连接建立，并且告诉gate新创建socket在socket slot的id，gate接收到新连接建立事件后，会根据会创建一个lua服务&ndash;agent服务（这里忽略登陆验证的情况），并且以socket的slot id为key，agent服务地址为value存入一个table，以便于gate接收到消息的时候，通过socket slot id查找agent地址并将数据包转发给agent服务。此外，这里也以agent服务地址为key，socket slot id为value，将信息存入另一个table表，以便于agent要推送消息时，通过管道，将要下传的数据以及socket slot id一起发给socket线程，socket线程通过id，找到对应的socket指针，并将数据通过fd传给客户端。
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/006socket_accept.png" alt="image" /></p></li>
+<img src="../../../../images/server/read_skynet_source/006socket_accept.png" alt="image" /></p></li>
 
 <li><p>skynet接收客户端消息流程
 由于单个skynet节点内，所有的socket都归gate服务管理，当socket收到数据包以后，就会往gate服务的次级消息队列，push数据包消息，gate在收到消息以后，首先会对数据进行分包和粘包处理，当收齐所有字节以后，又会向agent服务转发（向agent的次级消息队列push消息），最后agent会一个一个消费这些从客户端上传的请求。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/007socket_recv.png" alt="image" /></p></li>
+<img src="../../../../images/server/read_skynet_source/007socket_recv.png" alt="image" /></p></li>
 
 <li><p>服务端向客户端发送数据流程
 agent服务向客户端发送消息时，直接通过管道，将数据包从worker线程发送往socket线程，socket线程收到后，会将数据包存入对应socket的write buffer中，最后再向客户端推送。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/skynet_study/008socket_send.png" alt="image" /></p></li>
+<img src="../../../../images/server/read_skynet_source/008socket_send.png" alt="image" /></p></li>
 </ol>
 
 <h4 id="skynet的几个基本服务">skynet的几个基本服务</h4>
