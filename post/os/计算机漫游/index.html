@@ -252,7 +252,7 @@ int main()
     print(HELLO_WORLD);
 }</pre></div>
 <p>上面是一段简单的代码示例，但是计算机并不能直接运行这段代码，我们需要通过一些列操作，将源代码转成包含机器指令的二进制可执行文件，才能够被计算机识别。编译我们一般需要经过以下几个步骤：
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/Compile.png" alt="image" /></p>
+<img src="../../../images/hardware/Compile.png" alt="image" /></p>
 
 <ul>
 <li>我们的源码文件，首先要经过预处理器，将#include的库内.h的代码拷贝到hello.c文件中，同时进行宏展开，此时生成hello.i文件，此时的文件仍然是文本文件</li>
@@ -264,7 +264,7 @@ int main()
 <h4 id="计算机组件架构概述">计算机组件架构概述</h4>
 
 <p>要理解程序如何在计算机中运作起来，首先要对计算机的结构有基本的了解，下面是计算机的硬件结构图<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/ComputerArchitecture.png" alt="image" /><br />
+<img src="../../../images/hardware/ComputerArchitecture.png" alt="image" /><br />
 如上图所示，计算机基本构建包括</p>
 
 <ul>
@@ -289,12 +289,12 @@ int main()
 
 <ul>
 <li>当我们运行hello这个可执行文件时，首先从磁盘中，将hello中的机器指令，以及数据，从磁盘拷贝到内存中。拷贝的过程是这样的，首先机器指令和代码数据，先通过IO总线，经过IO桥，再通过系统总线，经由cpu的总线接口传输到寄存器中，然后再把它存放到主存储器中，最终完成代码和数据的加载（现代计算机，能够通过DMA技术，将磁盘代码直接读取到主存储器中）<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/ComputerLoadCode.png" alt="image" /></li>
+<img src="../../../images/hardware/ComputerLoadCode.png" alt="image" /></li>
 <li>PC寄存器，指向第一个计算机操作指令，CPU在完成指令和数据读取以后，会将指令和数据传输给ALU，ALU会将计算后的结果覆盖其中某个寄存器中的值，最终返回给主存储器或者显存或者其他设备，同时更新PC寄存器，使其指向下一个指令。以hello为例，经过若干次更新后，PC寄存器此时指向print指令，数据为“hello world\n”，CPU在加载完print指令和“hello world\n”数据后，会交给ALU去解释和执行这个指令，此时计算机会将“hello world\n”通过总线传输给显示适配器，最终显示在屏幕上。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/ComputerExecuteCode.png" alt="image" /></li>
+<img src="../../../images/hardware/ComputerExecuteCode.png" alt="image" /></li>
 <li>完成上述流程后，程序结束，并且将主存中的对应代码和数据清除。</li>
 <li>我们在运作一个程序的过程中，绝大多数操作时将字节从一个地方，拷贝到另一个地方，为了提高速度，尽量避免从低速的设备里存取字节，基本思想则是，当前设备作为下一级设备的高速缓存，比如主存当做磁盘的高速缓存，我们的硬件设备读写速度梯度图如下所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/CacheLevel.png" alt="image" /></li>
+<img src="../../../images/hardware/CacheLevel.png" alt="image" /></li>
 </ul>
 
 <h4 id="操作系统概述">操作系统概述</h4>
@@ -312,7 +312,7 @@ int main()
 <p>进程的出现，为多任务实现提供了可能和便利。每个进程拥有自己独立的内存空间，在单核的cpu中，操作系统会给每个进程分配时间片，用于不同的进程执行，每个进程在制定时间片内执行，时间到时，不论是否执行完，都要切换到另一个进程让其执行，这个切换的过程是操作系统来执行的。每个进程在进行切换时，首先会将当前的PC寄存器中的指令，以及寄存器中存放的数据，保存到进程context中，在切换到另一个进程的时候，又会从其context中读取机器指令和寄存器中的数据，并且继续执行该进程。这样，操作系统即实现了多任务，又让每个进程在自己的时钟周期内，独占整个机器资源。</p>
 
 <p>每个进程都有自己的内存空间，为了实现上面所述的几点（看上去是独占机器资源以及能够让操作系统多任务执行），进程的内存空间设计成如下所示的结构：<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/ProcessMemory.png" alt="image" /></p>
+<img src="../../../images/hardware/ProcessMemory.png" alt="image" /></p>
 
 <ul>
 <li>只读的代码和数据：可执行文件中的机器指令，以及数据存放于此</li>
@@ -333,7 +333,7 @@ At the kernel level, a process contains one or more kernel threads, which share 
 </blockquote>
 
 <p>进程概念图：<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/hardware/ProcessAbstract.png" alt="image" /></p>
+<img src="../../../images/hardware/ProcessAbstract.png" alt="image" /></p>
 
         
           <div class="blog-tags">

@@ -246,7 +246,7 @@
 <ul>
 <li>数据链路层的作用<br />
 数据链路层的作用，则是将网络层下发的数据包，根据自己所处的网络类型，将其封装成帧数据以后发送给下一跳地址。以ip数据包传输为例，首先ip层通过目标地址，在路由表中找到数据包通往目的需要经过的下一跳ip地址，并传给数据链路层，数据链路层根据ip，通过arp协议找到该ip地址所对应机器的mac地址，最后根据自己所处的网络对应的链路层协议，将数据包封装成帧以后，发给拥有该mac地址的机器。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/001.png" alt="image" /></li>
+<img src="../../../images/network_study/ipprotocol/001.png" alt="image" /></li>
 <li>数据包的跨网络传输<br />
 假设当前有两个网络，通过路由器连接一个令牌环网和以太网。<br />
 令牌环网&ndash;路由器&ndash;以太网<br />
@@ -265,7 +265,7 @@
 <h1 id="环回地址">环回地址</h1>
 
 <p>几乎所有的操作系统，都会有环回地址体系，他的作用是，本机内不同的进程，可以通过TCP/IP协议来进行通信，当数据包到达数据链路层时，如果判断数据包发往本机，则直接发送过去，否则通过ARP协议获取的以太网MAC地址，将数据封装成帧后，发往该MAC地址所属的机器上。<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/data_link_layer/loopback.png" alt="image" /></p>
+<img src="../../../images/network_study/data_link_layer/loopback.png" alt="image" /></p>
 
 <h1 id="arp和rarp协议">ARP和RARP协议</h1>
 

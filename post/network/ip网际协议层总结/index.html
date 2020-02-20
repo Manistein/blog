@@ -231,7 +231,7 @@
 
 <p></p>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/001.png" alt="image" /></p>
+<p><img src="../../../images/network_study/ipprotocol/001.png" alt="image" /></p>
 
 <h1 id="网络分层架构简述">网络分层架构简述</h1>
 
@@ -243,11 +243,11 @@
 
 <h4 id="分类ip地址">分类IP地址</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/002.png" alt="image" /></p>
+<p><img src="../../../images/network_study/ipprotocol/002.png" alt="image" /></p>
 
 <h4 id="分类ip地址范围">分类IP地址范围</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/003.png" alt="image" /></p>
+<p><img src="../../../images/network_study/ipprotocol/003.png" alt="image" /></p>
 
 <h4 id="无分类编址">无分类编址</h4>
 
@@ -258,12 +258,12 @@
 <h4 id="ip地址管理">ip地址管理</h4>
 
 <p>ip地址由其管理机构，统一批量发给一些大的ISP（Internet Service Provider）机构，不同的ISP再将自己拿到的ip，再分给不同的规模更小的ISP机构，这些机构再将ip分给众多本地ISP，绝大多数用户是通过本地ISP接入互联网的，层次结构图如下所示：<br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/004.png" alt="image" /></p>
+<img src="../../../images/network_study/ipprotocol/004.png" alt="image" /></p>
 
 <h4 id="区域自治与边界路由">区域自治与边界路由</h4>
 
 <p>ip数据包，要发送到目的端，要经过若干个路由器，到达路由器时，需要查询路由表中的目的地址，以及下一跳路由器的地址，但是因特网上网络众多，如果所有的网络号都放置于同一层级上，将会使路由表变得异常庞大，直接影响网络的传输性能，因此需要将不同地区的网络划分为若干个自治系统（autonomous system），自治系统内的路由器的路由表包含整个自治系统各个网络的信息，自治系统之间又通过边界路由器连接在一起。
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/005.png" alt="image" /></p>
+<img src="../../../images/network_study/ipprotocol/005.png" alt="image" /></p>
 
 <p>自治系统由各ISP自行组建，规模较小的自治系统内任何一个路由器的路由表中，标记到达本自治系统任何一个网络的信息（大的自治系统还会分为若干个区域，区域之间通过边界路由器连接）。自治系统内采用自己的路由选择协议（RIP或OSPF），自治系统之间采用BGP路由选择协议（AS边界路由一般叫做BGP发言人）。
 数据包发送到网络时，首先会发送到本机所属的本地自治系统中，通过路由表查找目的地址对应的下一跳路由器ip地址，如果找不到，则通过默认路由，将数据包发往边界路由器，传往上一级AS，地区自治系统，地区自治系统中的路由器如果找到目的地址，则派往相应的本地AS中，如果找不到则再往上发送到主干网，因为必须能够让任何有效的ip地址，都能找到匹配的目的地址【《计算机网络》P157】，再由主干网通过边界路由器发往对应的地区自制系统中，进而再发送到本地自治系统，最后找到指定的网络、指定的主机并将数据包交付。</p>
@@ -272,12 +272,12 @@
 
 <h4 id="首部结构图">首部结构图</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/006.png" alt="image" /></p>
+<p><img src="../../../images/network_study/ipprotocol/006.png" alt="image" /></p>
 
 <ul>
 <li>版本：标识是使用ipv4或者是ipv6协议</li>
 <li>首部长度：标记IP数据包首部总长是多少，单位是4字节，最长是60字节</li>
-<li>TOS服务类型：进行路由决策的字段，头3位标志优先权现已弃用，最后一位未使用但是必须是0，中间四位分表标记最小延时、最大吞吐量、最高可靠性和最小费用。下图是各种应用的TOS建议字段<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/007.png" alt="image" /></li>
+<li>TOS服务类型：进行路由决策的字段，头3位标志优先权现已弃用，最后一位未使用但是必须是0，中间四位分表标记最小延时、最大吞吐量、最高可靠性和最小费用。下图是各种应用的TOS建议字段<img src="../../../images/network_study/ipprotocol/007.png" alt="image" /></li>
 <li>总长度：标记IP数据包首部和数据部分的总长，通过首部长度和数据包总长度能够推算出数据包的起始地址和结束地址（不是指未分片前的长度，而是分片后的长度）</li>
 <li>16位标识：唯一标识所有发出的IP数据包，每次发送时，标识+1，当ip数据包因为超过MTU需要进行分片时，所有分片的标识值都被赋值为相同的值，为后面重组数据包提供依据</li>
 <li>3位标志：001表示后面还有分片（More Fragment），010表示不能分片（Don&rsquo;t Fragment）</li>
@@ -361,13 +361,13 @@
 
 <h4 id="icmp数据包格式">ICMP数据包格式</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/008.png" alt="image" /><br />
+<p><img src="../../../images/network_study/ipprotocol/008.png" alt="image" /><br />
 ICMP数据包首部的第5~8字节中，有两个字节是标识符，剩下两个字节是序号，ICMP报文中的标识符和序列号字段由发送端任意选择设定，这些值在应答中将被返回，这样，发送端就可以把应答与请求进行匹配。</p>
 
 <h4 id="icmp数据包分类和代码详细信息">ICMP数据包分类和代码详细信息</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/009.png" alt="image" /><br />
-<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/010.png" alt="image" /></p>
+<p><img src="../../../images/network_study/ipprotocol/009.png" alt="image" /><br />
+<img src="../../../images/network_study/ipprotocol/010.png" alt="image" /></p>
 
 <ul>
 <li>终点不可达：当主机或路由器不能交付数据包时，则向源点发送不可达报文</li>
@@ -383,7 +383,7 @@ ICMP数据包首部的第5~8字节中，有两个字节是标识符，剩下两�
 <li>差错报文
 
 <ul>
-<li>报文格式<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/ipprotocol/011.png" alt="image" /></li>
+<li>报文格式<img src="../../../images/network_study/ipprotocol/011.png" alt="image" /></li>
 <li>以下几种情况，不发送ICMP错误报文
 
 <ul>

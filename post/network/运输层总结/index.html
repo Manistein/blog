@@ -291,9 +291,9 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 
 <h4 id="udp首部">UDP首部</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/001.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/001.png" alt="image" /></p>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/002.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/002.png" alt="image" /></p>
 
 <ul>
 <li>源端口：发送端应用进程端口（16位）</li>
@@ -318,7 +318,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>面向字节流，TCP不关心应用层的数据结构，应用层的数据必须序列化为字节流后，才能交付TCP层，TCP层不记录应用进程下发数据的边界，需要应用层自行处理<br /></li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/003.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/003.png" alt="image" /></p>
 
 <ul>
 <li>提供可靠交付，保证数据包可达，并且保证交付应用层时，数据包顺序是发送方的发送顺序排列的</li>
@@ -328,7 +328,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 
 <h4 id="tcp数据包首部">TCP数据包首部</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/004.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/004.png" alt="image" /></p>
 
 <ul>
 <li>源端口：发送端应用进程端口</li>
@@ -363,7 +363,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 
 <ul>
 <li>数据收发双端，都有自己的应用进程内存，以及一个接收缓存和一个发送缓存</li>
-<li>在发送缓存和接收缓存，有一个窗口用于控制数据包的收发,不论发送缓存还是接收缓存都有一个滑动窗口，以发送端滑动窗口为例，字节数据和窗口的关系如下图所示：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/005.png" alt="image" />
+<li>在发送缓存和接收缓存，有一个窗口用于控制数据包的收发,不论发送缓存还是接收缓存都有一个滑动窗口，以发送端滑动窗口为例，字节数据和窗口的关系如下图所示：<img src="../../../images/network_study/tcp_udp/005.png" alt="image" />
 
 <ul>
 <li>当双端连接建立以后，接收方会告诉发送方，自己的窗口大小，以及最大分节大小（MSS即Max Segment Size），窗口大小是指发送方，可以连续发送的字节数，窗口大小与接收方的接收缓存大小及应用层接收数据字节的速度有关系，MSS则指定发送方每个TCP分节的最大大小是多少</li>
@@ -374,8 +374,8 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>发送方，滑动窗口内，未发送的字节部分为可用窗口，当可用窗口为0时，不能再发送数据包（超时重传除外）</li>
 <li>数据包就是这样不断循环下去</li>
 </ul></li>
-<li>接收方的滑动窗口以左，是已经被接收的数据，这部分会被应用进程在合适的时机接收，窗口前沿以右的部分是不允许接收的部分，窗口中的数据，可能包含未按序到达的部分，如果字节序不能连续按序达到，接收方就不会向发送方发送期望收到的字节序号（接收方只发送连续收到的字节序最大序号的下一个序号值，当同一个确认发送方收到超过3次时，发送方会立刻发送该分节给接收方），当接收方连续收到数据时，窗口后沿会迁移，前沿要么前移要么不动，并且发送已经确认收到的字节序的下一个序号给发送方（期望收到的字节序序号），已经确认收到的部分，在被应用进程接收后，可删除<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/006.png" alt="image" /></li>
-<li>发送方应用进程，在发送数据时，先将字节流写入应用进程所属的内存中，当发送缓存有空余时，写入对应数量的字节（一般写在缓存字节队列的尾部），接收方则不断从已经按序达到的数据中，抽取数据，然后删除这部分数据<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/007.png" alt="image" /></li>
+<li>接收方的滑动窗口以左，是已经被接收的数据，这部分会被应用进程在合适的时机接收，窗口前沿以右的部分是不允许接收的部分，窗口中的数据，可能包含未按序到达的部分，如果字节序不能连续按序达到，接收方就不会向发送方发送期望收到的字节序号（接收方只发送连续收到的字节序最大序号的下一个序号值，当同一个确认发送方收到超过3次时，发送方会立刻发送该分节给接收方），当接收方连续收到数据时，窗口后沿会迁移，前沿要么前移要么不动，并且发送已经确认收到的字节序的下一个序号给发送方（期望收到的字节序序号），已经确认收到的部分，在被应用进程接收后，可删除<img src="../../../images/network_study/tcp_udp/006.png" alt="image" /></li>
+<li>发送方应用进程，在发送数据时，先将字节流写入应用进程所属的内存中，当发送缓存有空余时，写入对应数量的字节（一般写在缓存字节队列的尾部），接收方则不断从已经按序达到的数据中，抽取数据，然后删除这部分数据<img src="../../../images/network_study/tcp_udp/007.png" alt="image" /></li>
 </ul>
 
 <p>(2) 超时重传机制：发送方在一定时间内，如果没有收到接收方的确认信息，则会重传数据</p>
@@ -389,7 +389,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>利用可变窗口进行流量控制示例（滑动窗口大小为400）</li>
 </ul>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/008.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/008.png" alt="image" /></p>
 
 <h4 id="tcp的拥塞控制">TCP的拥塞控制</h4>
 
@@ -417,19 +417,19 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>当网络主机建立时，发送方先把拥塞窗口设置为1（字节），然后注入网络，收到接收方确认以后，将窗口大小乘以2，再将数据包发送出去，如果收到确认则再乘以2，如此循环下去</li>
 <li>窗口有一个慢开始门限值（这个门限值为发生拥塞时，窗口大小的一半），当达到这个值的时候，此时改为拥塞控制算法，该算法就是每次发送完数据包，收到确认后，滑动窗口大小+1。</li>
 <li>当发送方迟迟没有收到确认，并要进行超时重传的时候，此时判定网络处于拥塞状态，拥塞窗口大小重新设置为1，并开始慢开始算法</li>
-<li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/009.png" alt="image" /></li>
-<li>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/010.png" alt="image" /></li>
+<li>流程示意图：<img src="../../../images/network_study/tcp_udp/009.png" alt="image" /></li>
+<li>效果示意图：<img src="../../../images/network_study/tcp_udp/010.png" alt="image" /></li>
 </ul></li>
 
 <li><p>快重传和快恢复</p>
 
 <ul>
-<li>快重传算法：比如发送方发送7个TCP报文M1-M7，接收方收到M1和M2时，向发送方发送M2确认，此时假设M3丢失，那么接收方收到M4、M5、M6时（即收到失序数据包），就向发送方发送3个M2确认，发送方收到重复确认超过3次时就重传M3，而不是等超时重传（超时重传要传送M3~M7）          <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/011.png" alt="image" /></li>
+<li>快重传算法：比如发送方发送7个TCP报文M1-M7，接收方收到M1和M2时，向发送方发送M2确认，此时假设M3丢失，那么接收方收到M4、M5、M6时（即收到失序数据包），就向发送方发送3个M2确认，发送方收到重复确认超过3次时就重传M3，而不是等超时重传（超时重传要传送M3~M7）          <img src="../../../images/network_study/tcp_udp/011.png" alt="image" /></li>
 <li>快恢复算法：不论当前是处于慢开始算法还是拥塞避免算法，只要当连续收到3次重复确认之后，发送方滑动窗口+3，并且进入快恢复算法，会单独重传多次确认的包，当有新的ack收到时，则立刻进入拥塞避免算法，如果超时触发，滑动窗口减半，并且进入慢开始算法。</li>
 
-<li><p>慢开始、拥塞避免和快恢复算法的状态机示意图  <img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/slowstart_congestionavoid_fastrecovery_fsm.png" alt="image" /></p></li>
+<li><p>慢开始、拥塞避免和快恢复算法的状态机示意图  <img src="../../../images/network_study/tcp_udp/slowstart_congestionavoid_fastrecovery_fsm.png" alt="image" /></p></li>
 
-<li><p>效果示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/012.png" alt="image" /></p></li>
+<li><p>效果示意图：<img src="../../../images/network_study/tcp_udp/012.png" alt="image" /></p></li>
 </ul></li>
 
 <li><p>路由器随机丢弃队尾数据包，避免全局阻塞</p></li>
@@ -451,7 +451,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>服务端收到客户端的连接请求后，返回请求确认包，服务端进入SYN-RECV状态</li>
 <li>客户端收到确认，进入ESTABLISH状态，并且发送确认的确认给服务端</li>
 <li>服务端收到确认的确认以后，进入ESTABLISH状态，双端可以进行通信</li>
-<li>示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/013.png" alt="image" /></li>
+<li>示意图：<img src="../../../images/network_study/tcp_udp/013.png" alt="image" /></li>
 </ul></li>
 <li>为什么是三次握手，而不是两次、四次，原因是，不论是发送方还是接收方，都需要确保对方已经收到请求并且允许连接的情况下才能建立连接。接收方收到请求并允许连接，会返回一个ACK确认包。收到确认意味着对方已经收到请求，并且允许连接，整个过程大概就是：<br />
 
@@ -475,7 +475,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 <li>服务端继续将未发送完毕的数据包发送给客户端，在所有的数据包都发送完毕以后，服务端向客户端发送关闭确认，并且进入LAST-ACK状态</li>
 <li>客户端收到服务端发送的连接关闭数据包，则进入到TIME-WAIT状态，该状态持续2MSL（Max Segment Lifetime最大分片存活时间，一般设置为2分钟），并且在2MSL后关闭</li>
 <li>服务端接收到客户端的确认数据包以后，则关闭连接（注意这里服务端会比客户端先关闭）</li>
-<li>流程示意图：<img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/014.png" alt="image" /></li>
+<li>流程示意图：<img src="../../../images/network_study/tcp_udp/014.png" alt="image" /></li>
 </ul></li>
 <li>为什么客户端在接收到服务端发送的关闭确认包以后，要设置2MSL的延长关闭时间？
 
@@ -490,7 +490,7 @@ IP&#43;Port能够将数据包发送到指定机器上的指定进程
 
 <h4 id="tcp状态机示意">TCP状态机示意</h4>
 
-<p><img src="https://raw.githubusercontent.com/Manistein/Photos/master/DailyUse/network_study/tcp_udp/015.png" alt="image" /></p>
+<p><img src="../../../images/network_study/tcp_udp/015.png" alt="image" /></p>
 
         
           <div class="blog-tags">
