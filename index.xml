@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Thu, 06 Feb 2020 13:52:40 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 Feb 2020 10:12:36 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>skynet网络机制</title>
+      <link>https://manistein.github.io/blog/post/server/skynet/skynet%E7%BD%91%E7%BB%9C%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Sat, 29 Feb 2020 10:12:36 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/server/skynet/skynet%E7%BD%91%E7%BB%9C%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我在前几年，写了一篇&lt;a href=&#34;https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/&#34;&gt;《skynet源码赏析》&lt;/a&gt;，阐述了skynet的整体设计，和核心运作机制流程，该文针对的是skynet-1.0版本，如今skynet已经升级到1.3版本，总的来说，skynet整体架构并没有特别大的改动，不过从1.2版本开始，skynet增强了网络并发处理的能力。1.3改进了cluster机制，修复了一些大量并发可能导致的bug。尽管《skynet源码赏析》这篇，已经详细地阐述了skynet内部实现机制，不过对于网络部分，这篇只是阐述了大致的运作机理，并未深入源码层进行非常细致的分析，为了填补这个遗憾，我决定在近期新增一篇专门讲解skynet网络机制的blog，此外我还计划在未来几个月内，写一篇集群机制的blog，以此完成我所谓的“skynet源码剖析三部曲”，XD。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part5：脚本运行基础架构的设计与实现</title>

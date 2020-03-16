@@ -452,8 +452,8 @@ typedef struct TString {
 <li>TString为长字符串时：当extra=0表示该字符串未进行hash运算；当extra=1时表示该字符串已经进行过hash运算。</li>
 <li>TString为短字符串时：当extra=0时表示它需要被gc托管；当extra=1时表示该字符串不会被gc回收。</li>
 </ul></li>
-<li>shrlen：仅对段字符串有效，表示段字符串的长度，既String Body的长度是多少。</li>
-<li>u：这是一个union结构，当TString为长字符串时，hnext域有效，当全局字符串表，有其他字符串hash冲突时，会将这些冲突的TString实例链接成单向链表，hnext的作用则是指向下一个对象在哪个位置。当TString为长字符串时，lnglen域生效，并且表示长字符串的长度也就是String Body的长度是多少。</li>
+<li>shrlen：仅对短字符串有效，表示短字符串的长度，既String Body的长度是多少。</li>
+<li>u：这是一个union结构，当TString为短字符串时，hnext域有效，当全局字符串表，有其他字符串hash冲突时，会将这些冲突的TString实例链接成单向链表，hnext的作用则是指向下一个对象在哪个位置。当TString为长字符串时，lnglen域生效，并且表示长字符串的长度也就是String Body的长度是多少。</li>
 <li>data：这个是用来标记String Body起始位置用的，配合shrlen或lnglen，我们能够找到String Body的结束位置在哪里。</li>
 </ul>
 
