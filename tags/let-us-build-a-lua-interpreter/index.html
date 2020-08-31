@@ -8,6 +8,8 @@
 
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -202,6 +204,46 @@
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         
         <div class="posts-list">
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/">
+                <h2 class="post-title">构建Lua解释器Part6：词法分析器设计与实现</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 22, 2020
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/">
@@ -522,6 +564,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
 <script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
 
 
 

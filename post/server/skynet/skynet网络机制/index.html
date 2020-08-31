@@ -8,6 +8,8 @@
 
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -219,7 +221,7 @@
 
 <p></p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本片博文研究的源码是skynet-1.3版本，尽管这篇的篇幅会比《skynet源码赏析》那篇要短，但是我还是建议读者先阅读那篇文章后，再阅读本篇，这样有助于读者真正消化和吸收。本文会以skynet example里的watchdog例子，作为基点，主要阐述skynet提供的gate服务的创建、运作流程，包括如何它是如何监听一个端口，如何接受一个客户端的连接，如何处理读写事件，以及如何处理关闭事件。本文只是论述客户端和服务器gate相关服务的交互流程，并不涉及到集群相关的内容，有关集群机制，我会在后续的文章中，进行论述。最后由于本人水平有限，如果有写的不当之处，希望大家能够批评指正，任何意见或建议我都将虚心接受，大家可以在qq185017593这个群找到我，欢迎大家的到来。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本片博文研究的源码是skynet-1.3版本，尽管这篇的篇幅会比《skynet源码赏析》那篇要短，但是我还是建议读者先阅读那篇文章后，再阅读本篇，这样有助于读者真正消化和吸收。本文会以skynet example里的watchdog例子，作为基点，主要阐述skynet提供的gate服务的创建、运作流程，包括它是如何监听一个端口，如何接受一个客户端的连接，如何处理读写事件，以及如何处理关闭事件。本文只是论述客户端和服务器gate相关服务的交互流程，并不涉及到集群相关的内容，有关集群机制，我会在后续的文章中，进行论述。最后由于本人水平有限，如果有写的不当之处，希望大家能够批评指正，任何意见或建议我都将虚心接受，大家可以在qq185017593这个群找到我，欢迎大家的到来。</p>
 
 <h2 id="关于本文探讨的example">关于本文探讨的example</h2>
 
@@ -1551,6 +1553,10 @@ close_socket(struct socket_server *ss, struct request_close *request, struct soc
             </li>
           
           
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part6：词法分析器设计与实现">Next Post &rarr;</a>
+            </li>
+          
         </ul>
       
 
@@ -1635,6 +1641,7 @@ close_socket(struct socket_server *ss, struct request_close *request, struct soc
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
 <script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
 
 
 

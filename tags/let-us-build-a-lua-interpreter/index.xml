@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Thu, 06 Feb 2020 13:52:40 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 22 Aug 2020 16:47:15 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>构建Lua解释器Part6：词法分析器设计与实现</title>
+      <link>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/</link>
+      <pubDate>Sat, 22 Aug 2020 16:47:15 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua&lt;/a&gt;这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part5：脚本运行基础架构的设计与实现</title>

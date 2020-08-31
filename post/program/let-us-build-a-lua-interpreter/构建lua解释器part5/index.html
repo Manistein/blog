@@ -8,6 +8,8 @@
 
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -425,7 +427,7 @@ print(&#34;hello world&#34;)</pre></div>
 |  iAsBx |   sBx:18(signed)  |   A:8  |Opcode:6|
 +--------+---------+---------+--------+--------+</pre></div>
 <p>上面展示了三种模式的编码，在lua中，以iABC模式进行编码的指令，占据了绝大多数。这里对不同的部分进行解释和说明，首先Opcode表示操作指令，它占据6个bit位，剩下的则表示参数信息；A表示函数栈中，哪个位置将作为RA寄存器，它占据8个bit位，这个RA寄存器一般是操作的目标所在，任何模式的指令都需要对RA寄存器进行操作，而在lua虚拟机中，所有的寄存器都是以栈上的某个域来充当的，并不像我们的计算机硬件那样，有专门的寄存器独立于栈之外。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除了sBx，其他所有的域都是无符号整数表示，而且sBx域，也不是采用二进制补码的方式进行编码，它采用了一个basis值作为0值，这个basis值是Bx的最大值除以2得到，即262143 &gt;&gt; 1，也就是131071。如果sBx表示-1时，那么它的值则是-1 + 131071 = 131070 = 0x1FFFE<sup>[4]</sup>，也就是说0表示sBx的最小值-131071，0xFFFFF表示sBx的最大值131072。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除了sBx，其他所有的域都是无符号整数表示，而且sBx域，也不是采用二进制补码的方式进行编码，它采用了一个basis值作为0值，这个basis值是Bx的最大值除以2得到，即262143 &gt;&gt; 1，也就是131071。如果sBx表示-1时，那么它的值则是-1 + 131071 = 131070 = 0x1FFFE<sup>[4]</sup>，也就是说0表示sBx的最小值-131071，0x3FFFF表示sBx的最大值131072。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正如前面所说的那样，我们绝大多数虚拟机指令是iABC模式，采用iABx模式的指令主要有OP_LOADK和OP_CLOSURE，OP_LOADK之所以要采用iABx指令，是因为其参数常量列表的下标，如果它采用iABC模式，那么有9个bit会被浪费掉，而仅仅依靠9个bit，最多只能支持到512个常量，这是远远不够的。而OP_CLOSURE的参数是从Proto列表里，找到与之关联的proto实例，我们同样不可能只限制我们的脚本里只能定义最多不超过512个函数，因此它也是iABx模式。采用iAsBx模式的指令，大多数是需要跳转的指令，比如jump、判断和循环相关的指令。如果读者对目前涉及到的一些内容感到困惑，并不要紧，本篇后续内容以及后续章节，我会慢慢丰富这些内容。</p>
 
 <h4 id="lua5-3中的指令集">Lua5.3中的指令集</h4>
@@ -526,7 +528,7 @@ Bx表示一个无符号整数值，从常量表中，获取index为Bx的常量�
 <li>OP_CALL       R(A), &hellip; ,R(A+C-2) := R(A)(R(A+1), &hellip; ,R(A+B-1))<br />
 这个是调用函数的指令，R(A)表示要被调用的函数，B表示该函数的参数个数，当B&gt;=1的时候，表示该函数R(A)有B-1个参数(R(A+1)~R(A+B-1))，当B为0时，表示从R(A+1)到栈顶都是该函数的参数。C代表该函数R(A)调用后的返回值个数，当C&gt;=1时，则表示该函数有C-1个返回值(R(A)~R(A+C-2))，当C为0时，表示函数调用完以后，从R(A)到栈顶都是其返回值。</li>
 <li>OP_RETURN     return R(A), &hellip; ,R(A+B-2)<br />
-每个函数的最后一个指令，就是return指令，该指令主要处理被调用函数的返回值，并且将其安排到栈上合适的位置，该处理与light c function的返回值处理方式类似，R(A)是第一个返回值存放的位置，B的值需要加以特殊说明，当B&gt;=1时，表示函数的返回值是B-1个(R(A)~R(B-2))，当B的值为0时，表示其返回值是不定的，从R(A)到栈顶。读到这里，可能读者会有疑惑，既然OP_CALL指令已经指明了返回值，那么OP_RETURN为什么还要去重新指明一次呢？这是因为OP_RETURN是针对被调用函数(callee)做的处理，而OP_CALL指令，则是对调用者(caller)做的处理。</li>
+每个函数的最后一个指令，就是return指令，该指令主要处理被调用函数的返回值，并且将其安排到栈上合适的位置，该处理与light c function的返回值处理方式类似，R(A)是第一个返回值存放的位置，B的值需要加以特殊说明，当B&gt;=1时，表示函数的返回值是B-1个(R(A)~R(A+B-2))，当B的值为0时，表示其返回值是不定的，从R(A)到栈顶。读到这里，可能读者会有疑惑，既然OP_CALL指令已经指明了返回值，那么OP_RETURN为什么还要去重新指明一次呢？这是因为OP_RETURN是针对被调用函数(callee)做的处理，而OP_CALL指令，则是对调用者(caller)做的处理。</li>
 </ul>
 
 <h4 id="运行脚本所需的基本数据结构">运行脚本所需的基本数据结构</h4>
@@ -2023,6 +2025,7 @@ often called source-to-source translators.<br />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
 <script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
 
 
 

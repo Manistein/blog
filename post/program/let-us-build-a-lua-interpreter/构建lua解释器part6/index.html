@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122943512-1');
+  </script>
+
+
+  <title>构建Lua解释器Part6：词法分析器设计与实现</title>
+  <meta property="og:title" content="构建Lua解释器Part6：词法分析器设计与实现" />
+  <meta name="twitter:title" content="构建Lua解释器Part6：词法分析器设计与实现" />
+  <meta name="description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到dummylua这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。
+
+">
+  <meta property="og:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到dummylua这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。
+
+">
+  <meta name="twitter:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分 …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/tags/let-us-build-a-lua-interpreter/">构建Lua解释器</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>构建Lua解释器Part6：词法分析器设计与实现</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 22, 2020
+  
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。</p>
+
+<p></p>
+
+<h1 id="词法分析器简介">词法分析器简介</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先我要对词法分析器作一个简短的介绍，所谓的词法分析器，其实就是对输入的内容(文本、字符串等)进行词法分析的模块。英文维基百科对词法分析的解释如下<sup>[1]</sup>：</p>
+
+<blockquote>
+<p>In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters (such as in a computer program or web page) into a sequence of tokens (strings with an assigned and thus identified meaning). A program that performs lexical analysis may be termed a lexer, tokenizer,[1] or scanner, although scanner is also a term for the first stage of a lexer. A lexer is generally combined with a parser, which together analyze the syntax of programming languages, web pages, and so forth.</p>
+</blockquote>
+
+<p>总而言之，词法分析就是将一串字符，转化为一串token，而词法分析器就是执行这一过程的逻辑模块。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在编译器中，什么是token？token是一门语言中，能够被识别的最小单元。现在来看一个例子，假设我么有一个文件，其内部的内容如下所示：</p>
+<div class="highlight"><pre class="chroma">name  &#34;hello&#34;  2020.</pre></div>
+<p>现在要对这个文本进行词法分析，首先我们要做的是，将文本字符加载到词法分析器的缓存中。在完成文本加载以后，我们需要从中，一个一个地获取有效token，而获取token的操作，是通过词法分析器里的一个函数来实现，我们可以假设它叫next函数。我们通过调用next函数若干次，得到以下结果</p>
+
+<ul>
+<li>我们通过调用next函数，词法分析器返回第一个有效被识别的token，这个token就是name，它是一个标识符，能够表示变量。</li>
+<li>然后我们再次调用next函数时，能够获取第二个token，这个token是一个字符串“hello”。</li>
+<li>当我们第三次调用next函数时，则获取了第三个token，这个token是个数值。</li>
+<li>当我们第四次调用next函数时，获取一个ASCII符号&rdquo;.&rdquo;</li>
+<li>当我们第五次调用next函数时，获取文本文书标志EOF</li>
+</ul>
+
+<p>从上面的例子中，我们可以看到一些有效的信息。首先是，词法分析需要和文本或者字符串打交道，如果我们的代码是存放在文本中的，那么词法分析器首先要将文本中的代码，加载到内存中。被加载到内存的文本内容，实际上就是一个字符序列。词法分析器需要对这个字符序列进行进一步的提取工作。我们一次只能获取一个有效的token，获取这个token的函数由词法分析器提供，比如例子里的next函数。其次是，我们所称的token，其实能够表示的内容非常丰富，它可以表示标志符，可以表示字符串，可以表是ASCII字符，可以是表示文本结束的EOF标识。正因为token能够表示的内容相当丰富，因此我们需要对token进行分类。实际上，我们一个token，既要表明它是什么类型的，还要表明自己包含的内容是什么，它的结构，在逻辑上如下所示：</p>
+<div class="highlight"><pre class="chroma">Token
++--------+--------+
+|  Type  |  Data  |
++--------+--------+</pre></div>
+<p>有些token，只是说明类型是不够的，它还需要存储token的内容，比如我们的标识符，需要将组成标识符的内容的字符串存入token的data域中，接下来，我们通过&lt; Type, Data &gt;的方式来表示一个token，那么我们持续调用next函数，并将其打印，则获得如下内容（Type使用lua中使用的定义）：</p>
+<div class="highlight"><pre class="chroma">&lt;TK_NAME, &#34;name&#34;&gt;    // TK_NAME表示它是标识符类型
+&lt;TK_STRING, &#34;hello&#34;&gt;
+&lt;TK_INT, 2020&gt;
+&lt;., null&gt;
+&lt;TK_EOS, null&gt;</pre></div>
+<p>从上面的例子中，我们可以感知，token能够表示的内容丰富，有些token通过type就能表示，有些还需要存储其内容在data域，以供词法分析器使用。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节对词法分析器的简介，就到此结束，后面将展开lua词法分析器的设计与实现的论述。</p>
+
+<h1 id="词法分析器基本数据结构">词法分析器基本数据结构</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本节开始介绍<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>词法分析器的基本数据结构，dummylua的词法分析器，基本参照lua-5.3.5的设计与实现。首先，我来介绍一下lua的Token数据结构：</p>
+<div class="highlight"><pre class="chroma">// lualexer.h
+typedef union Seminfo {
+    lua_Number r;
+    lua_Integer i;
+    TString* s; 
+} Seminfo;
+
+typedef struct Token {
+    int token;          // token enum value
+    Seminfo seminfo;    // token info
+} Token;</pre></div>
+<p>Token结构中，包含一个int变量token，还有一个Seminfo结构的变量seminfo。其中token字段代表Token实例的类型，而seminfo则用来保存token对应类型的实际值。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua的token类型，一部分是直接使用ASCII值，一部分是定义在一个枚举类型中。我们现在来看一下，token一共有哪些类型，我们现在来看一下分类：</p>
+
+<ul>
+<li>EOF：文件结束符，表示文件结束，意为End Of File，使用单独的枚举值TK_EOS</li>
+<li>算数：+,-,*,/,%,^,~,&amp;,|,&lt;&lt;,&gt;&gt;。由于&lt;&lt;和&gt;&gt;无法使用单独的字符来表示token的类型，因此他们使用单独的枚举值，TK_SHL和TK_SHR</li>
+<li>括号：(,),[,],{,}</li>
+<li>赋值：=</li>
+<li>比较：&gt;,&lt;,&gt;=,&lt;=,~=,==。由于&gt;=,&lt;=,~=,==无法单独使用，因此他们要使用单独的枚举值，TK_GREATEQ,TK_LESSEQ,TK_NOTEQUAL,TK_EQUAL</li>
+<li>分隔：,和;</li>
+<li>字符串：&rsquo;string&rsquo;和&rdquo;string&rdquo;，字符串类型使用TK_STRING</li>
+<li>连接符：..，因为单个字符无法表示，因此它也是用单独的枚举值TK_CONCAT</li>
+<li>数字：数值分为浮点数和整数，浮点数使用TK_FLOAT，而整数使用TK_INT</li>
+<li>标识符：就是我们常说的identity，通常用来表示变量，这种类型在lua中，统称为TK_NAME</li>
+<li>保留字：local,nil,true,false,end,then,if,elseif,not,and,or,function等，每个保留字，都是一个token类型，比如local是TK_LOCAL类型，而NIL则是TK_NIL，依次类推</li>
+</ul>
+
+<p>此外，词法分析器，遇到空格，换行符\r\n、\n\r，制表符\t、\v等，是直接跳过，直至获取下一个不需要跳过的字符为止。在dummylua中，对Token的类型定义主要分为两个部分，第一部分是直接通过ASCII值来表示，比如&rsquo;&gt;&lsquo;, &lsquo;&lt;&lsquo;, &lsquo;.&lsquo;和&rsquo;,&lsquo;等，还有一部分通过枚举值来定义，我们现在来看一下枚举值的定义有哪些：</p>
+<div class="highlight"><pre class="chroma">// lualexer.h
+// 1~256 should reserve for ASCII character token
+enum RESERVED {
+    /* terminal token donated by reserved word */
+    TK_LOCAL = FIRST_REVERSED,
+    TK_NIL,
+    TK_TRUE,
+    TK_FALSE,
+    TK_END,
+    TK_THEN,
+    TK_IF,
+    TK_ELSEIF,
+    TK_NOT,
+    TK_AND,
+    TK_OR,
+    TK_FUNCTION,
+
+    /* other token */
+    TK_STRING,
+    TK_NAME,
+    TK_FLOAT,
+    TK_INT,
+    TK_NOTEQUAL,
+    TK_EQUAL,
+    TK_GREATEREQUAL,
+    TK_LESSEQUAL,
+    TK_SHL,
+    TK_SHR,
+    TK_MOD,
+    TK_DOT,
+    TK_VARARG,
+    TK_CONCAT,
+    TK_EOS,
+};</pre></div>
+<p>FIRST_REVERSED的值是257，为什么取257开始呢？由于我们有很多token类型（主要是单个字符就能表示的token）是直接通过ASCII值来表示，为了避免和ASCII的值冲突，因此这里直接从257开始。在众多的类型中，只有几种需要保存值到token实例中，他们分别是TK_NAME、TK_FLOAT、TK_INT和TK_STRING，于是我们的Seminfo结构就派上用场了。Seminfo结构是一个union类型，它包含三个域，一个是lua_Number类型，用于存放浮点型数据，一个是lua_Integer类型，用于存放整型数据，一个是TString用于存放标识符和字符串的值。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们对token结构有了一个初步的认识，接下来要介绍则是词法分析器里要用到的最重要的数据结构，它就是LexState结构，其定义如下所示：</p>
+<div class="highlight"><pre class="chroma">typedef struct LexState {
+    Zio* zio;               // 负责从文件中读取、缓存字符，并提供字符的模块
+    int current;            // 从zio实例中，获取的当前需要使用的字符
+    struct MBuffer* buff;   // 保留字本身以及TK_STRING、TK_NAME、TK_FLOAT和TK_INT的值，
+                            // 由于不止一个字符组成，因此token在被完全识别之前，读取出来
+                            // 的字符，应当存在buff结构中，当词法分析器攒够一个完整的token
+                            // 时，则将其拷贝到Seminfo.s（TK_NAME、TK_STRING类型和保留字）
+                            // Seminfo.r（TK_FLOAT类型，string转换成浮点型数值）或Seminfo.i
+                            // （TK_INT类型，string转换成整型数值）中
+    Token t;                // current token
+    Token lookahead;        // 提前获取的token，如果它存在（不为TK_EOS），那么词法分析器调用
+                            // next函数时，它的值直接被获取。
+    int linenumber;         // 代码的行号
+    struct Dyndata* dyd;    // 语法分析过程中，存放local变量信息的结构
+    struct FuncState* fs;   // 语法分析器数据实例
+    lua_State* L;           // lua vm实例
+    TString* source;        // 正在进行编译的源码文件名称
+    TString* env;           // 一般是_ENV
+    struct Table* h;        // 常量缓存表，用于缓存lua代码中的常量，加快编译时的常量查找
+} LexState;</pre></div>
+<p>当我们的编译模块，要对一个文本里的代码进行编译时，首先会创建一个LexState的数据实例。词法分析器的工作，首先是要将代码文件，加载到内存中，被加载到内存中的代码，是一个字符串。词法分析器要做的第二个工作，就是将被加载到内存中的字符串里的字符，一个一个获取出来，并组成合适的token，如果不能组成，则抛出异常。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正如前面所说，词法分析器第一个工作，就是要将代码加载到内存中，作为官方lua-5.3的仿制品，dummylua的词法分析器和官方lua一样，采用一个叫做Zio的结构，负责存放从磁盘中加载出来的代码，其结构如下所示：</p>
+<div class="highlight"><pre class="chroma">// luazio.h
+typedef char* (*lua_Reader)(struct lua_State* L, void* data, size_t* size);
+
+typedef struct LoadF {
+    FILE* f;
+    char buff[BUFSIZE]; // read the file stream into buff
+    int n;             // how many char you have read
+} LoadF;
+
+typedef struct Zio {
+    lua_Reader reader;      // read buffer to p
+    int n;                  // the number of unused bytes
+    char* p;                // the pointer to buffer
+    void* data;             // structure which holds FILE handler
+    struct lua_State* L;
+} Zio;</pre></div>
+<p>与官方lua一样，dummylua的Zio结构，并没有限制使用者，用哪种方式来加载代码到内存中。而具体操作的函数，则是函数指针reader指向的函数，我们只要自定义的函数，符合这个签名，就能够被词法分析器调用，另外Zio的data指针，是作为reader函数的重要参数存在的，它同样可以由用户自己定义。不过lua提供了一个默认的LoadF结构，以及一个getF函数，用于将文件里的代码，加载到内存中，我将在接下来的内容中详细讨论。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们抛开具体的代码实现，通过一个实例，将整个流程串联起来，如图1所示，我们现在要将一个文件里的字节流读出，并识别里面的token。<br />
+<img src="../../../../images/build-a-lua-interpreter/part6/zio.png" alt="image" />图1<br />
+识别token的流程，也是需要将源码文件里的字符，一个一个获取出来，第一个被获取的字符，将决定它进入哪个token类型的处理分支之中，事实上lua是通过一个叫做zget的宏，获取字符的，这个宏如下所示：</p>
+<div class="highlight"><pre class="chroma">// luazio.h
+#define zget(z) (((z)-&gt;n--) &gt; 0 ? (*(z)-&gt;p++) : luaZ_fill(z))</pre></div>
+<p>传入这个宏的，是一个Zio结构的数据实例。事实上，我们识别token的逻辑是在一个叫做llex的函数内进行的，这个函数会不断读取新的字符，并且判断应该生成哪个token，下面的伪代码展示了这一点：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+static int llex(LexState* ls, Seminfo* s) {
+    ...
+    ls-&gt;current = zget(ls-&gt;z);
+    switch(ls-&gt;current) {
+    ...
+    case &#39;\&#39;&#39;: case &#39;\&#34;&#39;: {
+        return readstring(ls, s);
+    } break;
+    case &#39;0&#39;: case &#39;1&#39;: case &#39;2&#39;: case &#39;3&#39;: case &#39;4&#39;:
+    case &#39;5&#39;: case &#39;6&#39;: case &#39;7&#39;: case &#39;8&#39;: case &#39;9&#39;: {
+        return readnumber(ls, s);
+    } break;
+    ...
+    }
+}</pre></div>
+<p>从上面的伪代码我们可以看到，词法分析器识别一个token，需要不断从源码文件中，一个一个读取字符，然后判断它可能是哪种类型的token，最后作相应的处理，比如readstring和readnumber操作，就是把有效字符串识和数值别出来，最后存储在LexState结构的Token类型变量t中。readstring函数和readnumber函数内部也会多次调用zget函数，不断获取新的字符，最后生成token。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回到图1的例子，在词法分析器数据结构实例LexState完成初始化的伊始，我们刚完成初始化的Zio结构实例，会关联一个已经打开的文件，这个文件就是LoadF结构中的FILE*指针f指定，正如图所示，LoadF类型变量的n值为0，这意味着我们未读取buff中任何一个字符。而buff此时也未存储任何一个文件源码中的字符。现在回头来看看Zio数据实例本身，其void*指针，data指向了我们刚刚讨论过的LoadF类型实例，Zio的变量n表示，LoadF结构的buff中，还剩下多少个未读取的字符，char*指针p，应当指向LoadF结构中buff的某个位置，但是现在还是初始化状态，因此它是NULL，至于Zio中的reader函数，主要用于处理从文件中读取字符到LoadF结构的buff中的情况。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回顾一下zget这个宏，当我们第一次调用zget这个宏的时候，它会首先调用一个叫做luaZ_fill的函数来处理，我们先忽略它的具体实现，通过一个情景展示来观察它的逻辑流程。这段逻辑的本质是，因为没有未被读取的字符，因此需要重新到文件里加载。以图1为例，假设BUFFSIZ的值为8，现在我们来看看它的执行步骤：</p>
+
+<ul>
+<li>从文件中读取8个字符，到LoadF结构实例中的buff中，此时LoadF中的n值仍然是。</li>
+<li>Zio结构中的n值被赋值为8，指针p被赋值为buff的地址，如图2所示：<img src="../../../../images/build-a-lua-interpreter/part6/zio02.png" alt="image" />图2</li>
+<li>返回p所指向的字符</li>
+<li>p指针自增1，移动到下一个地址，结果如图3所示：<img src="../../../../images/build-a-lua-interpreter/part6/zio03.png" alt="image" />图3</li>
+</ul>
+
+<p>在这个阶段之后，每次我们调用zget这个宏，就会返回Zio的变量p所指向的字符，并且自增，同时Zio的变量n自减1，LoadF的n自增1。当Zio的变量n为0时，此时如果再调用zget宏，那么说明LoadF中的buff的字符已经被取完了，因此需要重新从磁盘获取BUFFSIZ个字符，得到图4的结果。<br />
+<img src="../../../../images/build-a-lua-interpreter/part6/zio04.png" alt="image" />图4<br />
+然后和前面概述的一样，返回p所指向的字符，并且p指针自增，LoadF的n值加1，Zio的n值减1。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们来看一下luaZ_fill函数的实现：</p>
+<div class="highlight"><pre class="chroma">// luazio.c
+int luaZ_fill(Zio* z) {
+    int c = 0;
+
+    size_t read_size = 0;
+    z-&gt;p = (void*)z-&gt;reader(z-&gt;L, z-&gt;data, &amp;read_size);
+    
+    if (read_size &gt; 0) {
+        z-&gt;n = (int)read_size;
+        c = (int)(*z-&gt;p);
+
+        z-&gt;p++;
+        z-&gt;n--;
+    }
+    else {
+        c = EOF;
+    }
+    
+    return c;
+}</pre></div>
+<p>而这里的reader函数，在是在luaaux.c文件里，名称为getF函数：</p>
+<div class="highlight"><pre class="chroma">// luaaux.c
+static char* getF(struct lua_State* L, void* data, size_t* sz) {
+    LoadF* lf = (LoadF*)data;
+    if (lf-&gt;n &gt; 0) {
+        *sz = lf-&gt;n;
+        lf-&gt;n = 0;
+    }
+    else {
+        *sz = fread(lf-&gt;buff, sizeof(char), BUFSIZE, lf-&gt;f);
+        lf-&gt;n = 0;
+    }
+
+    return lf-&gt;buff;
+}</pre></div>
+<p>这里的逻辑非常清晰，每当Zio结构里，字符被取完的时候，就需要调用luaZ_fill函数，该函数会通过reader函数，获取新的字符缓存，以及缓存的字符数量，然后返回p指针所指向的字符，最后p指针向前移动一位，n变量减1。这里的reader函数，实际上就是getF函数。结合上面描述的流程，要读懂这两段代码并不难。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们之所以要用到Zio这样的结构，主要的原因是词法分析器，需要从源码文件中，一个一个获取字符，如果每次都要走io，那么效率将会非常低，但是如果每次都将所有的代码加载进来，并且缓存，如果代码中，某个block有词法错误，整个词法分析的流程就会中断，如果文本较大，且位于开头的token识别起来就有问题，那么花费时间在io处理上就是极大的浪费，因此这里采用的策略就是，一部分一部分地加载到代码缓存中。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到目前为止，我就完成了lua词法分析器的基本数据结构的说明了，接下来将会对lua词法分析器的常用接口，初始化流程，和token识别流程进行说明。</p>
+
+<h1 id="词法分析器的接口">词法分析器的接口</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在了解了词法分析器的数据结构以后，我们现在来看看，词法分析器一共有哪些主要的接口，现在将接口展示如下所示：</p>
+<div class="highlight"><pre class="chroma">// 模块初始化
+void luaX_init(struct lua_State* L);
+// 词法分析器实例初始化
+void luaX_setinput(struct lua_State* L, LexState* ls, Zio* z, struct MBuffer* buffer, 
+    struct Dyndata* dyd, TString* source, TString* env);
+// 提前获取下一个token的信息，并暂存
+int luaX_lookahead(struct lua_State* L, LexState* ls);
+// 获取下一个token，如果有lookahead暂存的token，就直接获取，否则通过
+// llex函数获取下一个token
+int luaX_next(struct lua_State* L, LexState* ls);
+// 抛出词法分析错误
+void luaX_syntaxerror(struct lua_State* L, LexState* ls, const char* error_text);</pre></div>
+<p>接口非常简洁，无非就是初始化和获取下一个token的接口。</p>
+
+<h1 id="初始化流程">初始化流程</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成了lua词法分析器的讨论以后，我们现在来看一下词法分析器的初始化操作。词法分析器首要要做的初始化处理，即是对保留字进行内部化处理，由于保留字全部是短字符串，因此TString实例的extra字段不为0，并且值为对应token类型的枚举值。这样做的目的是，由于我们经过内部化的短字符串会被缓存起来，因此当我们识别到保留字的token的时候，会从缓存中直接获取字符串TString实例，通过这个TString实例的extra字段，我们可以直接获得其token类别的枚举值，方便我们在语法分析时的处理。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们现在来看一下，lua词法分析器的初始化逻辑：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+// the sequence must be the same as enum RESERVED
+const char* luaX_tokens[] = {
+    &#34;local&#34;, &#34;nil&#34;, &#34;true&#34;, &#34;false&#34;, &#34;end&#34;, &#34;then&#34;, &#34;if&#34;, &#34;elseif&#34;, &#34;not&#34;, &#34;and&#34;, &#34;or&#34;, &#34;function&#34;
+};
+
+void luaX_init(struct lua_State* L) {
+    TString* env = luaS_newliteral(L, LUA_ENV);
+    luaC_fix(L, obj2gco(env));
+
+    for (int i = 0; i &lt; NUM_RESERVED; i++) {
+        TString* reserved = luaS_newliteral(L, luaX_tokens[i]);
+        luaC_fix(L, obj2gco(reserved));
+        reserved-&gt;extra = i + FIRST_REVERSED;
+    }
+}</pre></div>
+<p>我们可以看到，初始化阶段，会创建保留字的字符串，由于保留字的字符数均少于40字节，因此他们属于短字符串，并且能够内部化。init函数对这些字符串，进行了脱离gc管理的操作，其本质就是从allgc列表中，移到fixgc列表中，避免这些保留字字符串被gc掉。回顾一下Part3，我们可以知道，当TString为短字符串时，extra字段不为0，则表示不能被gc，并且这个值现在被赋值为保留字类型的枚举值。我们的词法分析器初始化操作，主要是在创建lua_State实例的函数lua_newstate里调用的。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们在加载一段lua代码，并且开始编译的时候，需要创建一个LexState的结构，并且初始化它，初始化它的操作，在luaY_parser函数中，这个函数主要用来编译lua代码的：</p>
+<div class="highlight"><pre class="chroma">// luaparser.c
+LClosure* luaY_parser(struct lua_State* L, Zio* zio, MBuffer* buffer, Dyndata* dyd, const char* name) {
+    FuncState fs;
+    LexState ls;
+    luaX_setinput(L, &amp;ls, zio, buffer, dyd, luaS_newliteral(L, name), luaS_newliteral(L, LUA_ENV));
+    ls.current = zget(ls.zio);
+    
+    LClosure* closure = luaF_newLclosure(L, 1);
+    closure-&gt;p = fs.p = luaF_newproto(L);
+
+    setlclvalue(L-&gt;top, closure);
+    increase_top(L);
+    ptrdiff_t save_top = savestack(L, L-&gt;top);
+
+    ls.h = luaH_new(L);
+    setgco(L-&gt;top, obj2gco(ls.h));
+    increase_top(L);
+
+    mainfunc(L, &amp;ls, &amp;fs);
+    L-&gt;top = restorestack(L, save_top);
+
+    return closure;
+}</pre></div>
+<p>上面调用luaX_setinput函数，则是对词法分析器实例进行初始化操作：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+void luaX_setinput(struct lua_State* L, 
+    LexState* ls, Zio* z, struct MBuffer* buffer, struct Dyndata* dyd, TString* source, TString* env) {
+    ls-&gt;L = L;
+    ls-&gt;source = source;
+    ls-&gt;env = env;
+    ls-&gt;current = 0;
+    ls-&gt;buff = buffer;
+    ls-&gt;dyd = dyd;
+    ls-&gt;env = env;
+    ls-&gt;fs = NULL;
+    ls-&gt;linenumber = 1;
+    ls-&gt;t.token = 0;
+    ls-&gt;t.seminfo.i = 0;
+    ls-&gt;zio = z;
+}</pre></div>
+<p>这里的初始化操作很简单，主要是做一些赋值操作，前面介绍数据结构的时候，有对LexState结构进行说明，这里不再赘述。</p>
+
+<h1 id="token识别流程">Token识别流程</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;词法分析器，将在语法分析器内被使用，语法分析器要调用一个新的token，需要调用luaX_next来实现，我们现在来看看luaX_next函数的定义：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+int luaX_next(struct lua_State* L, LexState* ls) {
+    if (ls-&gt;lookahead.token != TK_EOS) {
+        ls-&gt;t.token = ls-&gt;lookahead.token;
+        ls-&gt;lookahead.token = TK_EOS;
+        return ls-&gt;t.token;
+    }
+
+    ls-&gt;t.token = llex(ls, &amp;ls-&gt;t.seminfo);
+    return ls-&gt;t.token;
+}</pre></div>
+<p>我们可以看到，如果lookhead里有存token的信息，那么就直接返回给LexState的token变量t，否则直接调用llex函数来识别新的token：</p>
+<div class="highlight"><pre class="chroma">// lualexer.h
+#define next(ls) (ls-&gt;current = zget(ls-&gt;zio))
+
+// lualexer.c
+static int llex(LexState* ls, Seminfo* seminfo) {
+    for (;;) {
+        luaZ_resetbuffer(ls);
+        switch (ls-&gt;current)
+        {
+        // new line
+        case &#39;\n&#39;: case &#39;\r&#39;: {
+            inclinenumber(ls);
+        } break;
+        // skip spaces
+        case &#39; &#39;: case &#39;\t&#39;: case &#39;\v&#39;: {
+            next(ls);
+        } break;
+        case &#39;-&#39;: {
+            next(ls);
+            // this line is comment
+            if (ls-&gt;current == &#39;-&#39;) {
+                while (!currIsNewLine(ls) &amp;&amp; ls-&gt;current != EOF)
+                    next(ls);
+            }
+            else {
+                return &#39;-&#39;;
+            }
+        } break;
+        case EOF:{
+            next(ls);
+            return TK_EOS;
+        }
+        case &#39;+&#39;: {
+            next(ls);
+            return &#39;+&#39;;
+        }
+        case &#39;*&#39;: {
+            next(ls);
+            return &#39;*&#39;;
+        }
+        case &#39;/&#39;: {
+            next(ls);
+            return &#39;/&#39;;
+        }
+        case &#39;~&#39;: {
+            next(ls);
+            // not equal
+            if (ls-&gt;current == &#39;=&#39;) {
+                next(ls);
+                return TK_NOTEQUAL;
+            }
+            else {
+                return &#39;~&#39;;
+            }
+        }
+        case &#39;%&#39;: {
+            next(ls);
+            return TK_MOD;
+        }
+        case &#39;.&#39;: {
+            next(ls);
+            if (isdigit(ls-&gt;current)) {
+                return str2number(ls, true);
+            }
+            else if (ls-&gt;current == &#39;.&#39;) {
+                next(ls);
+                // the &#39;...&#39; means vararg 
+                if (ls-&gt;current == &#39;.&#39;) {
+                    next(ls);
+                    return TK_VARARG;
+                }
+                // the &#39;..&#39; means concat
+                else {
+                    return TK_CONCAT;
+                }
+            }
+            else {
+                return &#39;.&#39;;
+            }
+        }
+        case &#39;&#34;&#39;: case &#39;\&#39;&#39;: { // process string
+            return read_string(ls, ls-&gt;current, &amp;ls-&gt;t.seminfo);
+        }
+        case &#39;(&#39;: {
+            next(ls);
+            return &#39;(&#39;;
+        }
+        case &#39;)&#39;: {
+            next(ls);
+            return &#39;)&#39;;
+        }
+        case &#39;[&#39;: {
+            next(ls);
+            return &#39;[&#39;;
+        }
+        case &#39;]&#39;: {
+            next(ls);
+            return &#39;]&#39;;
+        }
+        case &#39;{&#39;: {
+            next(ls);
+            return &#39;{&#39;;
+        }
+        case &#39;}&#39;: {
+            next(ls);
+            return &#39;}&#39;;
+        }
+        case &#39;&gt;&#39;: {
+            next(ls);
+            if (ls-&gt;current == &#39;=&#39;) {
+                next(ls);
+                return TK_GREATEREQUAL;
+            }
+            else if (ls-&gt;current == &#39;&gt;&#39;) {
+                next(ls);
+                return TK_SHR;
+            }
+            else {
+                return &#39;&gt;&#39;;
+            }
+        }
+        case &#39;&lt;&#39;:{
+            next(ls);
+            if (ls-&gt;current == &#39;=&#39;) {
+                next(ls);
+                return TK_LESSEQUAL;
+            }
+            else if (ls-&gt;current == &#39;&lt;&#39;)
+            {
+                next(ls);
+                return TK_SHL;
+            }
+            else {
+                return &#39;&lt;&#39;;
+            }
+        }
+        case &#39;=&#39;: {
+            next(ls);
+            if (ls-&gt;current == &#39;=&#39;) {
+                next(ls);
+                return TK_EQUAL;
+            }
+            else {
+                return &#39;=&#39;;
+            }
+        }
+        case &#39;,&#39;: {
+            next(ls);
+            return &#39;,&#39;;
+        }
+        case &#39;0&#39;: case &#39;1&#39;: case &#39;2&#39;: case &#39;3&#39;: case &#39;4&#39;:
+        case &#39;5&#39;: case &#39;6&#39;: case &#39;7&#39;: case &#39;8&#39;: case &#39;9&#39;: {
+            if (ls-&gt;current == &#39;0&#39;) {
+                save_and_next(ls-&gt;L, ls, ls-&gt;current);
+                if (ls-&gt;current == &#39;x&#39; || ls-&gt;current == &#39;X&#39;) {
+                    save_and_next(ls-&gt;L, ls, ls-&gt;current);
+                    return str2hex(ls);
+                }
+                else {
+                    return str2number(ls, false);
+                }
+            }
+            return str2number(ls, false);
+        }
+        default: {
+            // TK_NAME or reserved name
+            if (isalpha(ls-&gt;current) || ls-&gt;current == &#39;_&#39;) {
+                while (isalpha(ls-&gt;current) || ls-&gt;current == &#39;_&#39; || isdigit(ls-&gt;current)) {
+                    save_and_next(ls-&gt;L, ls, ls-&gt;current);
+                }
+                save(ls-&gt;L, ls, &#39;\0&#39;);
+                
+                TString* s = luaS_newlstr(ls-&gt;L, ls-&gt;buff-&gt;buffer, strlen(ls-&gt;buff-&gt;buffer));
+                if (s-&gt;extra &gt; 0) {
+                    return s-&gt;extra;
+                }
+                else {
+                    ls-&gt;t.seminfo.s = s;
+                    return TK_NAME;
+                }
+            }
+            else { // single char
+                int c = ls-&gt;current;
+                next(ls);
+                return c;
+            }
+        }
+        }
+    }
+
+    return TK_EOS;
+}</pre></div>
+<p>从上面的代码中，我们不难看出，对于单个ASCII字符就能表示的token，llex函数基本上是直接返回的，对于那些需要多个字符组成的token，llex函数，则是返回在枚举类型里定义的枚举值，比如TK_LESSEQUAL，TK_GREATEREQ等。这些都比较简单，不过需要进行特殊处理的类型，则是TK_INT，TK_FLOAT，TK_STRING和TK_NAME。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果token首字母是0~9，那么判定分支则走入识别数值的分支之中，紧接着判断第二个字母是否是x或者是X，如果是，那么判定它是十六进制的数值，我们通过str2hex函数来进行处理：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+1  #define save_and_next(L, ls, c) save(L, ls, c); ls-&gt;current = next(ls)
+2 #define currIsNewLine(ls) (ls-&gt;current == &#39;\n&#39; || ls-&gt;current == &#39;\r&#39;)
+
+3  static int str2hex(LexState* ls) {
+4   int num_part_count = 0;
+5   while (is_hex_digit(ls-&gt;current)) {
+6       save_and_next(ls-&gt;L, ls, ls-&gt;current);
+7       num_part_count++;
+8   }
+9   save(ls-&gt;L, ls, &#39;\0&#39;);
+10
+11  if (num_part_count &lt;= 0) {
+12      LUA_ERROR(ls-&gt;L, &#34;malformed number near &#39;0x&#39;&#34;);
+13      luaD_throw(ls-&gt;L, LUA_ERRLEXER);
+14  }
+15
+16  ls-&gt;t.seminfo.i = strtoll(ls-&gt;buff-&gt;buffer, NULL, 0);
+17  return TK_INT;
+18 }</pre></div>
+<p>上述代码的save操作，则是将ls-&gt;current所存储的字符，存入到LexState结构MBuffer类型的buff缓存中。词法分析器会不断调next(内部调用了zget宏)函数，并判断它是不是16进制的字符，如果是，则存储到buff缓存中，直到第一个不是16进制字符为止，我们则需将buff缓存里存储的字符，通过strtoll函数，转化为一个整型变量，并存储在ls-&gt;t这个表示当前token的变量之中，同时它的类型被设置为TK_INT。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果token首字母是0~9，并且紧随其后的第二个字符不是’x‘或者’X‘时，那么我们则进入到识别整型数值或者浮点型数值的逻辑之中了，此时调用str2number函数来进行操作：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+static int str2number(LexState* ls, bool has_dot) {
+    if (has_dot) {
+        save(ls-&gt;L, ls, &#39;0&#39;);
+        save(ls-&gt;L, ls, &#39;.&#39;);
+    }
+
+    while (isdigit(ls-&gt;current) || ls-&gt;current == &#39;.&#39;) {
+        if (ls-&gt;current == &#39;.&#39;) {
+            if (has_dot) {
+                LUA_ERROR(ls-&gt;L, &#34;unknow number&#34;);
+                luaD_throw(ls-&gt;L, LUA_ERRLEXER);
+            }
+            has_dot = true;
+        }
+        save_and_next(ls-&gt;L, ls, ls-&gt;current);
+    }
+    save(ls-&gt;L, ls, &#39;\0&#39;);
+
+    if (has_dot) {
+        ls-&gt;t.seminfo.r = atof(ls-&gt;buff-&gt;buffer);
+        return TK_FLOAT;
+    }
+    else {
+        ls-&gt;t.seminfo.i = atoll(ls-&gt;buff-&gt;buffer);
+        return TK_INT;
+    }
+}</pre></div>
+<p>这里同样会不断将字符存储到MBuffer类型的buff变量中，直至有一个字符不是0~9的字符或者’.‘为止，而后会进入到讲buff中的字符串转为数值的操作。函数会判断buff中是否包含’.‘，如果有且只有1个，那么转化为数值的操作则是将字符串转化为浮点型数据，如果没有，则进入到将字符串转化为整型数据的操作。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;识别字符串则简单得多，如果首字母是’\&lsquo;‘或者’\&ldquo;‘，那么则进入到字符串识别流程之中，这些操作则由read_string函数来执行：</p>
+<div class="highlight"><pre class="chroma">// lualexer.c
+static int read_string(LexState* ls, int delimiter, Seminfo* seminfo) {
+    next(ls);
+    while (ls-&gt;current != delimiter) {
+        int c = 0;
+        switch (ls-&gt;current)
+        {
+        case &#39;\n&#39;: case &#39;\r&#39;: case EOF: {
+            LUA_ERROR(ls-&gt;L, &#34;uncomplete string&#34;);
+            luaD_throw(ls-&gt;L, LUA_ERRLEXER);
+        } break;
+        case &#39;\\&#39;: {
+            next(ls);
+            switch (ls-&gt;current)
+            {
+            case &#39;t&#39;:{ c = &#39;\t&#39;; goto save_escape_sequence; }
+            case &#39;v&#39;:{ c = &#39;\v&#39;; goto save_escape_sequence; }
+            case &#39;a&#39;:{ c = &#39;\a&#39;; goto save_escape_sequence; }
+            case &#39;b&#39;:{ c = &#39;\b&#39;; goto save_escape_sequence; }
+            case &#39;f&#39;:{ c = &#39;\f&#39;; goto save_escape_sequence; }
+            case &#39;n&#39;:{ c = &#39;\n&#39;; goto save_escape_sequence; }
+            case &#39;r&#39;: {
+                c = &#39;\r&#39;;
+            save_escape_sequence:
+                save_and_next(ls-&gt;L, ls, c);
+            } break;
+            default: {
+                save(ls-&gt;L, ls, &#39;\\&#39;);
+                save_and_next(ls-&gt;L, ls, ls-&gt;current);
+            } break;
+            }
+        }
+        default: {
+            save_and_next(ls-&gt;L, ls, ls-&gt;current);
+        } break;
+        }
+    }
+    save(ls-&gt;L, ls, &#39;\0&#39;);
+    next(ls);
+
+    seminfo-&gt;s = luaS_newliteral(ls-&gt;L, ls-&gt;buff-&gt;buffer);
+
+    return TK_STRING;
+}</pre></div>
+<p>整个逻辑也很简单，只要没有遇到delimiter字符（’\&lsquo;‘或者’\&ldquo;‘），除了一些转义字符会做特殊处理（两个字符合成一个字符），其他的字符都会直接存到MBuffer类型的buff数组中，直至遇到delimiter字符，此时会根据buff中的字符串，去生成一个TString类型的字符串，并存到token的seminfo变量中，这里需要注意的是，delimiter字符本身不存入buff中。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;识别标识符(identify)也是简单的多，其开头必须是alphabet字符，或者是’_‘，然后接下来的字符，只要是alphabet、下划线或者数字的其中一种，它都会被存储到MBuffer类型的buff变量中，直至条件不成立，此时会将buff传入luaS_newlstr函数中去生成一个TString类型的字符串，如果字符串是个保留字，那么返回extra字段的值，这表示它的token类型的值，由于保留字是特定的，因此我们只需要extra所代表的值（token类型的枚举值）即可。如果字符串不是保留字，那么新生成的TString字符串则会被保存到seminfo变量中，并且token类型为TK_NAME。</p>
+
+<h1 id="一个测试用例">一个测试用例</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在文章的最后，我通过一个测试用例来展现词法分析器的分析结果，对part06.lua脚本中的代码，进行解析，获得的打印，则在下方展示。测试代码在p6_test.c中。</p>
+<div class="highlight"><pre class="chroma">-- part06.lua
+local function print_test()
+    local str = &#34;hello world&#34;
+    print(&#34;hello world&#34;)
+end
+
+print_test()
+
+     local number = 0.123
+     local number2 = .456
+local tbl = {}
+tbl[&#34;key&#34;] = &#34;value&#34; .. &#34;value2&#34;
+
+function print_r(...)
+    return ...
+end
+
+tbl.key
+
+-- This is comment
+tbl.sum = 100 + 200.0 - 10 * 12 / 13 % (1+2)
+if tbl.sum ~= 100 then
+    tbl.sum = tbl.sum &lt;&lt; 2
+elseif tbl.sum == 200 then
+    tbl.sum = tbl.sum &gt;&gt; 2
+elseif tbl.sum &gt; 1 then 
+elseif tbl.sum &lt; 2 then
+elseif tbl.sum &gt;= 3 then 
+elseif tbl.sum &lt;= 4 then 
+    tbl.sum = nil
+end
+
+tbl.true = true
+tbl.false = false
+
+local a, b = 11, 22</pre></div>
+<p>保留字会在开头加上&rdquo;RESERVED:&ldquo;的开头，而单个ASCII字符就能展示的token，则是直接打印，其他的会打印枚举定义。</p>
+<div class="highlight"><pre class="chroma">?
+REVERSED: local
+REVERSED: function
+TK_NAME print_test
+(
+)
+REVERSED: local
+TK_NAME str
+=
+TK_STRING hello world
+TK_NAME print
+(
+TK_STRING hello world
+)
+REVERSED: end
+TK_NAME print_test
+(
+)
+REVERSED: local
+TK_NAME number
+=
+TK_FLOAT 0.123000
+REVERSED: local
+TK_NAME number2
+=
+TK_FLOAT 0.456000
+REVERSED: local
+TK_NAME tbl
+=
+{
+}
+TK_NAME tbl
+[
+TK_STRING key
+]
+=
+TK_STRING value
+TK_CONCAT ..
+TK_STRING value2
+REVERSED: function
+TK_NAME print_r
+(
+TK_VARARG ...
+)
+TK_NAME return
+TK_VARARG ...
+REVERSED: end
+TK_NAME tbl
+.
+TK_NAME key
+TK_NAME tbl
+.
+TK_NAME sum
+=
+TK_INT 100
++
+TK_FLOAT 200.000000
+-
+TK_INT 10
+*
+TK_INT 12
+/
+TK_INT 13
+TK_MOD %
+(
+TK_INT 1
++
+TK_INT 2
+)
+REVERSED: if
+TK_NAME tbl
+.
+TK_NAME sum
+TK_NOEQUAL ~=
+TK_INT 100
+REVERSED: then
+TK_NAME tbl
+.
+TK_NAME sum
+=
+TK_NAME tbl
+.
+TK_NAME sum
+TK_SHL &lt;&lt;
+TK_INT 2
+REVERSED: elseif
+TK_NAME tbl
+.
+TK_NAME sum
+TK_EQUAL ==
+TK_INT 200
+REVERSED: then
+TK_NAME tbl
+.
+TK_NAME sum
+=
+TK_NAME tbl
+.
+TK_NAME sum
+TK_SHR &gt;&gt;
+TK_INT 2
+REVERSED: elseif
+TK_NAME tbl
+.
+TK_NAME sum
+&gt;
+TK_INT 1
+REVERSED: then
+REVERSED: elseif
+TK_NAME tbl
+.
+TK_NAME sum
+&lt;
+TK_INT 2
+REVERSED: then
+REVERSED: elseif
+TK_NAME tbl
+.
+TK_NAME sum
+TK_GREATEREQUAL &gt;=
+TK_INT 3
+REVERSED: then
+REVERSED: elseif
+TK_NAME tbl
+.
+TK_NAME sum
+TK_LESSEQUAL &lt;=
+TK_INT 4
+REVERSED: then
+TK_NAME tbl
+.
+TK_NAME sum
+=
+REVERSED: nil
+REVERSED: end
+TK_NAME tbl
+.
+REVERSED: true
+=
+REVERSED: true
+TK_NAME tbl
+.
+REVERSED: false
+=
+REVERSED: false
+REVERSED: local
+TK_NAME a
+,
+TK_NAME b
+=
+TK_INT 11
+,
+TK_INT 22
+total linenumber = 35请按任意键继续. . .</pre></div>
+<h1 id="结束语">结束语</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我用一些篇幅讨论了词法分析器的设计与实现，实际上part5已经有对词法分析器进行一些必要的概述了，我这里是对part5进行一些补充，目的是为了能够让读者对lua的词法分析器有更深刻的认识。下一篇开始，我将开始论述lua语法分析器的设计与实现。</p>
+
+<h1 id="reference">Reference</h1>
+
+<p>[1] <a href="https://en.wikipedia.org/wiki/Lexical_analysis">Lexical analysis</a></p>
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+            
+          </div>
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/server/skynet/skynet%E7%BD%91%E7%BB%9C%E6%9C%BA%E5%88%B6/" data-toggle="tooltip" data-placement="top" title="skynet网络机制">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
+
