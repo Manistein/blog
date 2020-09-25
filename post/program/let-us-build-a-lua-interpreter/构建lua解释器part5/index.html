@@ -789,9 +789,9 @@ instruction set.</p>
 <p>虚拟机是一些处理器(CPU)的模拟器，它是机器指令集的解释器。按这种标准来划分，实际上将lua分的更细一些，其虚拟机部分就是解释器，而lexer和parser是编译器，按这种方式来划分其实也是说的通的。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章后续部分，将会集中探讨lua的编译器部分，lexer和parser。</p>
 
-<h2 id="bnf范式">BNF范式</h2>
+<h2 id="ebnf范式">EBNF范式</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一种编程语言，都需要通过一组规则作为有限集合，组成它的语法(grammar)，而我们需要通过某种方式来组成这种语法，BNF范式就是其中一种。BNF是通过数学的方式来描述我们的编程语言语法的，但它的描述范围不局限于编程领域。一般来说，BNF范式由以下部分组成<sup>[8]</sup>：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一种编程语言，都需要通过一组规则作为有限集合，组成它的语法(grammar)，而我们需要通过某种方式来组成这种语法，EBNF范式就是其中一种。EBNF是通过数学的方式来描述我们的编程语言语法的，但它的描述范围不局限于编程领域。一般来说，EBNF范式由以下部分组成<sup>[8]</sup>：</p>
 
 <ul>
 <li>terminal符号的集合</li>
@@ -799,8 +799,8 @@ instruction set.</p>
 <li>production的集合</li>
 </ul>
 
-<p>接下来我将对以上三组概念进行解释和说明。terminal是指语句中，不能被继续拆解的基本单位，一般来说，我们的terminal就是指token。nonterminal是由一组terminal按一定规则组合而成的。而我们的production又是由一组nonterminal和/或terminal按照一定的规则组合而成。接下来，我们通过一个示例来感受一下，BNF范式的规则。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在假设我们要设计一种语言，这种语言就是将数值(整数和小数)，通过BNF范式表达出来，也就是说我们通过BNF来描述数值的语法，于是我们得到以下的内容：</p>
+<p>接下来我将对以上三组概念进行解释和说明。terminal是指语句中，不能被继续拆解的基本单位，一般来说，我们的terminal就是指token。nonterminal是由一组terminal按一定规则组合而成的。而我们的production又是由一组nonterminal和/或terminal按照一定的规则组合而成。接下来，我们通过一个示例来感受一下，EBNF范式的规则。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在假设我们要设计一种语言，这种语言就是将数值(整数和小数)，通过EBNF范式表达出来，也就是说我们通过EBNF来描述数值的语法，于是我们得到以下的内容：</p>
 <div class="highlight"><pre class="chroma">S ::= &#39;-&#39; FN | FN
 FN ::= DL | DL &#39;.&#39; DL
 DL ::= {D}
@@ -823,9 +823,9 @@ S ::= U.1 D         替换小数位十分位
 S ::= U.14          替换小数位百分位，全部替换完毕，因为整数位不是合法的terminal，因此解析失败，语句不合法</pre></div>
 <p>因为无法通过解析，因此U.14就不属于我们定义的数值语言。</p>
 
-<h2 id="lua的bnf范式">Lua的BNF范式</h2>
+<h2 id="lua的ebnf范式">Lua的EBNF范式</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍完BNF范式以后，我们现在来看一下Lua语言，完整的范式规则<sup>[9]</sup>：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在介绍完EBNF范式以后，我们现在来看一下Lua语言，完整的范式规则<sup>[9]</sup>：</p>
 <div class="highlight"><pre class="chroma">chunk ::= {stat [`;´]} [laststat[`;´]]
 
 block ::= chunk
@@ -886,7 +886,7 @@ unop ::= `-´  |  not  |  `#´</pre></div>
 
 <h2 id="本章要实现的范式">本章要实现的范式</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然上一节贴出了lua完整的语法，但是本章节要设计与实现的部分，也只是函数调用那一部分，并且不支持任何形式的赋值语句。我们前面也介绍过，我们的一个要被编译和解析的脚本既是一个chunk，而图1中的代码，正是该chunk中，需要被编译的那一部分，也就是我们现在只需要支持类似print(&ldquo;hello world&rdquo;)这种形式的函数调用即可，于是我们的BNF范式可以如下所示：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然上一节贴出了lua完整的语法，但是本章节要设计与实现的部分，也只是函数调用那一部分，并且不支持任何形式的赋值语句。我们前面也介绍过，我们的一个要被编译和解析的脚本既是一个chunk，而图1中的代码，正是该chunk中，需要被编译的那一部分，也就是我们现在只需要支持类似print(&ldquo;hello world&rdquo;)这种形式的函数调用即可，于是我们的EBNF范式可以如下所示：</p>
 <div class="highlight"><pre class="chroma">chunk        ::= { stat }
 stat         ::= functioncall
 functioncall ::= prefixexp args
@@ -909,12 +909,12 @@ chunk        ::= print &#39;(&#39; explist &#39;)&#39;  因为参数表有参数
 chunk        ::= print &#39;(&#39; exp &#39;)&#39;
 chunk        ::= print &#39;(&#39; String &#39;)&#39;   所有项均替换为terminal，并且均符合定义，所以解析通过
 chunk        ::= print &#39;(&#39; &#34;hello world&#34; &#39;)&#39; 将&#34;helloworld&#34;字符串替换String</pre></div>
-<p>上图展示了图1的脚本，完整的语法解析流程，因为脚本里的代码，能够通过我们当前BNF范式的解析，因此它是语法合法的，如果一个语句通过语法解析，但是被调用的函数并不存在，那么在lua中，它只能在运行时抛出错误。但如果一个语句不符合范式规定的规范，那么我们就会抛出编译时报错，提醒脚本编写者。<br />
+<p>上图展示了图1的脚本，完整的语法解析流程，因为脚本里的代码，能够通过我们当前EBNF范式的解析，因此它是语法合法的，如果一个语句通过语法解析，但是被调用的函数并不存在，那么在lua中，它只能在运行时抛出错误。但如果一个语句不符合范式规定的规范，那么我们就会抛出编译时报错，提醒脚本编写者。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚才展示的流程和范式，就是本章节我最终会实现的部分，我在后续的章节中，会以此为蓝本，逐步丰富这个范式，直至和上一节中贴出的范式重合为止。</p>
 
 <h2 id="词法分析器设计与实现">词法分析器设计与实现</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过上面的BNF范式的解析流程，我们可以知道，要使用Parser对源码里的语句，进行语法解析，我们就必须要首先识别源码中的terminal，上文也有对terminal进行简要的说明，不过我们现在还没真正搞清楚，lua语言中的terminal到底是什么？其实terminal本质就是token，这个问题其实相当于在问token到底是什么。前面我也说过，token的本质就是一门语言中，最基本的单位，例如前面的S::=FN的例子中，它的token集合就是&rsquo;0&rsquo;~&lsquo;9&rsquo;。不同的语言，对token的定义也略有不同，但是却有相通的属性。现在，我通过一张表来列举lua的最基本的元素，也就是我们的token集合：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过上面的EBNF范式的解析流程，我们可以知道，要使用Parser对源码里的语句，进行语法解析，我们就必须要首先识别源码中的terminal，上文也有对terminal进行简要的说明，不过我们现在还没真正搞清楚，lua语言中的terminal到底是什么？其实terminal本质就是token，这个问题其实相当于在问token到底是什么。前面我也说过，token的本质就是一门语言中，最基本的单位，例如前面的S::=FN的例子中，它的token集合就是&rsquo;0&rsquo;~&lsquo;9&rsquo;。不同的语言，对token的定义也略有不同，但是却有相通的属性。现在，我通过一张表来列举lua的最基本的元素，也就是我们的token集合：</p>
 
 <table>
 <thead>
@@ -1520,16 +1520,16 @@ void luaX_init(struct lua_State* L)
 
 <h2 id="语法分析器基础设计与实现">语法分析器基础设计与实现</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成了词法分析器的论述以后，现在我们开始进入到语法分析器基础的设计和实现上。本章涉及的语法分析器，并不是包含完整的功能，而是对于前面范式所定义的内容进行技术层面的实现。当然，本章的意义也非常重大，工作量并不意味着比后续的内容小，因为这是要搭建语法分析器最基础的框架，因此在构思上花费的时间甚至可能会更多。本节首先会从BNF范式出发，讨论dummylua语法分析器的整体逻辑架构，然后再逐步深入各个细节。我们最终的目的也很清晰，就是能够编译并运行图1所示的脚本代码print(&ldquo;hello world&rdquo;)。<br />
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成了词法分析器的论述以后，现在我们开始进入到语法分析器基础的设计和实现上。本章涉及的语法分析器，并不是包含完整的功能，而是对于前面范式所定义的内容进行技术层面的实现。当然，本章的意义也非常重大，工作量并不意味着比后续的内容小，因为这是要搭建语法分析器最基础的框架，因此在构思上花费的时间甚至可能会更多。本节首先会从EBNF范式出发，讨论dummylua语法分析器的整体逻辑架构，然后再逐步深入各个细节。我们最终的目的也很清晰，就是能够编译并运行图1所示的脚本代码print(&ldquo;hello world&rdquo;)。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回顾一下图2所示的代码，我们的脚本加载和编译的流程，都是在luaL_loadfile函数里进行的，因此我们Parser的运作流程，也是在这里面执行的，实际上，编译流程的入口函数，是一个叫做luaY_parser的函数，其函数声明如下所示：</p>
 <div class="highlight"><pre class="chroma">// luaparser.h
 LClosure* luaY_parser(struct lua_State* L, Zio* zio, MBuffer* buffer, Dyndata* dyd, const char* name)</pre></div>
 <p>我们先不深入里面的代码实现细节，只是为了告诉大家，我们编译在代码层面是从什么地方开始的。前面也提到过，我们在调用luaL_loadfile函数的时候，首先会创建一个LClosure结构的函数实例，并压入栈中，然后加载脚本并编译，最后将编译的结果放入LClosure结构的Proto结构里。我们本节的目标就是探讨这个编译流程。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们要被编译加载的脚本，可以被视作是一个chunk，因此它将被作为我们的研究起点，回顾一下官方lua的BNF范式，对chunk的有关定义：</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们要被编译加载的脚本，可以被视作是一个chunk，因此它将被作为我们的研究起点，回顾一下官方lua的EBNF范式，对chunk的有关定义：</p>
 <div class="highlight"><pre class="chroma">chunk ::= {stat [`;´]} [laststat[`;´]]</pre></div>
 <p>上面的production中，chunk由右边的nonterminal来定义。{}内的内容，表示会出现0次或者多次，而[]内的内容表示会出现0次或者1次。也就是说chunk是由0个、1个或者多个stat语句组成，可以有laststat和&rsquo;;&lsquo;，也可以没有这两个。laststat的定义如下所示：</p>
 <div class="highlight"><pre class="chroma">laststat ::= return [explist1]  |  break</pre></div>
-<p>前面我们也已经定义过本章节要实现的BNF范式规则，laststat并没有被纳入，因此本章不会讨论laststat相关的内容，为了简化问题，我也将&rsquo;;&lsquo;忽略，也就是说我们现在要关注的起点是：</p>
+<p>前面我们也已经定义过本章节要实现的EBNF范式规则，laststat并没有被纳入，因此本章不会讨论laststat相关的内容，为了简化问题，我也将&rsquo;;&lsquo;忽略，也就是说我们现在要关注的起点是：</p>
 <div class="highlight"><pre class="chroma">chunk ::= {stat}</pre></div>
 <p>我们运行脚本是由stat组合而成，stat是statement的简写，它是我们构建命令的最基本的单位，官方lua对stat的定义如下所示：</p>
 <div class="highlight"><pre class="chroma">stat ::=  varlist1 `=´ explist1  |
@@ -1614,7 +1614,7 @@ static void statement (LexState *ls) {
 }</pre></div>
 <p>我们需要关注的是它的switch语句，里面的case，基本上对应了一个独立的stat函数，这些stat函数分别实现了不同的stat分支，我们可以用图25来表示<br />
 <img src="../../../../images/build-a-lua-interpreter/part5/statments.png" alt="image" />图25<br />
-回顾一下上面BNF有关stat的定义，如果要将里面的nonterminal和图25的stat做对应关系的话，那么将如下表所示：</p>
+回顾一下上面EBNF有关stat的定义，如果要将里面的nonterminal和图25的stat做对应关系的话，那么将如下表所示：</p>
 
 <table>
 <thead>
@@ -1897,7 +1897,7 @@ R(1) = &#34;Good Bye &#34;</pre></div>
 
 <h2 id="结束语">结束语</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文开篇介绍了，我们最终要实现的目标，以一个简单的脚本代码作为例子，贯穿了整篇博文。我先介绍了lua解释器的整体运作流程，介绍了lua代码的反编译工具，介绍了lua的虚拟指令集，以及虚拟机的整体运作框架。接着又论述了编译器的概念，BNF范式，词法分析器和语法分析器。内容比较多，但是希望对大家有所帮助。<br />
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文开篇介绍了，我们最终要实现的目标，以一个简单的脚本代码作为例子，贯穿了整篇博文。我先介绍了lua解释器的整体运作流程，介绍了lua代码的反编译工具，介绍了lua的虚拟指令集，以及虚拟机的整体运作框架。接着又论述了编译器的概念，EBNF范式，词法分析器和语法分析器。内容比较多，但是希望对大家有所帮助。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;经过十几天的浴血奋战，我完成了这篇blog的编写，耗费了大量的时间和精力，我总共投入了不少于100小时到这篇文章中，本篇的重大意义在于，我的dummylua正式进入到编译器和虚拟机相关的部分，真正的挑战开始了，后续我也将继续投入大量的时间，完成剩下的部分。最后，原创不易，希望大家转载的时候注明出处。</p>
 
 <h2 id="reference">Reference</h2>
@@ -1914,8 +1914,8 @@ computers, this makes the target program executable on all those systems,
 at the cost of an extra compilation for the final target. Compilers that target
 programming languages rather than the instruction set of a computer are
 often called source-to-source translators.<br />
-[8] <a href="http://www.cs.umsl.edu/~janikow/cs4280/bnf.pdf">Microsoft Word bnf_m</a><br />
-[9] <a href="http://parrot.github.io/parrot-docs0/0.4.10/html/languages/lua/doc/lua51.bnf.html">lua51.bnf</a><br />
+[8] <a href="http://www.cs.umsl.edu/~janikow/cs4280/EBNF.pdf">Microsoft Word EBNF_m</a><br />
+[9] <a href="http://parrot.github.io/parrot-docs0/0.4.10/html/languages/lua/doc/lua51.EBNF.html">lua51.EBNF</a><br />
 [10] <a href="https://www.runoob.com/regexp/regexp-syntax.html">正则表达式语法</a></p>
 
         
