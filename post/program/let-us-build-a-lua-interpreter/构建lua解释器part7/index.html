@@ -10,13 +10,17 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
   <meta name="baidu-site-verification" content="F2vPlhbqCA" />
   
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  
+   
+   
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    gtag('config', 'UA-122943512-1');
-  </script>
+      gtag('config', 'UA-122943512-1');
+    </script>
+  
 
 
   <title>构建Lua解释器Part7：构建完整的语法分析器(上)</title>
@@ -321,7 +325,7 @@ laststat ::= return [explist]  |  break</pre></div>
 
 <p><img src="../../../../images/build-a-lua-interpreter/part5/statments.png" alt="image" />图5<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们已知，lua代码是由一系列的statement组合而成，因此在在编译过程中，就是要将脚本代码中的statement识别出来，并且进入到对应的编译分支，将其编译为虚拟机指令，由于篇幅所限，我无法在本章展示所有的编译分支逻辑，因此本章集中力量，对expr statement的设计和实现进行详细的分析。这也是本章Parser要实现的部分。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我将对lua的exprstat的EBNF范式进行说明，为了能够和我们后面的实现逻辑想契合，本章展示的EBNF与Part5展示的略有出入，一切以本章的为主，其EBNF范式如下所示：</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我将对lua的exprstat的EBNF范式进行说明，为了能够和我们后面的实现逻辑相契合，本章展示的EBNF与Part5展示的略有出入，一切以本章的为主，其EBNF范式如下所示：</p>
 <div class="highlight"><pre class="chroma">exprstat ::= func | assignment
 
 assignment ::= suffixedexp {, suffixedexp} [&#39;=&#39; explist]
@@ -529,19 +533,19 @@ UpValue[A]的值必须是table，将RK( C )的值赋值给该table的RK(B)域</l
   luastate.c
   luabase.h             #lua标准库，提供最基础的函数
   luabase.c
-  luainit.c             #第三方库加载机制的函数所在地
-  luastring.h           #lua字符串
+  luainit.c               #第三方库加载机制的函数所在地
+  luastring.h               #lua字符串
   luastring.c
-  luatable.h            #lua table
+  luatable.h                  #lua table
   luatable.c
 ~ compiler/         #编译器相关的部分放置在这里
-  luacode.h             #编译成虚拟机指令的库
+  luacode.h                   #编译成虚拟机指令的库
   luacode.c
   lualexer.h            #词法分析器
   lualexer.c
-  luaparser.h           #语法分析器
+  luaparser.h               #语法分析器
   luaparser.c
-  luazio.h              #协助词法分析器，分析文本的库
+  luazio.h                  #协助词法分析器，分析文本的库
   luazio.c
 + scripts/          #lua脚本测试用例
 + test/             #测试用例全部放置在这里
@@ -836,7 +840,7 @@ e-&gt;u.info = 0</pre></div>
 <ul>
 <li>先到栈上找local变量，看看是否在local列表中，如果是则返回，此时e-&gt;k=VLOCAL，e-&gt;u.info为栈上的索引值</li>
 <li>如果上一步找不到，则到自己函数的upvalue列表里去查找，如果找到，然后e-&gt;k=VUPVAL，e-&gt;u.info为upvalue列表里的索引值</li>
-<li>如果上一步找不到，则到外层函数里查找它的local列表，如果找到，则将其添加到自己的upvalue列表中，如果找不到，则到外层函数的upvalue列表里查找，如果在那里找到，先添加到自己的upvalue列表中，再将e-&gt;k=VUPVAL，e-&gt;u.info为upvalue列表里的索引值。如果都没找到，则需要再到更外一层函数里查找，执行相似的逻辑</li>
+<li>如果上一步找不到，则到外层函数里查找它的local列表，如果找到，则将其添加到自己的upvalue列表中，如果找不到，则到外层函数的upvalue列表里查找，如果在那里找到，先添加到自己的upvalue列表中，再将e-&gt;k=VUPVAL，e-&gt;u.info为upvalue列表里的索引值。如果都没找到，则需要再到更外一层函数里查找，执行相似的逻辑，找不到就一直到外层函数找，直至到top-level function为止</li>
 <li>如果还是找不到，就到_ENV表里查找，也就是upvalue[0]，也就是全局表_G里查找，此时e的值为e-&gt;k=VINDEXED，e-&gt;u.ind.vt=VUPVAL，e-&gt;u.ind.t=0，e-&gt;u.ind.idx=idx_of_name</li>
 </ul>
 
@@ -1404,6 +1408,10 @@ primaryexp的两个主要分支，一个是变量识别，还有一个是括号�
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part6：词法分析器设计与实现">&larr; Previous Post</a>
             </li>
           
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part8：构建完整的语法分析器(下)">Next Post &rarr;</a>
+            </li>
           
         </ul>
       

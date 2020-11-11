@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Sat, 05 Sep 2020 09:25:56 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 04 Nov 2020 15:21:23 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>构建Lua解释器Part8：构建完整的语法分析器(下)</title>
+      <link>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/</link>
+      <pubDate>Wed, 04 Nov 2020 15:21:23 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;前面，我已经用3篇blog的巨大篇幅，详细论述了Lua编译模块的一些基本知识。其中，Part5通过一个简单的打印hello world的例子，论述了编译出来的虚拟机指令，如何存到Proto结构中，最后再通过虚拟机执行的流程。Part6详细论述了，词法分析器的设计与实现。而Part7则论述了，expression的编译流程。本章，将作为Lua内置编译器论述的最后一个部分。往后的部分，将不再涉及编译相关的内容。当然，经历这篇，相信读者能够完全理解Lua内置编译器的设计与实现，个人认为完整度还是比较高的。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part7：构建完整的语法分析器(上)</title>
