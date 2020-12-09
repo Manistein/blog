@@ -23,34 +23,21 @@
   
 
 
-  <title>构建Lua解释器Part0：综述</title>
-  <meta property="og:title" content="构建Lua解释器Part0：综述" />
-  <meta name="twitter:title" content="构建Lua解释器Part0：综述" />
-  <meta name="description" content="项目简介
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;[1]的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。
-
-">
-  <meta property="og:description" content="项目简介
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;[1]的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。
-
-">
-  <meta name="twitter:description" content="项目简介
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实 …">
+  <title>Program</title>
+  <meta property="og:title" content="Program" />
+  <meta name="twitter:title" content="Program" />
   <meta name="author" content="Manistein"/>
   <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" />
+  <meta property="og:url" content="https://manistein.github.io/blog/categories/program/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
   <meta name="generator" content="Hugo 0.37" />
-  <link rel="canonical" href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" />
-  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="canonical" href="https://manistein.github.io/blog/categories/program/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/categories/program/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -198,23 +185,14 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="post-heading">
+            <div class="categories-heading">
               
-                <h1>构建Lua解释器Part0：综述</h1>
-              
-              
+                <h1>Program</h1>
               
               
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 16, 2018
-  
-  
-  
-</span>
-
-
+                <hr class="small">
+              
+              
               
             </div>
           </div>
@@ -225,111 +203,66 @@
 
 
     
-<div class="container" role="main">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <article role="main" class="blog-post">
-        <h2 id="项目简介">项目简介</h2>
+  <div class="container" role="main">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        
+        <div class="posts-list">
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/">
+                <h2 class="post-title">关于sizeof的一些思考</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。</p>
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 24, 2018
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h2 id="前言">前言</h2>
+
+<p>今天，我所在的技术群（qq185017593），讨论了sizeof的问题，聊得不亦乐乎，然而一个群友贴的代码，我感觉有一些漏洞，于是梳理了一下思路和知识点，特此记录一下。</p>
 
 <p></p>
+                  <a href="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" class="post-read-more">[Read More]</a>
+                
+              </div>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本项目采取和官方版本的近似的命名规范，并尽最大努力遵循lua官方的设计主线。由于开发过程是我自己重新手写的，因此不会在所有细节和官方版本保持一致。同时这是一份参考资料，主旨是提供一条思路主线，希望读者通过阅读这个系列，降低对lua源码的阅读难度，同时不建议<strong>只</strong>跟随本旅程来研究lua。最终希望读者在完成本系列的阅读后，回到研究lua官方源码的道路上。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本系列将会为一些观点，理论附注上引证来源，并在Reference上展示，最后本人水平有限，如果有错误的地方，希望大家联系我加以指正。同时欢迎大家加入我创建的qq群185017593一起讨论技术。</p>
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/c/">C</a>&nbsp;
+                  
+                </div>
+              
 
-<h2 id="系列内容">系列内容</h2>
-
-<ul>
-<li>Part1：<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/">虚拟机的基础&ndash;Lua基本数据结构、栈和基于栈的C函数调用的设计与实现</a></li>
-<li>Part2：<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">Garbage Collection基础架构</a></li>
-<li>Part3：<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/">String设计与实现</a></li>
-<li>Part4：<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/">Table设计与实现</a></li>
-<li>Part5：<a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/">脚本运行基础架构的设计与实现</a></li>
-<li>Part6：<a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/">词法分析器设计与实现</a></li>
-<li>Part7：<a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part7/">构建完整的语法分析器（上）</a></li>
-<li>Part8：<a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/">构建完整的语法分析器（下）</a></li>
-<li>Part9：<a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/">metatable</a></li>
-<li>Part10：userdata</li>
-<li>Part11：upvalue</li>
-<li>Part12：weektable</li>
-<li>Part13：require机制</li>
-<li>Part14：热更新原理</li>
-<li>Part15：再谈GC</li>
-<li>Part16：尾声</li>
-</ul>
-
-<h2 id="编译与运行">编译与运行</h2>
-
-<h4 id="获取仓库">获取仓库</h4>
-<div class="highlight"><pre class="chroma">git clone git@github.com:Manistein/dummylua-tutorial.git</pre></div>
-<h4 id="在linux和mac上编译与运行">在Linux和Mac上编译与运行</h4>
-<div class="highlight"><pre class="chroma">cd dummylua-tutorial/
-cd linux/
-cd part01/
-make
-
-cd bin/
-./dummylua</pre></div>
-<h4 id="在windows上编译与运行">在Windows上编译与运行</h4>
-
-<ul>
-<li>进入dummylua-tutorial/windows/project/</li>
-<li>使用VS2013或以上版本打开sln文件</li>
-<li>自行编译和运行</li>
-</ul>
-
-<h2 id="测试平台">测试平台</h2>
-
-<ul>
-<li>Linux（Ubuntu）</li>
-<li>Windows</li>
-<li>Mac</li>
-</ul>
-
-<h2 id="项目github地址">项目github地址</h2>
-
-<p><a href="https://github.com/Manistein/dummylua-tutorial">https://github.com/Manistein/dummylua-tutorial</a></p>
-
-<h2 id="reference">Reference</h2>
-
-<p>[1] <a href="https://compilers.iecc.com/crenshaw/tutor1.txt">LET&rsquo;S BUILD A COMPILER! Part I: INTRODUCTION</a> &ldquo;As  Brian Kernighan has said,  FIRST  make  it  run, THEN make it run fast.&rdquo;</p>
-
+            </article>
+          
+        </div>
         
-          <div class="blog-tags">
+          <ul class="pager main-pager">
             
-              <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+              <li class="previous">
+                <a href="/blog/categories/program/page/1/">&larr; Newer Posts</a>
+              </li>
             
-          </div>
+            
+          </ul>
         
-
-        
-      </article>
-
-      
-        <ul class="pager blog-pager">
-          
-            <li class="previous">
-              <a href="https://manistein.github.io/blog/post/program/c/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" data-toggle="tooltip" data-placement="top" title="关于sizeof的一些思考">&larr; Previous Post</a>
-            </li>
-          
-          
-            <li class="next">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part1：虚拟机的基础--Lua基本数据结构、栈和基于栈的C函数调用的设计与实现">Next Post &rarr;</a>
-            </li>
-          
-        </ul>
-      
-
-
-      
-        
-        
-      
-
+      </div>
     </div>
   </div>
-</div>
 
     <footer>
   <div class="container">
@@ -356,7 +289,7 @@ cd bin/
           
           <li>
             
-            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            <a href="https://manistein.github.io/blog/categories/program/index.xml" title="RSS">
             
               <span class="fa-stack fa-lg">
                 <i class="fa fa-circle fa-stack-2x"></i>

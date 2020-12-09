@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
+  
+   
+   
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122943512-1');
+    </script>
+  
+
+
+  <title>构建Lua解释器Part9：metatable</title>
+  <meta property="og:title" content="构建Lua解释器Part9：metatable" />
+  <meta name="twitter:title" content="构建Lua解释器Part9：metatable" />
+  <meta name="description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我们将进入到metatable的探索之中。由于这块本身比较简单，而且我也不打算罗列代码细节，因此本章的篇幅不会很大。只是对一些我认为比较关键的部分，进行说明。首先，本章的主要任务，首先是简要介绍metatable是做什么的，然后简要说明一下，它如何被设置，接着介绍metatable的访问域，双目运算操作域、单目运算操作域等。最后会告诉读者，本章的实现逻辑位于dummylua工程的哪些部位。
+
+">
+  <meta property="og:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我们将进入到metatable的探索之中。由于这块本身比较简单，而且我也不打算罗列代码细节，因此本章的篇幅不会很大。只是对一些我认为比较关键的部分，进行说明。首先，本章的主要任务，首先是简要介绍metatable是做什么的，然后简要说明一下，它如何被设置，接着介绍metatable的访问域，双目运算操作域、单目运算操作域等。最后会告诉读者，本章的实现逻辑位于dummylua工程的哪些部位。
+
+">
+  <meta name="twitter:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我们将进入到metatable的探索之中。由于这块本身比较简单，而且我也不打算罗列代码细节，因此本章的篇幅不会很大。只是对一些我认为比较关键的部分，进行说明。首先，本章的主要任务，首先是简要介绍metatable是做什么的，然后简要说明一下，它如何被设置，接着介绍metatable的访问 …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/tags/let-us-build-a-lua-interpreter/">构建Lua解释器</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>构建Lua解释器Part9：metatable</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on December 8, 2020
+  
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我们将进入到metatable的探索之中。由于这块本身比较简单，而且我也不打算罗列代码细节，因此本章的篇幅不会很大。只是对一些我认为比较关键的部分，进行说明。首先，本章的主要任务，首先是简要介绍metatable是做什么的，然后简要说明一下，它如何被设置，接着介绍metatable的访问域，双目运算操作域、单目运算操作域等。最后会告诉读者，本章的实现逻辑位于dummylua工程的哪些部位。</p>
+
+<p></p>
+
+<h1 id="什么是metatable">什么是metatable？</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metatable是什么？它的中文译名是元表。简单的来说，它是一种改变table行为的机制。如果没有这种机制，我们无法对两个table进行加减乘除运算，无法对table进行比较运算。而metatable机制的存在，则为这种提供了可行性。此外，metatable为不同的table，提供了公共域，这个是lua实现面向对象机制的基础。我们为一个table设置metatable的方式也非常简单，如下所示：</p>
+<div class="highlight"><pre class="chroma">local tbl = setmetatable({}, { __index = function(t, k) print(&#34;hello world&#34;) end })</pre></div>
+<p>上面的例子中，table的metatable，则是setmetatable的第二个参数。而如何获取一个metatable呢？如下例子得以展示：</p>
+<div class="highlight"><pre class="chroma">local mt = getmetable(tbl)</pre></div>
+<p>在lua53的中文文档中<sup>[1]</sup>，是这么来解释metatable和tag method的：</p>
+
+<blockquote>
+<p>Lua 中的每个值都可以有一个 元表。 这个 元表 就是一个普通的 Lua 表， 它用于定义原始值在特定操作下的行为。 如果你想改变一个值在特定操作下的行为，你可以在它的元表中设置对应域。 例如，当你对非数字值做加操作时， Lua 会检查该值的元表中的 &ldquo;__ add&rdquo; 域下的函数。 如果能找到，Lua 则调用这个函数来完成加这个操作。
+在元表中事件的键值是一个双下划线（__ ）加事件名的字符串； 键关联的那些值被称为 元方法。 在上一个例子中，__add 就是键值， 对应的元方法是执行加操作的函数。</p>
+</blockquote>
+
+<p>你可以使用 setmetatable 来替换一张表的元表。在 Lua 中，你不可以改变表以外其它类型的值的元表 （除非你使用调试库）； 若想改变这些非表类型的值的元表，请使用 C API。</p>
+
+<h1 id="metable的-index和-newindex域">metable的__ index和__ newindex域</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metatable中有两个重要的域，它们分别是以__ index和__ newindex作为key的域。我们通过一些例子，来理解这两个机制。首先我们来看看__ index的情况：</p>
+<div class="highlight"><pre class="chroma">local tbl = setmetatable({}, { __index = function(t, k) print(&#34;hello world&#34;) end })
+print(tbl.hello)</pre></div>
+<p>例1<br />
+这是一个会使用到metatable的__ index域的例子，在开始正式讨论之前，我们首先要对例子本身作一些说明。</p>
+
+<ul>
+<li>我们的local变量tbl，实质就是setmetatable函数的第一个参数</li>
+<li>tbl被设置了一个metatable，它就是setmetatable的第二个参数</li>
+<li>tbl的metatable存在__ index域</li>
+<li>print(tbl.hello)这个语句中，hello是tbl不存在的key</li>
+<li>__ index所指向的是一个函数，它有两个参数t和k，其中，t表示tbl这个表，而k则表示tbl的缺省域hello</li>
+</ul>
+
+<p>当我们的一个table，通过一个key，访问一个value时，虚拟机会做哪些操作呢？我们先来看上面这个例子，它是__ index所指的是function的情况：</p>
+
+<ol>
+<li>判断tbl中，是否存在被访问的key：hello，并且value不为nil。如果存在，则返回tbl.hello，否则进入下一步</li>
+<li>判断tbl是否设置了metatable，如果没有设置，则tbl.hello这个操作，返回的结果是nil。否则进入下一步</li>
+<li>判断tbl的metatable是否存在__ index域，如果不存在，tbl.hello这个操作，返回的结果是nil。否则进入下一步</li>
+<li>调用__ index所指向的函数，并执行，如果函数有返回值，或者在函数内有对tbl.hello赋值，那么tbl.hello的结果为这个返回值，或者是被赋予的值</li>
+<li>调用结束</li>
+</ol>
+
+<p>在例1中，print(tbl.hello)的结果为nil，并且输出了“hello world”，其结果如下所示：</p>
+<div class="highlight"><pre class="chroma">hello world
+nil</pre></div>
+<p>例1展示了一个简单的例子，我们现在来看一下例2：</p>
+<div class="highlight"><pre class="chroma">local mt = setmetatable({}, { __index = function(t, k) print(&#34;1111&#34;) end })
+mt.__index = function(t, k) print(&#34;2222&#34;) end
+local tbl = setmetatable({}, mt)
+print(tbl.hello)</pre></div>
+<p>例2<br />
+上面这个例子，输出的结果为：</p>
+<div class="highlight"><pre class="chroma">2222
+nil</pre></div>
+<p>因为tbl的metatable是mt，且mt的__ index域是个函数，且hello在tbl中并不存在，所以直接调用了mt.__ index函数。在访问一个table的缺省域的时候，如果该table有metatable，并且__ index域是个函数，那么直接调用它。这里不管tbl的metatable的metatable是否存在，存在的话__ index域是什么，它都只调用tbl的metatable的__ index函数。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们通过两个例子，讨论了metatable的__ index域是函数的情况，现在我们来看看metatable的__ index域是table的情况。</p>
+<div class="highlight"><pre class="chroma">local mt0 = { hello = &#34;hello world&#34; }
+local mt1 = setmetatable({}, {__index = mt0})
+mt1.key2 = &#34;key2&#34;
+local tbl = setmetatable({}, {__index = mt1})
+print(tbl.hello)
+print(tbl.key)
+print(tbl.key2)</pre></div>
+<p>例3<br />
+例3的输出结果为：</p>
+<div class="highlight"><pre class="chroma">hello world
+nil
+key2</pre></div>
+<p>hello是tbl的缺省域，因为tbl中找不到hello，所以要到tbl的metatable中查找__ index域，这里的__ index域指向一个table mt1，因此会到mt1中查找mt1.hello，又因为mt1中不存在key为hello的域，因此要到mt1的metatable中查找，而mt1的metatable的__ index域指向了mt0，因此将mt0.hello返回。同样的，tbl.key的访问逻辑，也执行类似的操作，只是因为mt0没有设置metatable，所以最终tbl.key的值为nil。而对于tbl.key2，操作逻辑也是类似的，只是因为mt1中存在key2这个域，因此直接返回该值，而不继续到metatable中查找。</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成了__ index域的论述以后，我们接下来看看__ newindex域。我们还是要通过几个例子，对它进行说明，首先来看看例4：</p>
+<div class="highlight"><pre class="chroma">local tbl = setmetatable({}, { __newindex = function(t, k, v) print(t, k, v) end })
+tbl.key = &#34;key&#34;
+print(tbl.key)</pre></div>
+<p>例4<br />
+例4中，key原本不存在于tbl中，由于tbl设置了一个metatable，并且__ newindex域有设置一个函数，因此例4中的赋值操作，会触发元方法__ newindex，但是赋值操作并不会生效（也就是调用了__ newindex函数以后，tbl.key仍然是nil值）。而我们的__ newindex函数有3个参数，分别是t、k和v，他们分别代表tbl，key和“key”。如果我们的tbl原本就有tbl.key这个域的时候，对tbl.key重新赋值，并不会触发元方法。例4的输出结果如下所示：</p>
+<div class="highlight"><pre class="chroma">table: 0x12b88c0    key key
+nil</pre></div>
+<p>当需要触发__ newindex的元方法的时候，不论metatable是否还有metatable，只要其有__ newindex，并且是个函数，那么就会执行它，并终止流程。接下来来看一下__ newindex是table的情况，我们来看看例5：</p>
+<div class="highlight"><pre class="chroma">local mt0 = {}
+local mt1 = setmetatable({}, { __newindex = mt0 })
+local mt2 = setmetatable({ key1 = &#34;111&#34;}, { __newindex = mt1 })
+local tbl = setmetatable({}, { __newindex = mt2 })
+tbl.key = &#34;key&#34;
+tbl.key1 = &#34;222&#34;
+print(tbl.key)
+print(mt0.key)
+print(mt2.key1)</pre></div>
+<p>例5<br />
+上面例子输出的结果为：</p>
+<div class="highlight"><pre class="chroma">nil
+key
+222</pre></div>
+<p>这个例子说明了几个内容：</p>
+
+<ul>
+<li>为表tbl从来不存在的key域赋值，tbl.key = &ldquo;key&rdquo;这个操作会触发元方法</li>
+<li>tbl会到其元表中的__ newindex域mt2，查找是否存在key，因为没找到，因此需要去mt1中查找</li>
+<li>mt1中也没找到key，所以要去mt1的元表的__ newindex域中去查找，也就是mt0中。</li>
+<li>mt0中也没找到key，但是mt0已经没有metatable，所以直接将&rdquo;key&rdquo;的值，赋值到mt0.key中，但是tbl.key并没有被赋值</li>
+</ul>
+
+<p>从上面的论述可以看出，当一个table有设置metatable，并且__ newindex方法有被设置，因此当给这个table添加新域的时候，会触发元方法__ newindex，如果__ newindex是个表，则会尝试从中去查找新设置操作的key值，如果找到则直接设置新值，如果找不到则需要继续触发metatable的元方法__ newindex。如果没找到元表，则直接将结果设置到该table中。读者可以观察一下tbl.key1 = &ldquo;222&rdquo;以及例子打印结果的情况。</p>
+
+<h1 id="双目运算事件">双目运算事件</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面一节中，我对__ index和__ newindex进行了简要的说明，大概介绍清楚了这两个元访问事件的运作机制，现在要对双目运算事件进行简要的说明。lua层的setmetatable，只支持对table赋值metatable的操作，而如果要对其他类型进行metatable的设置操作，需要借助C的API。我们的双目运算，如四则运算，如字符串拼接运算，是有默认的支持类型的，比如四则运算，只支持数值类型的数据运算，而字符串拼接，默认类型则是字符串类型。我们的metatable机制，可以用来实现面向对象的设计方法，限于篇幅，本章不对这些内容进行详细的讨论。使用元表来实现面向对象的机制时，table不可避免地要作为对象存在。那么对象之间如果有双目运算，那怎么处理呢？以加法为例，+操作符，默认只支持数值类型的运算，table是不支持的，除非你为__ add域设置了元方法，如例6所示：</p>
+<div class="highlight"><pre class="chroma">local tbl1 = setmetatable({ value = 1 }, {__add = function(lhs, rhs) return lhs.value + rhs.value })
+local tbl2 = { value = 2 }
+local ret = tbl1 + tbl2
+print(ret)</pre></div>
+<p>例6<br />
+其输出结果为：</p>
+<div class="highlight"><pre class="chroma">3</pre></div>
+<p>因为tbl1设置了__ add域的元方法，因此虚拟机在进行加法运算的时候，当操作数不都是数值类型时，就触发tbl1的__ add域元方法。现在假设另一种情况，如果tbl1没有设置__ add域的元方法，而是把这个元方法在tbl2设置了，那么结果仍然是一致的。因为虚拟机首先会找左操作数是否有对应的元方法，如果没有则会去右操作数去查找，如果都没有则抛错。其他情况留给读者去推导。lua除了双目元方法，还有单目的，这里就不一一列举了，引用lua53中文文档的一些内容，供读者查阅：</p>
+
+<blockquote>
+<p>__ add: + 操作。 如果任何不是数字的值（包括不能转换为数字的字符串）做加法， Lua 就会尝试调用元方法。 首先、Lua 检查第一个操作数（即使它是合法的）， 如果这个操作数没有为 &ldquo;__add&rdquo; 事件定义元方法， Lua 就会接着检查第二个操作数。 一旦 Lua 找到了元方法， 它将把两个操作数作为参数传入元方法， 元方法的结果（调整为单个值）作为这个操作的结果。 如果找不到元方法，将抛出一个错误。<br />
+__sub: - 操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__mul: * 操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__div: / 操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__mod: % 操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__pow: ^ （次方）操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__unm: - （取负）操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__idiv: // （向下取整除法）操作。 行为和 &ldquo;add&rdquo; 操作类似。<br />
+__band: &amp; （按位与）操作。 行为和 &ldquo;add&rdquo; 操作类似， 不同的是 Lua 会在任何一个操作数无法转换为整数时 （参见 §3.4.3）尝试取元方法。<br />
+__bor: | （按位或）操作。 行为和 &ldquo;band&rdquo; 操作类似。<br />
+__bxor: ~ （按位异或）操作。 行为和 &ldquo;band&rdquo; 操作类似。<br />
+__bnot: ~ （按位非）操作。 行为和 &ldquo;band&rdquo; 操作类似。<br />
+__shl: &lt;&lt; （左移）操作。 行为和 &ldquo;band&rdquo; 操作类似。<br />
+__shr: &gt;&gt; （右移）操作。 行为和 &ldquo;band&rdquo; 操作类似。<br />
+__concat: .. （连接）操作。 行为和 &ldquo;add&rdquo; 操作类似， 不同的是 Lua 在任何操作数即不是一个字符串 也不是数字（数字总能转换为对应的字符串）的情况下尝试元方法。<br />
+__len: # （取长度）操作。 如果对象不是字符串，Lua 会尝试它的元方法。 如果有元方法，则调用它并将对象以参数形式传入， 而返回值（被调整为单个）则作为结果。 如果对象是一张表且没有元方法， Lua 使用表的取长度操作（参见 §3.4.7）。 其它情况，均抛出错误。<br />
+__eq: == （等于）操作。 和 &ldquo;add&rdquo; 操作行为类似， 不同的是 Lua 仅在两个值都是表或都是完全用户数据 且它们不是同一个对象时才尝试元方法。 调用的结果总会被转换为布尔量。<br />
+__lt: &lt; （小于）操作。 和 &ldquo;add&rdquo; 操作行为类似， 不同的是 Lua 仅在两个值不全为整数也不全为字符串时才尝试元方法。 调用的结果总会被转换为布尔量。<br />
+__ le: &lt;= （小于等于）操作。 和其它操作不同， 小于等于操作可能用到两个不同的事件。 首先，像 &ldquo;lt&rdquo; 操作的行为那样，Lua 在两个操作数中查找 &ldquo;<strong>le&rdquo; 元方法。 如果一个元方法都找不到，就会再次查找 &ldquo;</strong>lt&rdquo; 事件， 它会假设 a &lt;= b 等价于 not (b &lt; a)。 而其它比较操作符类似，其结果会被转换为布尔量。<br />
+__index: 索引 table[key]。 当 table 不是表或是表 table 中不存在 key 这个键时，这个事件被触发。 此时，会读出 table 相应的元方法。<br />
+尽管名字取成这样， 这个事件的元方法其实可以是一个函数也可以是一张表。 如果它是一个函数，则以 table 和 key 作为参数调用它。 如果它是一张表，最终的结果就是以 key 取索引这张表的结果。 （这个索引过程是走常规的流程，而不是直接索引， 所以这次索引有可能引发另一次元方法。）<br />
+__newindex: 索引赋值 table[key] = value 。 和索引事件类似，它发生在 table 不是表或是表 table 中不存在 key 这个键的时候。 此时，会读出 table 相应的元方法。
+同索引过程那样， 这个事件的元方法即可以是函数，也可以是一张表。 如果是一个函数， 则以 table、 key、以及 value 为参数传入。 如果是一张表， Lua 对这张表做索引赋值操作。 （这个索引过程是走常规的流程，而不是直接索引赋值， 所以这次索引赋值有可能引发另一次元方法。）<br />
+一旦有了 &ldquo;newindex&rdquo; 元方法， Lua 就不再做最初的赋值操作。 （如果有必要，在元方法内部可以调用 rawset 来做赋值。）<br />
+__call: 函数调用操作 func(args)。 当 Lua 尝试调用一个非函数的值的时候会触发这个事件 （即 func 不是一个函数）。 查找 func 的元方法， 如果找得到，就调用这个元方法， func 作为第一个参数传入，原来调用的参数（args）后依次排在后面。</p>
+</blockquote>
+
+<h1 id="dummylua的metatable实现">dummylua的metatable实现</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dummylua新增了luatm.h|c文件，主要用于元表模块的初始化，元表设置和获取的操作，同时在global_State中添加了对应的数据结构（存放基础类型的元表的结构、元方法键值字符串存放结构等），在luavm.h|c中添加了luaV_finishset和luaV_finishset的逻辑，主要是用来执行元方法访问的一些逻辑操作，读者可以直接到阅读这些逻辑。</p>
+
+<h1 id="结束语">结束语</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章的篇幅很小，没有对元表实现太多的着墨，重点讲了元表访问操作的一些逻辑，metatable这块，我没有花费很大的篇幅着墨，很大原因是因为它相对来说较为简单，并且大家也比较熟悉，所以这里采取了速战速决的策略。本章作为lua语言特性讲解的第一章，后面将陆续介绍，userdata、upvalue、weektable、coroutine和require机制等。</p>
+
+<h1 id="reference">Reference</h1>
+
+<p>[1] <a href="http://cloudwu.github.io/lua53doc/manual.html#2.4">元表及元方法</a></p>
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+            
+          </div>
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part8：构建完整的语法分析器(下)">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src=https://manistein.github.io/blog/js/jquery-1.12.4.min.js></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
+

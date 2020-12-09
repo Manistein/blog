@@ -227,6 +227,46 @@
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/">
+                <h2 class="post-title">构建Lua解释器Part9：metatable</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on December 8, 2020
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我们将进入到metatable的探索之中。由于这块本身比较简单，而且我也不打算罗列代码细节，因此本章的篇幅不会很大。只是对一些我认为比较关键的部分，进行说明。首先，本章的主要任务，首先是简要介绍metatable是做什么的，然后简要说明一下，它如何被设置，接着介绍metatable的访问域，双目运算操作域、单目运算操作域等。最后会告诉读者，本章的实现逻辑位于dummylua工程的哪些部位。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part8/">
                 <h2 class="post-title">构建Lua解释器Part8：构建完整的语法分析器(下)</h2>
 
@@ -573,47 +613,6 @@
 
 <p></p>
                   <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">
-                <h2 class="post-title">构建Lua解释器Part2：Garbage Collection基础架构</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 13, 2018
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="前言">前言</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/">上一篇</a>我已经设计和实现了Lua解释器最基础的基本数据结构，实现了纯C函数在栈中的调用流程，以及保护模式调用函数等内容，今天要介绍的则是Lua解释器的GC基础架构。Garbage
-Collection机制，可能是让人们听之不寒而栗的机制，都说GC很复杂，需要花费大量时间去消化和理解，那为什么要在本系列的第2篇就早早引入？做这个决定并非一时冲动之举，而是经过思考后而决定的。之前在阅读了云风大神翻译的《编程之魂》第7章<sup>[1]</sup>，这篇关于对Lua设计者的访谈记录中，作者有这么说过：</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/" class="post-read-more">[Read More]</a>
                 
               </div>
 
