@@ -307,10 +307,8 @@
 #ifndef lua_h
 #define lua_h 
 
-static int POINTER_SIZE = sizeof(void*);
-
-#if POINTER_SIZE  &gt;= 8
-#define LUA_INTEGER long
+#if defined(LLONG_MAX) 
+#define LUA_INTEGER long long
 #define LUA_NUMBER double
 #else
 #define LUA_INTEGER int 
