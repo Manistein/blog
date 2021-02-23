@@ -42,8 +42,8 @@
   <link rel="canonical" href="https://manistein.github.io/blog/post/server/skynet/skynet%E6%BA%90%E7%A0%81%E8%B5%8F%E6%9E%90/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
@@ -273,7 +273,7 @@ skynet本质是什么？它为我们提供了什么机制？如何正确使用�
 从上面目录结构图来看，越是往下的层次，应用领域越广泛。越是往上的层级，针对性越强，应用领域越小，和业务越相关。</p>
 
 <ul>
-<li>3rd目录：提供lua语言支持、 jemalloc（内存管理模块）、md5加密等，这些模块在开发领域有着广泛的应用。<br /></li>
+<li>3rd目录：提供lua语言支持、 jemalloc（内存管理模块）、md5库等，这些模块在开发领域有着广泛的应用。<br /></li>
 <li>skynet-src目录：包含skynet最核心机制的模块，包括逻辑入口、加载C服务代码的skynet_module模块、运行和管理服务实例的skynet_context模块、skynet消息队列、定时器和socket模块等。</li>
 <li>service-src目录：这是依附于skynet核心模块的c服务，如用于日志输出的logger服务，用于运行lua脚本snlua的c服务等。<br /></li>
 <li>lualib-src目录：提供C层级的api调用，如调用socket模块的api，调用skynet消息发送，注册回调函数的api，甚至是对C服务的调用等，并导出lua接口，供lua层使用。可以视为lua调C的媒介</li>
@@ -713,7 +713,7 @@ context-&gt;cb_ud = ud;
 </ul>
 
 <ol>
-<li><p>概念：互斥锁，一条线程加锁锁住临界区，另一条线程尝试访问改临界区的时候，会发生阻塞，并进入休眠状态。临界区是锁lock和unlock之间的代码片段，一般是多条线程能够共同访问的部分。</p></li>
+<li><p>概念：互斥锁，一条线程加锁锁住临界区，另一条线程尝试访问该临界区的时候，会发生阻塞，并进入休眠状态。临界区是锁lock和unlock之间的代码片段，一般是多条线程能够共同访问的部分。</p></li>
 
 <li><p>具体说明：假设一台机器上的cpu有两个核心core0和core1，现在有线程A、B、C，此时core0运行线程A，core1运行线程B，此时线程B使用Mutex锁，锁住一个临界区，当线程A试图访问该临界区时，因为线程B已经将其锁住，因此线程A被挂起，进入休眠状态，此时core0进行上下文切换，将线程A放入休眠队列中，然后core0运行线程C，当线程B完成临界区的流程并执行解锁之后，线程A又会被唤醒，core0重新运行线程A</p></li>
 
@@ -2070,7 +2070,7 @@ Cluster设计请查看<a href="http://blog.codingnow.com/2017/03/skynet_cluster.
           
 
           &nbsp;&bull;&nbsp;
-          2020
+          2021
 
           
             &nbsp;&bull;&nbsp;
@@ -2089,8 +2089,8 @@ Cluster设计请查看<a href="http://blog.codingnow.com/2017/03/skynet_cluster.
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
-<script src=https://manistein.github.io/blog/js/jquery-1.12.4.min.js></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/jquery-1.12.4.min.js"></script>
+<script src="https://manistein.github.io/blog/js/bootstrap.min.js"></script>
 <script src="https://manistein.github.io/blog/js/main.js"></script>
 <script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
 <script> hljs.initHighlightingOnLoad(); </script>

@@ -39,8 +39,8 @@
   <link rel="canonical" href="https://manistein.github.io/blog/" />
   <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
@@ -214,6 +214,43 @@
 
         <div class="posts-list">
           
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/">
+                <h2 class="post-title">构建Lua解释器Part10：userdata</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 23, 2021
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我开始对<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是非常复杂，因此我这里也会速战速决，将userdata的一些核心思想论述清楚，就将本章完结。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/">
@@ -547,44 +584,6 @@
               
             </article>
           
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/">
-                <h2 class="post-title">构建Lua解释器Part3：String设计与实现</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 1, 2019
-  
-  
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <h2 id="前言">前言</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">上一章节</a>我介绍了<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>项目的gc的设计原理和实现方式，该部分我基本是仿造了官方lua-5.3.4的做法。本章节，我将为大家带来dummylua项目TString的设计实现讲解。和以往任何一篇一样，本篇我也是基本遵循lua-5.3的设计思想，但由于实现是我凭理解自己手动实现，因此不会在所有的细节上和官方lua保持一致。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任何一门语言都要支持字符串，lua也一样，本章将从lua string的数据结构开始阐述，然后深入其他细节进行阐述，并试图揭露这些设计的历史背景和原因，由于本人能力有限，如有不当之处想要指明，或是想和我一起讨论，欢迎加Q群与我讨论(QQ185017593)，我是群主，欢迎大家的到来。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part3/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-            </article>
-          
         </div>
 
         
@@ -644,7 +643,7 @@
           
 
           &nbsp;&bull;&nbsp;
-          2020
+          2021
 
           
             &nbsp;&bull;&nbsp;
@@ -663,8 +662,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
-<script src=https://manistein.github.io/blog/js/jquery-1.12.4.min.js></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/jquery-1.12.4.min.js"></script>
+<script src="https://manistein.github.io/blog/js/bootstrap.min.js"></script>
 <script src="https://manistein.github.io/blog/js/main.js"></script>
 <script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
 <script> hljs.initHighlightingOnLoad(); </script>

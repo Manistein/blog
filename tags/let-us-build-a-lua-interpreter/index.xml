@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Tue, 08 Dec 2020 16:03:32 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 23 Feb 2021 14:00:15 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>构建Lua解释器Part10：userdata</title>
+      <link>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/</link>
+      <pubDate>Tue, 23 Feb 2021 14:00:15 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本章节，我开始对&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua&lt;/a&gt;的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是非常复杂，因此我这里也会速战速决，将userdata的一些核心思想论述清楚，就将本章完结。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part9：metatable</title>

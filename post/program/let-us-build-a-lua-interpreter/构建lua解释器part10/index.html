@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="msvalidate.01" content="BEE2E707286C0BC14981B8EA3063843A" />
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122943512-1"></script>
+  <meta name="baidu-site-verification" content="F2vPlhbqCA" />
+  
+  
+   
+   
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122943512-1');
+    </script>
+  
+
+
+  <title>构建Lua解释器Part10：userdata</title>
+  <meta property="og:title" content="构建Lua解释器Part10：userdata" />
+  <meta name="twitter:title" content="构建Lua解释器Part10：userdata" />
+  <meta name="description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我开始对dummylua的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是非常复杂，因此我这里也会速战速决，将userdata的一些核心思想论述清楚，就将本章完结。
+
+">
+  <meta property="og:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我开始对dummylua的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是非常复杂，因此我这里也会速战速决，将userdata的一些核心思想论述清楚，就将本章完结。
+
+">
+  <meta name="twitter:description" content="前言
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我开始对dummylua的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是 …">
+  <meta name="author" content="Manistein"/>
+  <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Manistein&#39;s Blog" />
+
+  <meta name="generator" content="Hugo 0.37" />
+  <link rel="canonical" href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://manistein.github.io/blog/css/highlight.min.css" /><link rel="stylesheet" href="https://manistein.github.io/blog/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Projects</a>
+              <div class="navlinks-children">
+                
+                  <a href="/blog/tags/let-us-build-a-lua-interpreter/">构建Lua解释器</a>
+                
+                  <a href="/blog/">开源RTS Demo（敬请期待）</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags/">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Manistein&#39;s Blog" href="https://manistein.github.io/blog/">
+            <img class="avatar-img" src="https://manistein.github.io/blog/img/head.jpg" alt="Manistein&#39;s Blog" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>构建Lua解释器Part10：userdata</h1>
+              
+              
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 23, 2021
+  
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章节，我开始对<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>的userdata的设计与实现，进行论述。它的大体设计与实现，仍然是仿照了lua5.3的标准，由于，所有的内容，都是我自己理解后，重新实现，因此在一些实现细节上略有不同，但是整体设计思路遵循了lua的设计思想。本章的篇幅不会很长，因为userdata这个部分并不是非常复杂，因此我这里也会速战速决，将userdata的一些核心思想论述清楚，就将本章完结。</p>
+
+<p></p>
+
+<h1 id="userdata的数据结构">userdata的数据结构</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userdata是用来存放，用户自定义的数据结构实例的，userdata的种类有两种，一种是lightuserdata，还有一种则是full userdata。light userdata是Value结构中的一个变量类型，本质是一个void* 指针</p>
+<div class="highlight"><pre class="chroma">// luaobject.h
+typedef union lua_Value {
+    struct GCObject* gc;
+    void* p;
+    int b;
+    lua_Integer i;
+    lua_Number n;
+    lua_CFunction f;
+} Value;</pre></div>
+<p>light userdata的内存，需要用户自行管理，而full userdata则是通过lua的gc机制进行管理，我们本章论述的也正是full userdata。后文中，所有指代userdata的地方，均是指full userdata。对full userdata的操作实现，一般是在c层进行的，后面会有使用的例子。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先我们要看的是userdata的数据结构，在dummylua中，它的定义如下所示：</p>
+<div class="highlight"><pre class="chroma">// luaobject.h
+#define CommonHeader struct GCObject* next; lu_byte tt_; lu_byte marked
+
+typedef struct Udata {
+    CommonHeader;           // GC公共头部
+    struct Table* metatable;// userdata可以设置metatable，一般用于设置__gc域，在userdata被回收之前，
+                            // __gc函数会被调用，一般用于回收系统资源等
+    int ttuv_;              // 相当于TValue的tt_，用来指代user_变量的类型
+    int len;                // 自定义域的大小
+    Value user_;            // 本质就是TValue的value_部分，这里将TValue拆成了两个部分
+} Udata;</pre></div>
+<p>注释，对每个字段有了一个大致的说明，后续内容，会对他们进行较为详细的解释和说明。</p>
+
+<h1 id="userdata的接口">userdata的接口</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上一小节，介绍了userdata的基本数据结构，本小节则会介绍userdata相关的主要接口，分别是luaS_newuserdata，getudatamem，setuservalue，getuservalue。我们先来看一下luaS_newuserdata的定义：</p>
+<div class="highlight"><pre class="chroma">// luastring.c
+Udata* luaS_newuserdata(struct lua_State* L, int size);</pre></div>
+<p>这个接口，做了什么事情呢？就是创建了一个userdata实例，这个userdata实例的内存大小，就是Udata头部+传入的size大小，我们可以看一下userdata实例的构成：</p>
+<div class="highlight"><pre class="chroma">+------------+----------------+
+|Header:Udata|   user domain  |
++------------+----------------+</pre></div>
+<p>前面的Header，就是sizeof(Udata)的大小，而后面的user domain，则是luaS_newuserdata的第二个参数size来指定，比方，现在我们定义了一个Vector3的数据结构：</p>
+<div class="highlight"><pre class="chroma">typedef struct Vector3 {
+    float x;
+    float y;
+    float z;
+} Vector3;</pre></div>
+<p>现在我们要创建，这个Vector3关联的userdata，那么它的创建代码则如下所示：</p>
+<div class="highlight"><pre class="chroma">Udata* u = luaS_newuserdata(L, sizeof(Vector3));</pre></div>
+<p>第二个参数，size的大小则是sizeof(Vector3)的大小，也就是12，那么此时，user domain的大小则是12 bytes的大小。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成了userdata实例的创建之后，我们要在c层，获取我们自定义的结构实例的指针，如何获取它呢，我们需要一个接口getudatamem</p>
+<div class="highlight"><pre class="chroma">// luaobject.h
+#define getudatamem(o) (cast(char*,o)+sizeof(Udata))</pre></div>
+<p>这个宏的作用在，则是将userdata实例中，user domain部分的指针拿到，获取的结果所指向的位置，如下&rsquo;^&lsquo;所示：</p>
+<div class="highlight"><pre class="chroma">+------------+----------------+
+|Header:Udata|   user domain  |
++------------+----------------+
+             ^</pre></div>
+<p>通过这个宏，我们可以获取结构自定义结构变量的实例，具体方法如下所示：</p>
+<div class="highlight"><pre class="chroma">Vector3* v3 = (Vector3*)getudatamem(u);</pre></div>
+<p>接下来，我们就可以对v3所指向的内存块进行对应的处理了。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userdata还有一个重要的接口，就是setuservalue，这是一个宏，它的作用是，将一个TValue实例，赋值到Udata头部中，分别将TValue实例的tt_赋值给Udata的ttuv_，将TValue的value_赋值给Udata的user_字段中，其定义如下所示：</p>
+<div class="highlight"><pre class="chroma">// luaobject.h
+#define setuservalue(u, o) \
+            (u)-&gt;ttuv_ = (o)-&gt;tt_; (u)-&gt;user_ = (o)-&gt;value_</pre></div>
+<p>同样的，获取它的接口如下所示：</p>
+<div class="highlight"><pre class="chroma">// luaobject.h
+#define getuservalue(u, o) \
+            (o)-&gt;tt_ = (u)-&gt;ttuv_; (o)-&gt;value_ = (u)-&gt;user_</pre></div>
+<p>到这里，我们就完成了userdata相关的接口的讨论了。</p>
+
+<h1 id="userdata的gc处理">userdata的gc处理</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于lua的gc机制，我在Part2里已经有非常详细的论述了，在后面的章节中，我还会再出一篇，再次，进一步论述gc算法。有关gc算法的具体步骤，可以查看Part2，本小节，我将集中精力，梳理一下userdata的标记和清除阶段的逻辑处理。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userdata在标记阶段，其处理逻辑如下所示：</p>
+<div class="highlight"><pre class="chroma">// luagc.c
+void reallymarkobject(struct lua_State* L, struct GCObject* gco) {
+    struct global_State* g = G(L);
+    white2gray(gco);
+
+    switch(gco-&gt;tt_) {
+        case LUA_TTHREAD:{
+            linkgclist(gco2th(gco), g-&gt;gray);            
+        } break;
+        case LUA_TTABLE:{
+            linkgclist(gco2tbl(gco), g-&gt;gray);
+        } break;
+        case LUA_TLCL:{
+            linkgclist(gco2lclosure(gco), g-&gt;gray);
+        } break;
+        case LUA_TCCL:{
+            linkgclist(gco2cclosure(gco), g-&gt;gray);
+        } break;
+        case LUA_TPROTO:{
+            linkgclist(gco2proto(gco), g-&gt;gray);
+        } break;
+        case LUA_SHRSTR:{ 
+            gray2black(gco);
+            struct TString* ts = gco2ts(gco);
+            g-&gt;GCmemtrav += sizelstring(ts-&gt;shrlen);
+        } break;
+        case LUA_LNGSTR:{
+            gray2black(gco);
+            struct TString* ts = gco2ts(gco);
+            g-&gt;GCmemtrav += sizelstring(ts-&gt;u.lnglen);
+        } break;
+        case LUA_TUSERDATA: {
+            gray2black(gco);
+
+            TValue uvalue;
+            Udata* u = gco2u(gco);
+            getuservalue(u, &amp;uvalue);
+            if (u-&gt;metatable) {
+                markobject(L, u-&gt;metatable);
+            }
+
+            if (iscollectable(&amp;uvalue) &amp;&amp; iswhite(gcvalue(&amp;uvalue))) {
+                reallymarkobject(L, gcvalue(&amp;uvalue));
+            }
+
+            g-&gt;GCmemtrav += sizeof(Udata);
+            g-&gt;GCmemtrav += u-&gt;len;
+        } break;
+        default:break;
+    }
+}</pre></div>
+<p>我们已知了，luaS_newuserdata接口，其实是在luastring模块里的，因为它的创建和使用逻辑和luastring非常类似，在标记阶段也是，userdata实例本身，在标记为灰色后，直接标记成黑色，并且将它的metatable(如果存在的话)标记为灰色，并且放入gray列表中，此外如果userdata的user域存在，且是一个gc实例，那么它也需要被标记为灰色，并且放入gray列表中。这里，我们需要注意几个问题，一个就是userdata在标记扫描阶段，直接整个被标记为黑色，并不会对user domain内部的任何域进行检查和处理。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，我们来看一下userdata的清除逻辑，如下所示：</p>
+<div class="highlight"><pre class="chroma">// luagc.c
+static lu_mem freeobj(struct lua_State* L, struct GCObject* gco) {
+    switch(gco-&gt;tt_) {
+        case LUA_SHRSTR: {
+            struct TString* ts = gco2ts(gco);
+            luaS_remove(L, ts);
+            lu_mem sz = sizelstring(ts-&gt;shrlen);
+            luaM_free(L, ts, sz); 
+            return sz; 
+        } break;
+        case LUA_LNGSTR: {
+            struct TString* ts = gco2ts(gco);
+            lu_mem sz = sizelstring(ts-&gt;u.lnglen);
+            luaM_free(L, ts, sz);
+        } break;
+        case LUA_TTABLE: {
+            struct Table* tbl = gco2tbl(gco);
+            lu_mem sz = sizeof(struct Table) + tbl-&gt;arraysize * sizeof(TValue) + twoto(tbl-&gt;lsizenode) * sizeof(Node);
+            luaH_free(L, tbl);
+            return sz;
+        } break;
+        case LUA_TTHREAD: {
+            // TODO
+        } break;
+        case LUA_TLCL: {
+            struct LClosure* cl = gco2lclosure(gco);
+            lu_mem sz = sizeof(LClosure);
+            luaF_freeLclosure(L, cl);
+            return sz;
+        } break;
+        case LUA_TCCL: {
+            struct CClosure* cc = gco2cclosure(gco);
+            lu_mem sz = sizeof(struct CClosure);
+            luaF_freeCclosure(L, cc);
+            return sz;
+        } break;
+        case LUA_TPROTO: {
+            struct Proto* f = gco2proto(gco);
+            lu_mem sz = luaF_sizeproto(L, f);
+            luaF_freeproto(L, f);
+            return sz;
+        } break;
+        case LUA_TUSERDATA: {
+            Udata* u = gco2u(gco);
+            lu_mem sz = sizeof(Udata) + u-&gt;len;
+            luaM_free(L, u, sz);
+            return sz;
+        } break;
+        default:{
+            lua_assert(0);
+        } break;
+    }
+    return 0;
+}</pre></div>
+<p>我们可以看case LUA_TUSERDATA的那部分逻辑，可以看到的是，userdata实例是整个被释放掉，未对userdata内部的user domian部分做任何的处理，也就是说如果user domain内部包含了堆内存实例的指针，这部分需要用户自己进行处理。</p>
+
+<h1 id="userdata的user-domain域内部的堆内存清理">userdata的user domain域内部的堆内存清理</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面，我们提到了，user domain域内，如果包含了指向堆内存的指针，那么这部分需要我们进行处理，需要怎么处理呢？lua的清除逻辑，并没有提供这样的机会，但是，我们前面说过，userdata有一个metatable域，为userdata设置一个metatable，并且这个metatable如果包含一个名为__gc的函数，那么在userdata被gc回收之前，会首先调用这个函数，我们来看一个伪代码，假设userdata的metatable是如下所示：</p>
+<div class="highlight"><pre class="chroma">{
+    __gc = function(udata) release(udata) end
+}</pre></div>
+<p>那么在udata实例，被gc回收之前，上面这个__gc函数会被调用，该函数的参数，就是userdata实例本身，release函数是用户自己在c层实现的函数，导出给lua层使用的，这个release函数，将在c层逻辑中，对udata的user domain域中，包含的堆内存实例进行释放操作，避免内存泄露。</p>
+
+<h1 id="userdata的使用例子">userdata的使用例子</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接下来，我们要看的则是userdata的使用例子，这里直接引用《Programing in Lua》的28.1 <a href="https://www.lua.org/pil/28.1.html">userdata</a>一节，这里就不再赘述。</p>
+
+<h1 id="本章的example">本章的example</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章也写了一个测试用例，这个测试用例创建了一个userdata实例，并且为它设置了一个包含_ _gc函数的metatable，最后将这个userdata实例，从栈中移除，接着调用了fullgc函数，最后显示的结果是，这个__gc函数被调用。</p>
+<div class="highlight"><pre class="chroma">// p10_test.c
+#include &#34;p10_test.h&#34;
+#include &#34;../common/luastring.h&#34;
+#include &#34;../vm/luagc.h&#34;
+#include &#34;../common/luatable.h&#34;
+
+typedef struct Vector3 {
+    float x;
+    float y;
+    float z;
+} Vector3;
+
+int gcfunc(struct lua_State* L) {
+    Udata* u = lua_touserdata(L, -1);
+    Vector3* v3 = (Vector3*)getudatamem(u);
+    printf(&#34;total_size:%d x:%f, y:%f, z:%f&#34;, u-&gt;len, v3-&gt;x, v3-&gt;y, v3-&gt;z);
+    return 0;
+}
+
+void test_create_object(struct lua_State* L) {
+    Udata* u = luaS_newuserdata(L, sizeof(Vector3));
+
+    Vector3* v3 = (Vector3*)getudatamem(u);
+    v3-&gt;x = 10.0f;
+    v3-&gt;y = 10.0f;
+    v3-&gt;z = 10.0f;
+
+    L-&gt;top-&gt;tt_ = LUA_TUSERDATA;
+    L-&gt;top-&gt;value_.gc = obj2gco(u);
+    increase_top(L);
+
+    struct Table* t = luaH_new(L);
+    struct GCObject* gco = obj2gco(t);
+    TValue tv;
+    tv.tt_ = LUA_TTABLE;
+    tv.value_.gc = gco;
+    setobj(L-&gt;top, &amp;tv);
+    increase_top(L);
+
+    lua_pushCclosure(L, gcfunc, 0);
+    lua_setfield(L, -2, &#34;__gc&#34;);
+
+    lua_setmetatable(L, -2);
+    L-&gt;top--;
+
+    return;
+}
+
+void p10_test_main() {
+    struct lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+
+    test_create_object(L);
+    luaC_fullgc(L);
+
+    luaL_close(L);
+}</pre></div>
+<p>执行后，得到的结果为：</p>
+<div class="highlight"><pre class="chroma">total_size:12 x:10.0, y:10.0, z:10.0</pre></div>
+<p>这说明，创建出来的userdata，在fullgc过后，被清除掉了。</p>
+
+<h1 id="结束语">结束语</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本章，我大致介绍了userdata的设计与实现，与以往的一些重型篇幅的章节相比，本章内容非常少，并且对前面一些章节的论述有所依赖，因此如果读者通读了前面的章节，理解这个章节中关联的部分，也不会非常困难。本章节，我也是在实现了userdata相关的逻辑之后，写下的，因此读者可以在Part10的代码目录中，找到对应的实现，下一个章节，我将论述upvalue的设计与实现。</p>
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+            
+          </div>
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part9/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part9：metatable">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:1518986465@qq.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Manistein" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
+            
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              <a href="https://manistein.github.io/blog/">Manistein</a>
+            
+          
+
+          &nbsp;&bull;&nbsp;
+          2021
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://manistein.github.io/blog/">Manistein&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.37</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/jquery-1.12.4.min.js"></script>
+<script src="https://manistein.github.io/blog/js/bootstrap.min.js"></script>
+<script src="https://manistein.github.io/blog/js/main.js"></script>
+<script src="https://manistein.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+<script src="https://manistein.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
+

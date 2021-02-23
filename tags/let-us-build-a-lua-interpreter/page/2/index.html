@@ -23,21 +23,21 @@
   
 
 
-  <title>Csharp Server</title>
-  <meta property="og:title" content="Csharp Server" />
-  <meta name="twitter:title" content="Csharp Server" />
+  <title>Let Us Build a Lua Interpreter</title>
+  <meta property="og:title" content="Let Us Build a Lua Interpreter" />
+  <meta name="twitter:title" content="Let Us Build a Lua Interpreter" />
   <meta name="author" content="Manistein"/>
   <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://manistein.github.io/blog/tags/csharp-server/" />
+  <meta property="og:url" content="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
   <meta name="generator" content="Hugo 0.37" />
-  <link rel="canonical" href="https://manistein.github.io/blog/tags/csharp-server/" />
-  <link rel="alternate" href="https://manistein.github.io/blog/tags/csharp-server/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="canonical" href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/bootstrap.min.css">
@@ -187,7 +187,7 @@
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="tags-heading">
               
-                <h1>Csharp Server</h1>
+                <h1>Let Us Build a Lua Interpreter</h1>
               
               
                 <hr class="small">
@@ -210,8 +210,8 @@
         <div class="posts-list">
           
             <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
-                <h2 class="post-title">C#服务端框架设计与实现</h2>
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">
+                <h2 class="post-title">构建Lua解释器Part0：综述</h2>
 
                 
               </a>
@@ -220,7 +220,7 @@
                 <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 18, 2019
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 16, 2018
   
   
   
@@ -230,19 +230,19 @@
               </p>
               <div class="post-entry">
                 
-                  <h2 id="前言">前言</h2>
+                  <h2 id="项目简介">项目简介</h2>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在完成<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part4/">构建Lua解释器Part4</a>以后，我原计划是将业余时间投入到Lua虚拟机的研究之中。不过最近，我们项目希望服务端和客户端共享战斗逻辑，功能由客户端实现，借以降低开发联调的成本，而客户端主要使用C#语言，在确定客户端能够做到表现和逻辑分离以后，我们决定服务端也搭建C#战斗集群来运行战斗逻辑。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。</p>
 
 <p></p>
-                  <a href="https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="post-read-more">[Read More]</a>
+                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" class="post-read-more">[Read More]</a>
                 
               </div>
 
               
                 <div class="blog-tags">
                   
-                    <a href="https://manistein.github.io/blog//tags/csharp-server/">csharp-server</a>&nbsp;
+                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
                   
                 </div>
               
@@ -250,6 +250,15 @@
             </article>
           
         </div>
+        
+          <ul class="pager main-pager">
+            
+              <li class="previous">
+                <a href="/blog/tags/let-us-build-a-lua-interpreter/page/1/">&larr; Newer Posts</a>
+              </li>
+            
+            
+          </ul>
         
       </div>
     </div>
@@ -280,7 +289,7 @@
           
           <li>
             
-            <a href="https://manistein.github.io/blog/tags/csharp-server/index.xml" title="RSS">
+            <a href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" title="RSS">
             
               <span class="fa-stack fa-lg">
                 <i class="fa fa-circle fa-stack-2x"></i>
