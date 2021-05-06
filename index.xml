@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Sat, 13 Mar 2021 10:01:07 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 27 Apr 2021 18:16:53 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>探索libevent</title>
+      <link>https://manistein.github.io/blog/post/server/libevent/%E6%8E%A2%E7%B4%A2libevent%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Tue, 27 Apr 2021 18:16:53 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/server/libevent/%E6%8E%A2%E7%B4%A2libevent%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;libevent是当前一个非常知名的跨平台网络库，学习并研究它，可以让我们理解一个优秀的网络库是如何设计的。为此，我近期花了几天时间，过了一遍libevent的基础数据结构和基本运行机制。虽然libevent库整体并不是很大，但是短短几天内要彻底掌握所有的细节，还是有相当的难度，因此这里，我只阐述libevent最核心的运作机制。本文研究的libevent的版本是libevent-2.1.12-stable。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part11：Upvalue</title>

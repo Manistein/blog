@@ -259,7 +259,7 @@ function test()
     end
     aaa()
 end</pre></div>
-<p>在上面这个例子中，test函数的外层，一共有两个变量，upval和upval2。test函数内，有一行打印upval的代码，因为有这个操作，test函数需要引用到外层函数的upval这个变量，因此upval是test函数的一个upvavle。而上面这个例子，在test函数内，又定义了一个aaa函数，在aaa函数内，因为使用了upval、upval2和locvar几个变量，因此aaa函数的upvalue有upval、upval2和locvar。由于aaa是test的内层定义的函数，test是aaa的外层函数，因此test函数的upvalue也包括了，upval、upval2。现在，只是给大家一个直观的概念，其实很多读者对此已经耳熟能详了，在后面的章节内容中，我会更细致地论述这个机制的原理。</p>
+<p>在上面这个例子中，test函数的外层，一共有两个变量，upval和upval2。test函数内，有一行打印upval的代码，因为有这个操作，test函数需要引用到外层函数的upval这个变量，因此upval是test函数的一个upvalue。而上面这个例子，在test函数内，又定义了一个aaa函数，在aaa函数内，因为使用了upval、upval2和locvar几个变量，因此aaa函数的upvalue有upval、upval2和locvar。由于aaa是test的内层定义的函数，test是aaa的外层函数，因此test函数的upvalue也包括了，upval、upval2。现在，只是给大家一个直观的概念，其实很多读者对此已经耳熟能详了，在后面的章节内容中，我会更细致地论述这个机制的原理。</p>
 
 <h1 id="lua函数探索">Lua函数探索</h1>
 
@@ -605,6 +605,10 @@ f2()</pre></div>
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part10/" data-toggle="tooltip" data-placement="top" title="构建Lua解释器Part10：userdata">&larr; Previous Post</a>
             </li>
           
+          
+            <li class="next">
+              <a href="https://manistein.github.io/blog/post/server/libevent/%E6%8E%A2%E7%B4%A2libevent%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6/" data-toggle="tooltip" data-placement="top" title="探索libevent">Next Post &rarr;</a>
+            </li>
           
         </ul>
       
