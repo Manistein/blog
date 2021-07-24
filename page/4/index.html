@@ -23,21 +23,21 @@
   
 
 
-  <title>Let Us Build a Lua Interpreter</title>
-  <meta property="og:title" content="Let Us Build a Lua Interpreter" />
-  <meta name="twitter:title" content="Let Us Build a Lua Interpreter" />
+  <title>Manistein&#39;s Blog</title>
+  <meta property="og:title" content="Manistein&#39;s Blog" />
+  <meta name="twitter:title" content="Manistein&#39;s Blog" />
   <meta name="author" content="Manistein"/>
   <link href='https://manistein.github.io/blog/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:image" content="https://manistein.github.io/blog/img/head.jpg" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/" />
+  <meta property="og:url" content="https://manistein.github.io/blog/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Manistein&#39;s Blog" />
 
   <meta name="generator" content="Hugo 0.37" />
-  <link rel="canonical" href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/" />
-  <link rel="alternate" href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
+  <link rel="canonical" href="https://manistein.github.io/blog/" />
+  <link rel="alternate" href="https://manistein.github.io/blog/index.xml" type="application/rss+xml" title="Manistein&#39;s Blog">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://manistein.github.io/blog/css/bootstrap.min.css">
@@ -185,13 +185,17 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="tags-heading">
+            <div class="page-heading">
               
-                <h1>Let Us Build a Lua Interpreter</h1>
+                <h1>Manistein&#39;s Blog</h1>
               
               
                 <hr class="small">
               
+              
+                
+                  <span class="page-subheading">如果你喜欢我写的文章，喜欢讨论技术，欢迎加入我创建的群：QQ185017593</span>
+                
               
               
             </div>
@@ -203,139 +207,59 @@
 
 
     
-  <div class="container" role="main">
+  <div role="main" class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         
+
         <div class="posts-list">
           
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">
-                <h2 class="post-title">构建Lua解释器Part2：Garbage Collection基础架构</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 13, 2018
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="前言">前言</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://manistein.github.io/blog/post/program/build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/">上一篇</a>我已经设计和实现了Lua解释器最基础的基本数据结构，实现了纯C函数在栈中的调用流程，以及保护模式调用函数等内容，今天要介绍的则是Lua解释器的GC基础架构。Garbage
-Collection机制，可能是让人们听之不寒而栗的机制，都说GC很复杂，需要花费大量时间去消化和理解，那为什么要在本系列的第2篇就早早引入？做这个决定并非一时冲动之举，而是经过思考后而决定的。之前在阅读了云风大神翻译的《编程之魂》第7章<sup>[1]</sup>，这篇关于对Lua设计者的访谈记录中，作者有这么说过：</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
           
             <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/">
-                <h2 class="post-title">构建Lua解释器Part1：虚拟机的基础--Lua基本数据结构、栈和基于栈的C函数调用的设计与实现</h2>
-
+              <a href="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/">
+                <h2 class="post-title">变换矩阵推导</h2>
+                
                 
               </a>
 
-              <p class="post-meta">
-                <span class="post-meta">
+              <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 17, 2018
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 8, 2014
   
   
   
 </span>
 
 
-              </p>
               <div class="post-entry">
                 
-                  <h2 id="前言">前言</h2>
+                  <h1 id="前言">前言</h1>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从本篇开始，我们正式进入到Lua解释器的开发阶段（这是一个遵循Lua5.3标准的项目）。本篇并不直接接入到设计和实现语法分析器和词法分析器的阶段，而是先设计和实现Lua虚拟机的基础数据结构（包括Lua最基本的数据结构，如基本数据类型，表示虚拟机状态的global_State和lua_State结构，在函数调用中扮演重要角色的CallInfo结构等）以及设计和实现基于栈的C函数调用流程。这些都是理解后面虚拟机运作的基础。由于这是一个仿制项目，为了和官方版本做区分，就称之为dummylua，后面要称呼本项目时，一律用dummylua来表示。</p>
+<p>注：这篇文章，最早发表在CSDN博客上<a href="https://blog.csdn.net/Manistein/article/details/8994607">https://blog.csdn.net/Manistein/article/details/8994607</a>  后来CSDN博客弃用了，于是迁移到这里，以下是正文<br />
+大学这几年一直在学图形学方面的知识，积累了一些原理的知识，也作过一些总结，并用word文档的方式记录下来，因为懒，不想写到博客上，前几天由于自己的手提出了问题，大量的笔记大量遗失，还好台式上还储存着，现在发现记录在网络上是最安全的，还可以和别人讨论学习，下面是我以前做的一些总结，现在把它放在一起，供大家参考，如果有什么错误的地方，希望大家批评指正，菜鸟在此先谢过各位大神。</p>
 
 <p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/" class="post-read-more">[Read More]</a>
+                  <a href="https://manistein.github.io/blog/post/client/cg/%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5%E6%8E%A8%E5%AF%BC/" class="post-read-more">[Read More]</a>
                 
               </div>
 
               
                 <div class="blog-tags">
                   
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+                    <a href="https://manistein.github.io/blog//tags/cg/">cg</a>&nbsp;
                   
                 </div>
               
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">
-                <h2 class="post-title">构建Lua解释器Part0：综述</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 16, 2018
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="项目简介">项目简介</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-
             </article>
           
         </div>
+
         
           <ul class="pager main-pager">
             
               <li class="previous">
-                <a href="/blog/tags/let-us-build-a-lua-interpreter/page/1/">&larr; Newer Posts</a>
+                <a href="https://manistein.github.io/blog/page/3/">&larr; Newer Posts</a>
               </li>
             
             
@@ -370,7 +294,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
           
           <li>
             
-            <a href="https://manistein.github.io/blog/tags/let-us-build-a-lua-interpreter/index.xml" title="RSS">
+            <a href="https://manistein.github.io/blog/index.xml" title="RSS">
             
               <span class="fa-stack fa-lg">
                 <i class="fa fa-circle fa-stack-2x"></i>
@@ -421,6 +345,18 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
 
 
 
+
+
+
+<div style="width:300px;margin:0 auto; padding:20px 0;">
+	<img src="img/beian.png" /> 
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010602007903" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+		<img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44010602007903号</p>
+	</a>
+	<a target="_blank" href="http://beian.miit.gov.cn" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+		<img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤ICP备20027140号</p>
+	</a>
+</div>
 
 
   </body>

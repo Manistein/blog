@@ -198,7 +198,7 @@
                 <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 18, 2019
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 30, 2019
   
   
   
@@ -225,6 +225,46 @@
           </div>
         
         <div class="posts-list">
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/common/understanding_computer_endianness/">
+                <h2 class="post-title">Understanding computer endianness</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 30, 2019
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h1 id="preface">Preface</h1>
+
+<p>After a long time, now I decide to add a new post. This is my first post written in English. Maybe it is a challenge, but it is surely a good beginning. I believe that one step at a time can make a thousand miles. I am going to talk about the endianness in this post.</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/common/understanding_computer_endianness/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/common/">common</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/server/csharp/csharp%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
@@ -575,48 +615,6 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
 　　本Blog的主要功能是对数据链路层知识进行梳理，而非对Top-Down中Link-Layer这一章节的翻译，而是经过自己的梳理而写的文章。最后由于本人水平有限，如有不当的地方，欢迎大家批评指正，大家可以将建议或者意见发到我的邮箱中1518986465@qq.com。
 </p>
                   <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E6%BC%AB%E8%B0%88/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/network/">network</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/">
-                <h2 class="post-title">数据包在网络层中的传输</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 14, 2018
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="前言">前言</h2>
-
-<p>好久没有写blog了，近一年来，不断在学习网络相关的东西，最近看了许多书籍和paper，觉得是时候该写一篇有关网络层相关的文章，来梳理一下自己所学的知识点。在写这篇文章之前，我大概看过《计算机网络（谢希仁著）》、《网络是怎样连接的》和《Computer Networking A Top-Down Approach》等几本书。早在刚开始决定学习一下网络原理之初，我选择了《TCP/IP详解 卷1》来看，不过结合个人的学习经历，相比于Top-Down，个人认为这本书其实并不适合刚入门的初学者看，它略过了太多的细节，相反《Computer Networking A Top-Down Approach》这本，不论在内容编排上，还是在内容阐述上都非常合理、清晰，循序渐进，对于想入门计算机网络的人来说，是绝佳的经典教程。<br />
-按照我自己的习惯，每经历一个阶段的学习，我就会进行一次知识的梳理和总结，今天写的这篇<strong>目的是通过阐述数据包在网络层中的流转，梳理网络层的整体结构，运作流程。最终串联各个知识点</strong>。本文将通过3个数据包流转的例子（其中一个是在一个很小的局域网内的传输，一个是在AS内的传输，还有一个是跨AS的传输），来逐步展现网络层的基本组成成分，以及不同规模情况下的基本运作流程。网络层数据包协议主要有IPv4和IPv6两种，目前广泛运用的仍然是IPv4，为了解决IPv4地址耗尽的问题，专家们提出了IPv6。本文探讨的内容，主要针对IPv4，不对IPv6作深入探讨。<br />
-本文旨在梳理网络层的基本结构和运作流程，并不涉及到网络层的方方面面，文章也会大量引用《计算机网络》、《网络是怎样连接的》、《Computer Networking A Top-Down Approach》以及其他一些论文的论述和插图，最后本人学识水平有限，如有疏漏，欢迎大家批评指正。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/network/%E6%95%B0%E6%8D%AE%E5%8C%85%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%E4%B8%AD%E7%9A%84%E4%BC%A0%E8%BE%93/" class="post-read-more">[Read More]</a>
                 
               </div>
 
