@@ -399,7 +399,7 @@ static int llex(LexState* ls, Seminfo* s) {
     ...
     }
 }</pre></div>
-<p>从上面的伪代码我们可以看到，词法分析器识别一个token，需要不断从源码文件中，一个一个读取字符，然后判断它可能是哪种类型的token，最后作相应的处理，比如readstring和readnumber操作，就是把有效字符串识和数值别出来，最后存储在LexState结构的Token类型变量t中。readstring函数和readnumber函数内部也会多次调用zget函数，不断获取新的字符，最后生成token。<br />
+<p>从上面的伪代码我们可以看到，词法分析器识别一个token，需要不断从源码文件中，一个一个读取字符，然后判断它可能是哪种类型的token，最后作相应的处理，比如readstring和readnumber操作，就是把有效字符串识和数值识别出来，最后存储在LexState结构的Token类型变量t中。readstring函数和readnumber函数内部也会多次调用zget函数，不断获取新的字符，最后生成token。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回到图1的例子，在词法分析器数据结构实例LexState完成初始化的伊始，我们刚完成初始化的Zio结构实例，会关联一个已经打开的文件，这个文件就是LoadF结构中的FILE*指针f指定，正如图所示，LoadF类型变量的n值为0，这意味着我们未读取buff中任何一个字符。而buff此时也未存储任何一个文件源码中的字符。现在回头来看看Zio数据实例本身，其void*指针，data指向了我们刚刚讨论过的LoadF类型实例，Zio的变量n表示，LoadF结构的buff中，还剩下多少个未读取的字符，char*指针p，应当指向LoadF结构中buff的某个位置，但是现在还是初始化状态，因此它是NULL，至于Zio中的reader函数，主要用于处理从文件中读取字符到LoadF结构的buff中的情况。<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回顾一下zget这个宏，当我们第一次调用zget这个宏的时候，它会首先调用一个叫做luaZ_fill的函数来处理，我们先忽略它的具体实现，通过一个情景展示来观察它的逻辑流程。这段逻辑的本质是，因为没有未被读取的字符，因此需要重新到文件里加载。以图1为例，假设BUFFSIZ的值为8，现在我们来看看它的执行步骤：</p>
 

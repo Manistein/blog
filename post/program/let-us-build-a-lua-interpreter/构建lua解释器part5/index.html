@@ -1236,7 +1236,7 @@ typedef struct LoadF {
 } LoadF;
 
 typedef struct Zio {
-    lua_Reader reader;      // 执行从文件中读取字符，并村妇LoadF的buff中的执行函数，由外部指定
+    lua_Reader reader;      // 执行从文件中读取字符，并存入LoadF的buff中的执行函数，由外部指定
     int n;                  // 还有多少个未被处理的字符，初始值是LoadF的n值
     char* p;                // 指向LoadF结构的buff数组的指针，每处理一个字符，它会自增
     void* data;             // LoadF结构实例的指针

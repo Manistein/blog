@@ -424,7 +424,7 @@ typedef struct Proto {
 <li>OP_SELF R(A+1) = R(B); R(A) = R(B)[RK( C )]<br />
 寄存器B的变量必须是个table，然后从常量表K(当C值&gt;=256)，中取出以K-256为索引的值，或者从寄存器C中的值，存放到寄存器A中。最后将寄存器B中的table变量赋值给R(A+1)</li>
 <li>OP_TEST if not (R(A) &lt;=&gt; C) then pc++<br />
-如果寄存器A的值，与C值相等，那么PC寄存器自增1(跳过下一个指令)，通常TEST指令后面必定要跟一个JUMP指令</li>
+如果寄存器A的值与C值不相等，那么PC寄存器自增1(跳过下一个指令)，通常TEST指令后面必定要跟一个JUMP指令</li>
 <li>OP_TESTSET if (R(B) &lt;=&gt; C) then R(A) := R(B) else pc++<br />
 如果寄存器B的值，与C值相等，那么将寄存器B的值，赋值给寄存器A，否则PC寄存器自增1(跳过下一个指令)，通常TESTSET指令后面必定要跟一个JUMP指令</li>
 <li>OP_JUMP pc+=sBx; if (A) close all upvalues &gt;= R(A - 1)<br />
