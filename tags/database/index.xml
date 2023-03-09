@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database on Manistein&#39;s Blog</title>
+    <link>https://manistein.github.io/blog/tags/database/</link>
+    <description>Recent content in Database on Manistein&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
+    <webMaster>1518986465@qq.com (Manistein)</webMaster>
+    <lastBuildDate>Sat, 28 Jan 2023 15:27:29 +0800</lastBuildDate>
+    
+	<atom:link href="https://manistein.github.io/blog/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MongoDB初探</title>
+      <link>https://manistein.github.io/blog/post/server/db/mongodb%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Sat, 28 Jan 2023 15:27:29 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/server/db/mongodb%E5%88%9D%E6%8E%A2/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本篇内容是我阅读完MongoDB 4.2官方文档后的梳理总结，并且只是梳理。梳理的内容并不包含MongoDB官方文档的方方面面，更多的是与我们项目相关联的部分。本篇博客不是简单对官方文档的整理，其中包含了很多官方文档之外的资料，文章的脉络和结构，也是根据本人的理解进行组织。本文并不打算阐述太多MongoDB操作和部署相关的内容，更多的是梳理其内部的一些运作机制，如果想了解如何部署和使用MongoDB API，请查阅&lt;a href=&#34;https://www.mongodb.com/docs/v4.2/&#34;&gt;官网&lt;/a&gt;。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最后，由于本人水平有限，如有不当之处欢迎指出，同时也欢迎读者加入QQ:185017593群聊。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

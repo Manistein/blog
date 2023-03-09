@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Mon, 19 Jul 2021 17:43:18 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 Oct 2022 00:20:45 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/categories/program/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>红黑树探索</title>
+      <link>https://manistein.github.io/blog/post/program/c/%E7%BA%A2%E9%BB%91%E6%A0%91%E6%8E%A2%E7%B4%A2/</link>
+      <pubDate>Sat, 29 Oct 2022 00:20:45 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/c/%E7%BA%A2%E9%BB%91%E6%A0%91%E6%8E%A2%E7%B4%A2/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在沉浸了一年多之后，我开始重新拾起了写博客的习惯。过去一年主要在忙我的书的事情，一本关于如何实现Lua解释器的书&amp;ndash;《Lua解释器构建：从虚拟机到编译器》。这本书将由机械工业出版社出版，目前已经过了终审，处于校对环节，预计明年1月能够出样书，大概2月份能够上市。随书源码已经放到github上了，有兴趣的读者可以点击&lt;a href=&#34;https://github.com/Manistein/let-us-build-a-lua-interpreter&#34;&gt;这里&lt;/a&gt;进行访问。由于我想写的内容已经在书中展现，因此原来的博客&lt;a href=&#34;https://github.com/Manistein/dummylua-tutorial&#34;&gt;dummylua-tutorial&lt;/a&gt;系列不再更新。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;对书籍的预热结束，言归正传，本篇将深入探索红黑树。红黑树由于难于理解与实现，业内一直将“手撸红黑树”作为调侃的梗。本文将要探索的是红黑树的设计与实现，在开始写博客之前，我已经动手将红黑树实现了一遍，并且通过了预定的测试，确实是“手撸红黑树”了，XD。该项目我已经放到github上，读者可以通过这个链接&lt;a href=&#34;https://github.com/Manistein/red-black-tree&#34;&gt;red-black-tree&lt;/a&gt;进行下载。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>构建Lua解释器Part12：Weaktable</title>

@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Fri, 24 Aug 2018 16:02:45 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 Oct 2022 00:20:45 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>C</title>
       <link>https://manistein.github.io/blog/tags/c/</link>
-      <pubDate>Fri, 24 Aug 2018 16:02:45 +0800</pubDate>
+      <pubDate>Sat, 29 Oct 2022 00:20:45 +0800</pubDate>
       <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/tags/c/</guid>
       <description></description>
@@ -54,6 +54,15 @@
       <pubDate>Thu, 18 Apr 2019 22:22:24 +0800</pubDate>
       <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/tags/csharp-server/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Database</title>
+      <link>https://manistein.github.io/blog/tags/database/</link>
+      <pubDate>Sat, 28 Jan 2023 15:27:29 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/tags/database/</guid>
       <description></description>
     </item>
     
