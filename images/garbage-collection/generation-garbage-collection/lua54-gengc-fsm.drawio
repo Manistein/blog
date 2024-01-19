@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net" modified="2024-01-19T06:32:04.865Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="ejGkwgHEc8FWbfkWYVSf" version="22.1.20" type="device">
+  <diagram name="Page-1" id="rc0uClVn3gRNKsO3K7OQ">
+    <mxGraphModel dx="1434" dy="1846" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-7" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;回收结束&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-1" target="VS3Hu-ArZXTeXrLUidqR-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="465" y="440" />
+              <mxPoint x="170" y="440" />
+              <mxPoint x="170" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-1" value="young collection" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="530" y="310" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-10" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;回收结束：totalbytes &amp;lt; 1.5 * estimate&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-2" target="VS3Hu-ArZXTeXrLUidqR-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-13" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;回收结束：totalbytes &amp;gt;= 1.5 * estimate&lt;br&gt;lastatomic = 本轮GC扫描过的内存总量值&lt;br&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-2" target="VS3Hu-ArZXTeXrLUidqR-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-2" value="fullgen" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="530" y="90" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-6" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;当x &amp;gt;= 1/5 * estimate&lt;br&gt;且totalbytes &amp;lt; 2 * estimate时触发&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;fillColor=#e51400;strokeColor=#B20000;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-5" target="VS3Hu-ArZXTeXrLUidqR-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-9" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;当totalbytes &amp;gt;= 2 * estimate时触发&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-5" target="VS3Hu-ArZXTeXrLUidqR-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-5" value="Pause1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="190" y="220" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-8" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 16px; background-color: initial;&quot;&gt;设当前虚拟机内存总量为totalbytes。&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 16px; background-color: initial;&quot;&gt;设上一轮GC结束后，剩下的虚拟机内存总量为estimate。&lt;/span&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;设Pause阶段，虚拟机新增内存量为x&lt;br&gt;设上一轮GC扫描的内存总量为lastatomic&lt;br&gt;&lt;/font&gt;" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="-80" width="500" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-16" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;totalbytes &amp;gt;= 2 * estimate&amp;nbsp;&lt;br&gt;且lastatomic != 0&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-11" target="VS3Hu-ArZXTeXrLUidqR-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-11" value="Pause2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="770" y="250" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-17" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;回收结束：本轮GC扫描过的内存总量记为atomic，当atomic &amp;lt; lastatomic * 1.125时，并且将lastatomic设置为0&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-15" target="VS3Hu-ArZXTeXrLUidqR-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="130" />
+              <mxPoint x="1200" y="550" />
+              <mxPoint x="140" y="550" />
+              <mxPoint x="140" y="232" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-18" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;回收结束：当前GC扫描过的内存总量atomic&amp;gt;lastatomic * 1.125&lt;br&gt;让lastatomic = atomic&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="VS3Hu-ArZXTeXrLUidqR-15" target="VS3Hu-ArZXTeXrLUidqR-11">
+          <mxGeometry x="0.3433" y="-10" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="420" />
+              <mxPoint x="850" y="420" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VS3Hu-ArZXTeXrLUidqR-15" value="stepgenfull" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="90" width="80" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

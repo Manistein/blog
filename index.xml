@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>1518986465@qq.com (Manistein)</managingEditor>
     <webMaster>1518986465@qq.com (Manistein)</webMaster>
-    <lastBuildDate>Sat, 28 Jan 2023 15:27:29 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jan 2024 15:50:44 +0800</lastBuildDate>
     
 	<atom:link href="https://manistein.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>分代GC浅析</title>
+      <link>https://manistein.github.io/blog/post/program/garbage-collection/%E5%88%86%E4%BB%A3gc%E6%B5%85%E6%9E%90/</link>
+      <pubDate>Sat, 13 Jan 2024 15:50:44 +0800</pubDate>
+      <author>1518986465@qq.com (Manistein)</author>
+      <guid>https://manistein.github.io/blog/post/program/garbage-collection/%E5%88%86%E4%BB%A3gc%E6%B5%85%E6%9E%90/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;去年一年就出了一篇博客，整体上来说还是太忙了，又是赶项目又是忙出书的事情，趁着农历还没新年，忙里偷闲整一篇新的XD。本次想讨论的内容是分代GC（garbage collection，意为垃圾回收机制），关于GC相关的文章，之前在Lua解释器构建系列中已经出过一篇，不过那个是增进式GC（感兴趣的读者可以点击这个链接：&lt;a href=&#34;http://manistein.club/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/&#34;&gt;构建Lua解释器Part2：Garbage Collection基础架构&lt;/a&gt;），本文想要讨论的则是分代GC。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;虽然本文写作的动机是在笔者阅读完Lua 5.4的GC源码之后，出于巩固知识的目的写的，但是笔者还是希望从更高的层次去讨论GC算法本身，因此会略去诸多Lua虚拟机相关的实现细节。本文将从GC的作用开始论述，介绍GC机制中常见的组成部件。首先通过简单的标记清除算法来引入GC的概念，然后逐步引入分步执行GC的概念和算法，最后以Lua 5.4所使用的分代GC算法为例，介绍工业级语言虚拟机是如何进行分代GC运作的。&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;为了方便论述，本文不会完全遵循源码中的所有细节，旨在更好的解释分代GC这种机制，希望能让读者对分代GC有个比较深刻的理解，最后由于本人水平有限，如有不正确的地方，欢迎大家批评指正，笔者在此感激不尽。读者也可以加入笔者创建的Q群，QQ号为：185017593。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>MongoDB初探</title>
@@ -474,7 +489,7 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
       <author>1518986465@qq.com (Manistein)</author>
       <guid>https://manistein.github.io/blog/page/about/</guid>
       <description> 有朋自远方来，不亦乐乎 欢迎来到我的博客，我希望通过分享自己的一些想法，见解和总结来结识更多的朋友。希望更多热衷技术的小伙伴可以加入我创建的游戏技术讨论群QQ：185017593
-关于我  2010.9~2014.7 就读于广东省韶关学院计算机学院 2014.1~2015.5 参与一款MMO端游开发 2015.8~2016.8 参与一款MMO手游开发，负责服务端核心模块开发，业务功能开发 2016.8~2017.3 参与维护一款全服架构的农场类手游，主要工作在服务端，在项目后期独立维护该项目，该项目同时在线峰值超过1w 2017.5~2018.8 负责一款全服架构的模拟经营类游戏的服务端框架的设计和搭建，并且和搭档一起设计和开发业务层核心模块，此外也参与业务功能开发 2018.12~至今 担任一款全服架构的SLG游戏项目的服务器主程，负责全项目服务端架构搭建，任务安排，进度把控  我的技能  熟悉skynet 熟悉cocos2dx 熟悉c/c++和lua  爱好  阅读 总结 RTS游戏忠实粉丝，也喜欢GTA系列的游戏  </description>
+关于  《Lua解释器构建：从虚拟机到编译器》一书作者。 广州某游戏公司服务端技术总监。  我的技能  熟悉skynet 熟悉cocos2dx 熟悉c/c++和lua  爱好  阅读 总结 RTS游戏忠实粉丝，也喜欢GTA系列的游戏  </description>
     </item>
     
     <item>

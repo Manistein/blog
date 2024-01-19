@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net" modified="2024-01-19T04:13:51.772Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="Mh99hgVqXRaRErAylzfl" version="22.1.20" type="device">
+  <diagram name="Page-1" id="rc0uClVn3gRNKsO3K7OQ">
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BMD3vk750Op_6i22iyfP-1" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;reallyold&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" vertex="1" parent="1">
+          <mxGeometry y="150" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-2" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;old1&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d0cee2;strokeColor=#56517e;" vertex="1" parent="1">
+          <mxGeometry x="300" y="150" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-3" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;survival&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="470" y="150" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-4" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;new&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="150" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="BMD3vk750Op_6i22iyfP-5" target="BMD3vk750Op_6i22iyfP-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-5" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;g-&amp;gt;reallyold&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="270" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="BMD3vk750Op_6i22iyfP-7" target="BMD3vk750Op_6i22iyfP-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-7" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;g-&amp;gt;old1&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="270" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="BMD3vk750Op_6i22iyfP-9" target="BMD3vk750Op_6i22iyfP-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-9" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;g-&amp;gt;survival&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="270" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="BMD3vk750Op_6i22iyfP-11" target="BMD3vk750Op_6i22iyfP-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BMD3vk750Op_6i22iyfP-11" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;g-&amp;gt;allgc&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="270" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -216,6 +216,45 @@
           
           
             <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/garbage-collection/%E5%88%86%E4%BB%A3gc%E6%B5%85%E6%9E%90/">
+                <h2 class="post-title">分代GC浅析</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on January 13, 2024
+  
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;去年一年就出了一篇博客，整体上来说还是太忙了，又是赶项目又是忙出书的事情，趁着农历还没新年，忙里偷闲整一篇新的XD。本次想讨论的内容是分代GC（garbage collection，意为垃圾回收机制），关于GC相关的文章，之前在Lua解释器构建系列中已经出过一篇，不过那个是增进式GC（感兴趣的读者可以点击这个链接：<a href="http://manistein.club/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part2/">构建Lua解释器Part2：Garbage Collection基础架构</a>），本文想要讨论的则是分代GC。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然本文写作的动机是在笔者阅读完Lua 5.4的GC源码之后，出于巩固知识的目的写的，但是笔者还是希望从更高的层次去讨论GC算法本身，因此会略去诸多Lua虚拟机相关的实现细节。本文将从GC的作用开始论述，介绍GC机制中常见的组成部件。首先通过简单的标记清除算法来引入GC的概念，然后逐步引入分步执行GC的概念和算法，最后以Lua 5.4所使用的分代GC算法为例，介绍工业级语言虚拟机是如何进行分代GC运作的。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了方便论述，本文不会完全遵循源码中的所有细节，旨在更好的解释分代GC这种机制，希望能让读者对分代GC有个比较深刻的理解，最后由于本人水平有限，如有不正确的地方，欢迎大家批评指正，笔者在此感激不尽。读者也可以加入笔者创建的Q群，QQ号为：185017593。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/garbage-collection/%E5%88%86%E4%BB%A3gc%E6%B5%85%E6%9E%90/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/garbage-collection/">garbage-collection</a>&nbsp;
+                  
+                </div>
+              
+            </article>
+          
+            <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/server/db/mongodb%E5%88%9D%E6%8E%A2/">
                 <h2 class="post-title">MongoDB初探</h2>
                 
@@ -549,43 +588,6 @@
               
             </article>
           
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/">
-                <h2 class="post-title">构建Lua解释器Part6：词法分析器设计与实现</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 22, 2020
-  
-  
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <h1 id="前言">前言</h1>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;构建Lua解释器Part5，对Lua解释器进行了整体介绍，并且以一个hello world程序为例子，给读者一个初步的概念。通过那一篇，我们知道了编译器至少要包括词法分析其和语法分析器，而本篇，我将集中时间和精力，用来介绍和讲解Lua词法分析器的设计与实现，实际上，它是对Part5词法分析器部分的一个补充。本文所指的词法分析器，是参照Lua-5.3这个版本的源码，并且亲自动手实现和测试过，它也已经被整合到<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>这个工程中，欢迎大家star。由于整个词法分析是我自己重新实现，因此不会在所有的细节上和官方lua保持一致，最后由于本人水平有限，如有写的不正确的地方，欢迎大家批评指正。此外，我已经建了一个qq群(QQ:185017593)，有兴趣参与技术讨论的同学可以加进来。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-            </article>
-          
         </div>
 
         
@@ -645,7 +647,7 @@
           
 
           &nbsp;&bull;&nbsp;
-          2023
+          2024
 
           
             &nbsp;&bull;&nbsp;
