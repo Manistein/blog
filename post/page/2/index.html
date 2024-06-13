@@ -198,7 +198,7 @@
                 <span class="post-meta">
   
   
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on August 22, 2020
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on September 5, 2020
   
   
   
@@ -225,6 +225,45 @@
           </div>
         
         <div class="posts-list">
+          
+            <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part7/">
+                <h2 class="post-title">构建Lua解释器Part7：构建完整的语法分析器(上)</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on September 5, 2020
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h1 id="前言">前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在上一章里，我完成了词法分析器的设计与实现的论述，接下来我要继续论述语法分析器的设计与实现。限于篇幅，我将会把语法分析器分为两个部分来论述，本章为上部，下一章为下部。本章将会重新复习编译器的构造，并且论述编译流程，以及lua的parser所涉及的编译相关的内容，最后通过阐述虚拟机相关指令的实现，作为结尾。本章所涉及的代码，全部在<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>工程里，欢迎star。另外，如果你喜欢我写的文章，喜欢讨论技术，欢迎加入我创建的群：QQ185017593<br />
+</p>
+                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part7/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
           
             <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/">
@@ -575,46 +614,6 @@ Collection机制，可能是让人们听之不寒而栗的机制，都说GC很�
 
 <p></p>
                   <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part1/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/">
-                <h2 class="post-title">构建Lua解释器Part0：综述</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on October 16, 2018
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="项目简介">项目简介</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lua是一门精妙简洁，而功能强大的语言，学习和掌握它的核心机制有着重要的意义。这是一个仿制lua解释器的项目(参照的版本是Lua5.3)，我希望通过逐步实现lua解释器的各个部分，更加深刻地掌握lua的基本结构和运作原理。本项目将分为多个部分完成，并为每一个部分附上一篇博文为该部分的设计和实现进行解析。开发这个项目的目的，并不是做一个能用于生产环境的lua解释器，而是尝试追寻前辈的步伐，尽最大可能理解其设计lua语言的思路，理解其中的关键细节。这是一个探索原理的旅程，因此效率并不是本项目要考虑的关键因素。这里我遵循的是&rdquo;FIRST  make  it  run, THEN make it run fast&rdquo;<sup>[1]</sup>的原则，先让它跑起来。整个系列暂时不包含GC部分，不过这些开发量也足以消耗我大量的时间和精力。</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part0/" class="post-read-more">[Read More]</a>
                 
               </div>
 

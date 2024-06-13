@@ -210,6 +210,47 @@
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://manistein.github.io/blog/post/program/c/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ptmalloc%E7%9A%84%E8%BF%90%E4%BD%9C%E6%9C%BA%E5%88%B6/">
+                <h2 class="post-title">深入理解ptmalloc的运作机制</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on June 4, 2024
+  
+  
+  
+</span>
+
+
+              </p>
+              <div class="post-entry">
+                
+                  <h1 id="1-前言">1、前言</h1>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一直对glibc的内存分配器的设计与实现感兴趣，之前一直没有下定决心以及抽出足够的时间进攻这个方向，最近抽出了几天对glibc的ptmalloc源码进行了梳理和研究，现在将研究成果梳理总结成文。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为什么要写这篇文章？相信很多读者对系统是怎样管理内存感兴趣，通过深入研究ptmalloc，读者可以深刻了解到系统是怎样减少内存碎片，如何提升多线程环境下的内存分配和释放的性能，这对读者更好地进行系统编程有着直接或间接的帮助。本文立足于glibc 2.26的源码，为了方便读者理解和方便笔者书写，着重介绍概念和运作原理，不会贴大段的代码，各位看官大可放心食用。最有本人水平有限，如有书写不当的地方欢迎大家联系我修改，欢迎大家加入技术讨论群：QQ185017593。</p>
+
+<p></p>
+                  <a href="https://manistein.github.io/blog/post/program/c/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ptmalloc%E7%9A%84%E8%BF%90%E4%BD%9C%E6%9C%BA%E5%88%B6/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <div class="blog-tags">
+                  
+                    <a href="https://manistein.github.io/blog//tags/c/">C</a>&nbsp;
+                  
+                </div>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://manistein.github.io/blog/post/program/garbage-collection/%E5%88%86%E4%BB%A3gc%E6%B5%85%E6%9E%90/">
                 <h2 class="post-title">分代GC浅析</h2>
 
@@ -558,46 +599,6 @@
 
 <p></p>
                   <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part6/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-                <div class="blog-tags">
-                  
-                    <a href="https://manistein.github.io/blog//tags/let-us-build-a-lua-interpreter/">let us build a lua interpreter</a>&nbsp;
-                  
-                </div>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/">
-                <h2 class="post-title">构建Lua解释器Part5：脚本运行基础架构的设计与实现</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                <span class="post-meta">
-  
-  
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on February 6, 2020
-  
-  
-  
-</span>
-
-
-              </p>
-              <div class="post-entry">
-                
-                  <h2 id="前言">前言</h2>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在经过漫长的准备，我终于完成了《构建Lua解释器》系列的第五部分的代码编写，并且通过了预定的测试。本篇我将对<a href="https://github.com/Manistein/dummylua-tutorial">dummylua</a>项目中的脚本运行基础架构的设计与实现进行介绍和解析，它包括了lua编译器基础架构以及虚拟机基础架构。过去4个部分的开发，为本部分提供了坚实且必要的基础，本篇将为编译与运行lua脚本搭建最基础的架构，后续内容将在此架构上继续填充与丰富，本部分，我们的目标是编译并运行如下所示的一段脚本代码：</p>
-
-<p></p>
-                  <a href="https://manistein.github.io/blog/post/program/let-us-build-a-lua-interpreter/%E6%9E%84%E5%BB%BAlua%E8%A7%A3%E9%87%8A%E5%99%A8part5/" class="post-read-more">[Read More]</a>
                 
               </div>
 
